@@ -122,6 +122,30 @@ async function protonLookup(appID) {
   return { tier: String(data.tier), total: data.total || 0 };
 }
 
+const COOP_TAGS = ['co-op', 'online co-op', 'lan co-op', 'shared/split screen', 'remote play together', 'cross-platform multiplayer'];
+
+/** Store-category signals: controller/co-op feature flags, IAP, age + descriptors. Null-safe. */
+function extractStoreSignals(details) {
+  if (!details) return { features: null, family: null, hasInAppPurchases: null };
+  const cats = Array.isArray(details.categories) ? details.categories.map((c) => c.description || '') : [];
+  const lower = cats.map((c) => c.toLowerCase());
+  const controller = lower.some((c) => /full controller support/.test(c))
+    ? 'full'
+    : lower.some((c) => /partial controller/.test(c))
+      ? 'partial'
+      : null;
+  const coop = cats.filter((c) => COOP_TAGS.some((t) => c.toLowerCase().includes(t)));
+  const cd = details.content_descriptors;
+  const descriptors = Array.isArray(cd) ? [] : cd?.notes ? [cd.notes] : [];
+  const ageRaw = details.required_age;
+  const requiredAge = ageRaw != null && String(ageRaw).trim() !== '' ? parseInt(ageRaw, 10) : null;
+  return {
+    features: { controller, coop },
+    family: requiredAge != null || descriptors.length ? { requiredAge, descriptors } : null,
+    hasInAppPurchases: cats.length ? lower.some((c) => /in-app purchases/.test(c)) : null,
+  };
+}
+
 /** OpenCritic public API (best-effort, no key): search then score */
 async function openCriticLookup(title, steamAppID) {
   try {
@@ -194,9 +218,7 @@ async function fetchLiveGameFromWeb(query) {
     steamReviews: steamRev?.reviews || [],
     steamRecent: steamRecent || null,
     deckProton: proton || null,
-    hasInAppPurchases: details?.categories
-      ? details.categories.some((c) => /in-app purchases/i.test(c.description || ''))
-      : null,
+    ...extractStoreSignals(details),
     metacriticScore: metaScore,
     metacriticLink: cs?.metacriticLink || null,
     openCriticScore: oc.score,

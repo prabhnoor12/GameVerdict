@@ -64,10 +64,26 @@ D:\GameVerdict/
 ### Local Run:
 ```bash
 cd D:\GameVerdict
-python -m http.server 8081
-# Open http://localhost:8081
+npm start
+# Open http://localhost:3000
 ```
-*(Or with Node: `npx serve .`)*
+
+### Steam library import (optional, free):
+The 📚 library import needs a Steam Web API key (free, same account as your games):
+1. Grab one at [steamcommunity.com/dev/apikey](https://steamcommunity.com/dev/apikey) (any domain value works for local use).
+2. Run with it set: `STEAM_API_KEY=your_key npm start` (PowerShell: `$env:STEAM_API_KEY="your_key"; npm start`).
+3. On Cloudflare Pages, add `STEAM_API_KEY` under Settings → Environment variables.
+4. The importing profile's game details must be Public (Steam → Profile → Privacy Settings).
+Without a key, everything else works — library import shows a setup hint and manual backlog entries still feed triage.
+
+### Seeded top-100 database (weekly snapshot):
+Search falls back to a static snapshot of the most-played Steam titles (`src/data/seeded-games.json`, most-played per SteamSpy, not editorial picks) when a game isn't hand-curated:
+```bash
+npm start              # terminal 1: local API (no key needed)
+npm run seed           # terminal 2: rebuild the snapshot (~15 min, polite delays)
+node scripts/seed.mjs --limit=5   # quick sample
+```
+Unverifiable titles are skipped, never fabricated. A GitHub workflow (`.github/workflows/seed.yml`) refreshes the snapshot every Monday.
 
 ### Keyboard Shortcuts:
 - Press `/` anywhere to instantly focus the game search bar.

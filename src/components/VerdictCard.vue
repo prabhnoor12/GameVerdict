@@ -9,6 +9,9 @@
     <div v-else-if="game.coverage === 'thin'" class="p-3 rounded-2xl bg-amber-950/40 border border-amber-700/60 text-[11px] text-amber-200">
       🔍 Thin data: a single source backs this score. Provisional — revisit when a second source lands.
     </div>
+    <div v-if="game.bomb" class="p-3 rounded-2xl bg-rose-950/40 border border-rose-700/60 text-[11px] text-rose-200">
+      🚨 Possible review-bombing: recent reviews sit at {{ game.bomb.recentPct }}% (n={{ game.bomb.recentN }}) against {{ game.bomb.overallPct }}% overall — a {{ game.bomb.gap }}-point crater. Read recent reviews before trusting the average.
+    </div>
     <div class="flex flex-col sm:flex-row gap-6 items-start">
       <div class="w-full sm:w-48 h-64 rounded-2xl overflow-hidden shrink-0 cover-shadow bg-zinc-800 relative group">
         <img :src="game.headerImg" alt="Game Cover Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
@@ -128,6 +131,16 @@
       </div>
     </div>
 
+    <div v-if="deviceLine || familyText || featureChips.length" class="p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800 text-xs space-y-1.5">
+      <div v-if="deviceLine" class="flex items-center gap-1.5">
+        <span :class="deviceLine.class">{{ deviceLine.text }}</span>
+      </div>
+      <div v-if="familyText" class="text-zinc-300">👨‍👩‍👧 {{ familyText }} <span class="text-zinc-500">(per Steam store data)</span></div>
+      <div v-if="featureChips.length" class="flex flex-wrap gap-1.5">
+        <span v-for="c in featureChips" :key="c" class="px-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-700 text-[10px] text-zinc-300">{{ c }}</span>
+      </div>
+    </div>
+
     <div class="space-y-3 pt-4 border-t border-zinc-800">
       <h3 class="font-bold text-sm text-zinc-200">💡 If you like this, try:</h3>
       <div class="flex flex-wrap gap-2">
@@ -211,6 +224,25 @@ const trendClass = computed(() => ({
 function srcVal(v, suffix = '') {
   return v == null ? '—' : `${v}${suffix}`;
 }
+
+const DEVICE_NAMES = { pc: 'PC', deck: 'Steam Deck', laptop: 'old laptop', ps5: 'PS5', xbox: 'Xbox', switch: 'Switch' };
+const deviceLine = computed(() => {
+  if (!store.device || store.device === 'pc') return null;
+  const fit = GameData.deviceFit(props.game, store.device);
+  const name = DEVICE_NAMES[store.device] || store.device;
+  if (fit === 'fits') return { text: `✅ Plays on your ${name}`, class: 'text-emerald-300 font-bold' };
+  if (fit === 'no') return { text: `Not listed for ${name}`, class: 'text-zinc-400' };
+  return null;
+});
+const familyText = computed(() => GameData.familyLine(props.game.family));
+const featureChips = computed(() => {
+  const chips = [];
+  const f = props.game.features;
+  if (f?.controller === 'full') chips.push('🎮 Full controller support');
+  else if (f?.controller === 'partial') chips.push('🎮 Partial controller support');
+  for (const c of f?.coop || []) chips.push(`👥 ${c}`);
+  return chips;
+});
 
 const deck = computed(() => GameData.getDeckInfo(store.currentGame.realityCheck.steamDeckRating));
 const deckLabel = computed(() => {

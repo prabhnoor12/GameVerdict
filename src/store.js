@@ -1,13 +1,26 @@
 import { reactive, computed } from 'vue';
 import { GameData } from '../js/game-data.js';
+import seedData from './data/seeded-games.json';
+
+GameData.setSeedPool(seedData.games || [], { generatedAt: seedData.generatedAt || null, count: seedData.count || 0 });
 
 const WISHLIST_KEY = 'gv:wishlist:v1';
+const LIBRARY_KEY = 'gv:steam-library:v1';
+const MANUAL_KEY = 'gv:manual-games:v1';
 
 function loadWishlist() {
   try {
     return JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
   } catch {
     return [];
+  }
+}
+
+function loadJson(key, fallback) {
+  try {
+    return JSON.parse(localStorage.getItem(key)) ?? fallback;
+  } catch {
+    return fallback;
   }
 }
 
@@ -24,6 +37,19 @@ export const store = reactive({
   suggestions: [],
   wishlist: loadWishlist(),
   compareList: [],
+  steamInput: '',
+  steamLibrary: loadJson(LIBRARY_KEY, null),
+  manualGames: loadJson(MANUAL_KEY, []),
+  libraryDetails: {},
+  libraryLoading: false,
+  libraryError: '',
+  enrichProgress: '',
+  achievements: {},
+  priceDrops: [],
+  checkingPrices: false,
+  device: loadJson('gv:device:v1', 'pc'),
+  onboarded: loadJson('gv:onboarded:v1', false),
+  showLibrary: false,
   showWishlist: false,
   showCoffee: false,
   toastMsg: '',
@@ -41,11 +67,24 @@ export function toast(msg) {
 
 function allGames() {
   const seen = new Set();
-  return [...GameData.recentLive, ...GameData.CURATED_GAMES].filter((g) => {
+  return [...GameData.recentLive, ...GameData.getSeedPool(), ...GameData.CURATED_GAMES].filter((g) => {
     if (seen.has(g.id)) return false;
     seen.add(g.id);
     return true;
   });
+}
+
+export const seedMeta = computed(() => GameData.getSeedMeta());
+
+/** Surprise pick from the unplayed backlog, weighted by value-per-hour. */
+export function surprise() {
+  const { pick, reason } = GameData.surprisePick(enrichedOwned.value, store.weeklyHours, Math.random);
+  if (!pick) {
+    toast('Nothing to pick — import your library or add games first');
+    return { pick: null, reason: '' };
+  }
+  toast(`🎲 ${reason}`);
+  return { pick, reason };
 }
 
 export function effectivePrice(game) {
@@ -78,6 +117,8 @@ export const filteredGames = computed(() => {
       const c = GameData.costPerHourOf(g, { useSale: store.useSalePrice, hoursMode: store.hoursMode });
       return c != null && c.value < 1.5;
     });
+  } else if (store.activeFilter === 'coop') {
+    list = list.filter((g) => GameData.hasCoop(g));
   }
   const by = store.sortBy;
   list.sort((a, b) => {
@@ -228,4 +269,249 @@ export function initFromHash() {
     GameData.CURATED_GAMES.find((g) => g.id === m) ||
     GameData.recentLive.find((g) => g.id === m);
   if (found) store.currentGame = found;
+}
+
+/* ---------- Steam library import + owned-backlog triage ---------- */
+
+function saveLibrary() {
+  try {
+    localStorage.setItem(LIBRARY_KEY, JSON.stringify(store.steamLibrary));
+  } catch { /* quota: session-only, import stays usable */ }
+}
+
+function saveManual() {
+  localStorage.setItem(MANUAL_KEY, JSON.stringify(store.manualGames));
+}
+
+function hashStr(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h << 5) - h + s.charCodeAt(i);
+  return Math.abs(h);
+}
+
+export async function importLibrary() {
+  const raw = store.steamInput.trim();
+  const parsed = GameData.parseSteamInput(raw);
+  if (!parsed) {
+    store.libraryError = 'Paste a Steam profile URL, SteamID64, or vanity name.';
+    return;
+  }
+  store.libraryLoading = true;
+  store.libraryError = '';
+  try {
+    const res = await fetch(`/api/steam-library?input=${encodeURIComponent(raw)}`);
+    const body = await res.json();
+    if (!res.ok || !body.success) {
+      store.libraryError = body.error || 'Import failed — try again.';
+      return;
+    }
+    store.steamLibrary = {
+      steamId: body.steamId,
+      persona: body.persona,
+      games: body.games,
+      importedAt: Date.now()
+    };
+    store.libraryDetails = {};
+    saveLibrary();
+    toast(`Imported ${body.games.length} owned games`);
+    enrichLibrary();
+  } catch {
+    store.libraryError = 'Import failed — check your connection and try again.';
+  } finally {
+    store.libraryLoading = false;
+  }
+}
+
+export function clearLibrary() {
+  store.steamLibrary = null;
+  store.libraryDetails = {};
+  store.enrichProgress = '';
+  try { localStorage.removeItem(LIBRARY_KEY); } catch { /* noop */ }
+}
+
+/** Enrich owned games with store genres in 40-id batches, played-first. Capped at 120. */
+export async function enrichLibrary() {
+  const lib = store.steamLibrary;
+  if (!lib?.games?.length) return;
+  const played = lib.games.filter((g) => g.playtimeMins > 0).sort((a, b) => b.playtimeMins - a.playtimeMins);
+  const unplayed = lib.games.filter((g) => !g.playtimeMins);
+  const queue = [...played, ...unplayed].slice(0, 120).filter((g) => !store.libraryDetails[g.appid]);
+  for (let i = 0; i < queue.length; i += 40) {
+    const batch = queue.slice(i, i + 40);
+    store.enrichProgress = `Enriching ${Math.min(i + 40, queue.length)}/${queue.length}…`;
+    try {
+      const res = await fetch(`/api/steam-details?ids=${batch.map((g) => g.appid).join(',')}`);
+      const body = await res.json();
+      if (body.success) {
+        for (const d of body.details) store.libraryDetails[d.appid] = d;
+      }
+    } catch { /* keep going with the next batch */ }
+  }
+  store.enrichProgress = '';
+}
+
+/** Owned games merged with details, hour estimates, session fit, curated matches. */
+export const enrichedOwned = computed(() => {
+  const lib = store.steamLibrary;
+  const rows = [];
+  for (const g of lib?.games || []) {
+    const d = store.libraryDetails[g.appid];
+    const genres = d?.ok ? d.genres || [] : [];
+    const curated = GameData.CURATED_GAMES.find((c) => c.steamAppID === String(g.appid)) || null;
+    const estMainHrs = curated
+      ? curated.realityCheck.mainStoryHours
+      : genres.length ? GameData.estimateHours(genres, hashStr(String(g.appid))).main : null;
+    rows.push({
+      ...g,
+      genres,
+      header: d?.ok ? d.header : null,
+      curated,
+      estMainHrs,
+      fit: GameData.sessionFit(genres)
+    });
+  }
+  for (const m of store.manualGames) {
+    rows.push({
+      appid: null, name: m.name, playtimeMins: m.playtimeMins || 0,
+      playtime2wksMins: 0, rtimeLastPlayed: 0,
+      genres: [], header: null, curated: null,
+      estMainHrs: m.estMainHrs, fit: 'either', manual: true, manualId: m.id
+    });
+  }
+  return rows;
+});
+
+export const libraryStats = computed(() =>
+  GameData.computeLibraryStats((store.steamLibrary?.games || []).concat(
+    store.manualGames.map((m) => ({ playtimeMins: m.playtimeMins || 0, rtimeLastPlayed: 0 }))
+  ))
+);
+
+export const triage = computed(() => GameData.finishOrCut(enrichedOwned.value));
+
+export const seriesWatch = computed(() => GameData.seriesGroups(enrichedOwned.value));
+
+export const weeknightQueue = computed(() =>
+  enrichedOwned.value
+    .filter((g) => g.fit === 'short' && (g.playtimeMins || 0) === 0 && g.estMainHrs != null)
+    .slice(0, 8)
+);
+
+export const weekendQueue = computed(() =>
+  enrichedOwned.value
+    .filter((g) => g.fit === 'epic' && (g.playtimeMins || 0) === 0 && g.estMainHrs != null)
+    .sort((a, b) => (b.curated?.unifiedConsensusPercent ?? 0) - (a.curated?.unifiedConsensusPercent ?? 0))
+    .slice(0, 8)
+);
+
+/** Sale patience: wishlist cost vs queue position at the user's pace. */
+export const wishlistPatience = computed(() => {
+  const months = backlogTotals.value.weeks / 4.3;
+  return store.wishlist.map((w) => ({
+    ...w,
+    waitVerdict: months > 6
+      ? `Your queue is ${months.toFixed(0)} months deep — don't buy until a 50%+ sale.`
+      : months > 2
+        ? `You'll reach this in ~${months.toFixed(0)} months — wait for 30%+ off.`
+        : 'Near the front of your queue — a small discount justifies it.'
+  }));
+});
+
+export function addManualGame(name, estMainHrs) {
+  const title = String(name || '').trim();
+  const hrs = Number(estMainHrs);
+  if (!title || !(hrs > 0)) {
+    toast('Give the game a title and estimated main-story hours');
+    return;
+  }
+  store.manualGames.push({ id: `manual-${Date.now()}`, name: title, estMainHrs: hrs, playtimeMins: 0 });
+  saveManual();
+  toast(`Added "${title}" to your backlog`);
+}
+
+export async function verdictForOwned(owned) {
+  if (owned?.curated) {
+    selectGame({ ...owned.curated });
+    document.getElementById('heroCard')?.scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+  store.query = owned.name;
+  await search();
+}
+
+/* ---------- Casual onboarding: three questions over existing state ---------- */
+
+const VIBE_MAP = {
+  epic: { sortBy: 'consensus', activeFilter: 'masterpiece' },
+  quick: { sortBy: 'hours', activeFilter: 'short' },
+  social: { sortBy: 'consensus', activeFilter: 'coop' },
+  story: { sortBy: 'consensus', activeFilter: 'all' }
+};
+
+export function completeOnboarding({ hours, device, vibe }) {
+  if (hours > 0) store.weeklyHours = hours;
+  if (device) {
+    store.device = device;
+    try { localStorage.setItem('gv:device:v1', JSON.stringify(device)); } catch { /* noop */ }
+  }
+  const map = VIBE_MAP[vibe];
+  if (map) {
+    store.sortBy = map.sortBy;
+    store.activeFilter = map.activeFilter;
+  }
+  store.onboarded = true;
+  try { localStorage.setItem('gv:onboarded:v1', JSON.stringify(true)); } catch { /* noop */ }
+  toast('Tuned to your time, device, and vibe');
+}
+
+export function setDevice(device) {
+  store.device = device;
+  try { localStorage.setItem('gv:device:v1', JSON.stringify(device)); } catch { /* noop */ }
+}
+
+/* ---------- Regulars: achievements on demand + wishlist price drops ---------- */
+
+export async function fetchAchievements(appid) {
+  const id = Number(appid);
+  if (!id || store.achievements[id]?.done) return store.achievements[id] || null;
+  const steamId = store.steamLibrary?.steamId;
+  if (!steamId) {
+    toast('Import your Steam library first to track achievements');
+    return null;
+  }
+  store.achievements[id] = { loading: true };
+  try {
+    const res = await fetch(`/api/steam-achievements?steamid=${steamId}&appid=${id}`);
+    const body = await res.json();
+    store.achievements[id] = body.success
+      ? { done: true, total: body.total, unlocked: body.unlocked, pct: GameData.achievementPct(body) }
+      : { done: true, error: body.error || 'No achievements found' };
+  } catch {
+    store.achievements[id] = { done: true, error: 'Request failed — try again' };
+  }
+  return store.achievements[id];
+}
+
+/** On-visit price check: compare saved wishlist prices against live prices. */
+export async function checkPrices() {
+  if (store.checkingPrices || !store.wishlist.length) return;
+  store.checkingPrices = true;
+  store.priceDrops = [];
+  try {
+    for (const w of store.wishlist) {
+      try {
+        const result = await GameData.searchGame(w.title);
+        const now = result.salePrice != null && result.salePrice < result.basePriceUsd
+          ? result.salePrice : result.basePriceUsd;
+        const drop = GameData.dropFor(w.price, now);
+        if (drop) store.priceDrops.push({ ...w, ...drop });
+      } catch { /* one title failing must not stop the rest */ }
+      await new Promise((r) => setTimeout(r, 800));
+    }
+    toast(store.priceDrops.length
+      ? `💸 ${store.priceDrops.length} price drop${store.priceDrops.length > 1 ? 's' : ''} on your wishlist`
+      : 'No drops right now — patience pays');
+  } finally {
+    store.checkingPrices = false;
+  }
 }

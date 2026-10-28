@@ -381,7 +381,8 @@ export const GameData = (() => {
     { id: 'deck', label: '🎮 Steam Deck Verified' },
     { id: 'masterpiece', label: '🏆 95%+ Masterpieces' },
     { id: 'clean', label: '💎 Clean MTX-free' },
-    { id: 'value', label: '💰 Best value (<$1.50/hr)' }
+    { id: 'value', label: '💰 Best value (<$1.50/hr)' },
+    { id: 'coop', label: '👥 Co-op with friends' }
   ];
 
   /** Unified consensus: single formula everywhere (Steam 55 / Metacritic 35 / Backlog-user 10). */
@@ -507,6 +508,102 @@ export const GameData = (() => {
     return `${Math.floor(s / 86400)}d ago`;
   }
 
+  /** Parse a Steam profile URL, raw SteamID64, or vanity name into a lookup. */
+  function parseSteamInput(input) {
+    const s = String(input || '').trim();
+    if (!s) return null;
+    if (/^\d{17,}$/.test(s)) return { kind: 'id', value: s };
+    const m = s.match(/steamcommunity\.com\/(profiles|id)\/([^/?#]+)/i);
+    if (m) {
+      const seg = decodeURIComponent(m[2]).replace(/\/+$/, '');
+      if (m[1].toLowerCase() === 'profiles') {
+        return /^\d{17,}$/.test(seg) ? { kind: 'id', value: seg } : null;
+      }
+      return /^[A-Za-z0-9_-]{2,32}$/.test(seg) ? { kind: 'vanity', value: seg } : null;
+    }
+    return /^[A-Za-z0-9_-]{2,32}$/.test(s) ? { kind: 'vanity', value: s } : null;
+  }
+
+  /** Library-wide triage inputs: totals, unplayed pile, sunk hours, stale count. */
+  function computeLibraryStats(games) {
+    const list = games || [];
+    const now = Date.now() / 1000;
+    let unplayed = 0, mins = 0, stale = 0;
+    for (const g of list) {
+      if (!g.playtimeMins) unplayed++;
+      mins += g.playtimeMins || 0;
+      if (g.rtimeLastPlayed > 0 && now - g.rtimeLastPlayed > 90 * 86400) stale++;
+    }
+    return {
+      total: list.length,
+      unplayed,
+      played: list.length - unplayed,
+      hoursPlayed: Math.round((mins / 60) * 10) / 10,
+      stale90: stale
+    };
+  }
+
+  /** Session fit from genres: short-session loops vs epic commitments. Heuristic, labelled. */
+  function sessionFit(genres) {
+    const g = (genres || []).join(' ').toLowerCase();
+    if (/roguel|deckbuild|puzzle|platform|racing|sport|party|rhythm|casual|fighting/.test(g)) return 'short';
+    if (/crpg|\brpg\b|open world|strategy|tactic|simulation|souls|jrpg|survival|mmo/.test(g)) return 'epic';
+    return 'either';
+  }
+
+  /** Finish-or-cut triage over owned games with hour estimates.
+   *  finish: started (2h+), untouched 90d+, still has 1h+ left — quick wins first.
+   *  cut: never played — biggest commitments surface first. */
+  function finishOrCut(games, nowSec) {
+    const now = nowSec || Date.now() / 1000;
+    const finish = [], cut = [];
+    for (const g of games || []) {
+      if (g.estMainHrs == null || g.estMainHrs <= 0) continue;
+      const playedHrs = (g.playtimeMins || 0) / 60;
+      const remainingHrs = Math.round((g.estMainHrs - playedHrs) * 10) / 10;
+      const lastAge = g.rtimeLastPlayed > 0 ? now - g.rtimeLastPlayed : null;
+      if (playedHrs >= 2 && lastAge != null && lastAge > 90 * 86400 && remainingHrs > 1) {
+        finish.push({ ...g, playedHrs: Math.round(playedHrs * 10) / 10, remainingHrs });
+      } else if ((g.playtimeMins || 0) === 0) {
+        cut.push({ ...g, playedHrs: 0, remainingHrs: g.estMainHrs });
+      }
+    }
+    finish.sort((a, b) => a.remainingHrs - b.remainingHrs);
+    cut.sort((a, b) => b.estMainHrs - a.estMainHrs);
+    return { finish, cut };
+  }
+
+  /** Conservative sequel grouping: trailing numerals order a series, bare titles rank first. */
+  const NUMERAL_RANK = { ii: 2, iii: 3, iv: 4, v: 5, vi: 6, vii: 7 };
+  function seriesKey(name) {
+    const clean = String(name || '').trim();
+    const m = clean.match(/^(.*?)\s+(ii|iii|iv|v|vi|vii|\d{1,2})$/i);
+    if (!m) return { base: clean.toLowerCase(), rank: 1 };
+    return { base: m[1].toLowerCase(), rank: NUMERAL_RANK[m[2].toLowerCase()] || parseInt(m[2], 10) };
+  }
+  function seriesGroups(games) {
+    const byBase = new Map();
+    for (const g of games || []) {
+      const s = seriesKey(g.name);
+      if (!s.base) continue;
+      if (!byBase.has(s.base)) byBase.set(s.base, []);
+      byBase.get(s.base).push({ ...g, rank: s.rank });
+    }
+    const groups = [];
+    for (const [base, entries] of byBase) {
+      if (entries.length < 2) continue;
+      entries.sort((a, b) => a.rank - b.rank);
+      const first = entries[0];
+      const sequelPlayed = entries.slice(1).some(e => (e.playtimeMins || 0) > 0);
+      groups.push({
+        base: base.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+        entries,
+        missingPredecessor: sequelPlayed && (first.playtimeMins || 0) === 0
+      });
+    }
+    return groups;
+  }
+
   /** Genre-based hour estimate for live games (HLTB has no public API; heuristic, labelled estimated). */
   function estimateHours(genres, hash) {
     const g = (genres || []).join(' ').toLowerCase();
@@ -562,6 +659,116 @@ export const GameData = (() => {
       .map(x => x.game);
   }
 
+  /** Seeded static database (top-100 snapshot, refreshed weekly by scripts/seed.mjs).
+   *  Served as Tier 1.5: below hand-curated, above live fetch. Entries carry
+   *  fetchedAt so the card's age stamp stays honest. */
+  let seedPool = [];
+  let seedMeta = { generatedAt: null, count: 0 };
+  function setSeedPool(list, meta) {
+    seedPool = Array.isArray(list) ? list : [];
+    if (meta) seedMeta = meta;
+    else seedMeta = { generatedAt: null, count: seedPool.length };
+  }
+  function getSeedPool() { return seedPool; }
+  function getSeedMeta() { return seedMeta; }
+  function upsertSeed(entry) {
+    const i = seedPool.findIndex(e => e.id === entry.id);
+    if (i >= 0) seedPool[i] = entry;
+  }
+
+  /** Surprise pick: best weight-per-hour value among unplayed backlog games.
+   *  Deterministic argmax by default; pass a rand fn for weighted roulette. */
+  function surpriseWeight(g, weeklyHours) {
+    const consensus = g.curated?.unifiedConsensusPercent ?? 75;
+    const shortBonus = (g.fit === 'short' && weeklyHours <= 5) ? 1.5 : 1;
+    return (consensus / g.estMainHrs) * shortBonus;
+  }
+  function surpriseReason(g) {
+    const bits = [`~${g.estMainHrs}h ask`];
+    if (g.fit === 'short') bits.push('short-session fit');
+    if (g.curated?.unifiedConsensusPercent != null) bits.push(`rated ${g.curated.unifiedConsensusPercent}%`);
+    return `${g.name}: ${bits.join(' · ')}`;
+  }
+  function surprisePick(candidates, weeklyHours = 8, rand = null) {
+    const pool = (candidates || [])
+      .filter(g => (g.playtimeMins || 0) === 0 && g.estMainHrs > 0)
+      .map(g => ({ g, w: surpriseWeight(g, weeklyHours) }));
+    if (!pool.length) return { pick: null, reason: 'No unplayed games with hour data.' };
+    let pick;
+    if (rand) {
+      const total = pool.reduce((s, e) => s + e.w, 0);
+      let r = rand() * total;
+      pick = pool[pool.length - 1].g;
+      for (const e of pool) { r -= e.w; if (r <= 0) { pick = e.g; break; } }
+    } else {
+      pick = pool.reduce((best, e) => (e.w > best.w ? e : best)).g;
+    }
+    return { pick, reason: surpriseReason(pick) };
+  }
+
+  /** Device fit: Deck/proxy verdicts from real signals, consoles from platform
+   *  strings. Absence says "not listed" (UI copy), except Switch where Steam
+   *  data is silent — there absence stays an honest unknown. */
+  const CONSOLE_TOKENS = { ps5: ['ps5'], xbox: ['xbox series', 'xbox one', 'xbox'], switch: ['switch'] };
+  function deviceFit(game, device) {
+    const d = String(device || '').toLowerCase();
+    const rating = game?.realityCheck?.steamDeckRating || '';
+    const plats = (game?.platforms || []).join(' ').toLowerCase();
+    if (d === 'deck' || d === 'laptop') {
+      if (/verif/i.test(rating)) return 'fits';
+      if (d === 'deck' && /playable/i.test(rating)) return 'fits';
+      if (d === 'deck' && /unsupport|poor|borked/i.test(rating)) return 'no';
+      return 'unknown';
+    }
+    if (CONSOLE_TOKENS[d]) {
+      if (CONSOLE_TOKENS[d].some(t => plats.includes(t))) return 'fits';
+      return d === 'switch' ? 'unknown' : 'no';
+    }
+    return 'unknown';
+  }
+
+  /** Co-op signal: genre tags or Steam category flags surfaced by the backend. */
+  function hasCoop(game) {
+    if ((game?.genres || []).some(g => /co-?op|split[ -]?screen/i.test(g))) return true;
+    return (game?.features?.coop || []).length > 0;
+  }
+
+  /** Family line from required_age + content descriptors. Null when unknown. */
+  function familyLine(family) {
+    if (!family) return null;
+    const age = family.requiredAge;
+    const desc = (family.descriptors || []).filter(Boolean);
+    if (age == null && !desc.length) return null;
+    const head = age > 0 ? `Age ${age}+` : 'All ages';
+    const tail = desc.length ? desc.join(', ') : (age > 0 ? '' : 'no content descriptors');
+    return tail ? `${head} · ${tail}` : head;
+  }
+
+  /** Wishlist drop math: savings vs the price you saved, null when no drop. */
+  function dropFor(saved, now) {
+    if (saved == null || now == null || !(now < saved) || !(saved > 0)) return null;
+    return { now, saved, pct: Math.round((1 - now / saved) * 100) };
+  }
+
+  /** Completionist share from an achievements payload, null-safe. */
+  function achievementPct(a) {
+    if (!a || !(a.total > 0)) return null;
+    return Math.round((a.unlocked / a.total) * 100);
+  }
+
+  /** Review-bomb guard: recent sample craters while a solid overall holds.
+   *  Quiet on thin samples, thin overalls, and small dips — no false alarms. */
+  const BOMB_GAP = 15;
+  const BOMB_MIN_OVERALL = 1000;
+  const BOMB_MIN_N = 10;
+  function bombSignal({ steamPct, steamCount, trend }) {
+    if (steamPct == null || !trend || trend.n < BOMB_MIN_N) return null;
+    if ((steamCount || 0) < BOMB_MIN_OVERALL) return null;
+    const gap = steamPct - trend.pct;
+    if (gap < BOMB_GAP) return null;
+    return { gap, overallPct: steamPct, recentPct: trend.pct, recentN: trend.n };
+  }
+
   /** Frontend memory cache for live lookups (10 min TTL) to avoid refetching per keystroke. */
   const liveMemoryCache = new Map();
   const LIVE_TTL_MS = 10 * 60 * 1000;
@@ -587,8 +794,10 @@ export const GameData = (() => {
     const timeout = setTimeout(() => controller.abort(), 9000);
 
     // 1. Local aggregator: Steam + Metacritic + OpenCritic + CheapShark (no CORS issues, no key needed)
+    // GAMEVERDICT_API_BASE lets node scripts (seed) run the same pipeline against a local server.
     try {
-      const localRes = await fetch(`/api/live-game?q=${encodeURIComponent(query)}`, { signal: controller.signal });
+      const apiBase = globalThis.GAMEVERDICT_API_BASE || '';
+      const localRes = await fetch(`${apiBase}/api/live-game?q=${encodeURIComponent(query)}`, { signal: controller.signal });
       if (localRes.ok) {
         const json = await localRes.json();
         if (json.success && json.data && (json.data.steamRatingPercent != null || json.data.metacriticScore != null || json.data.openCriticScore != null)) {
@@ -658,6 +867,12 @@ export const GameData = (() => {
         trend: null,
         fetchedAt: null
       };
+    }
+
+    // --- Tier 1.5: Seeded snapshot (top-100, weekly). Static but age-stamped. ---
+    const seeded = seedPool.find(e => fuzzyMatch(query, e.title));
+    if (seeded) {
+      return { ...seeded, seedPooled: true };
     }
 
     // --- Tier 2: Live multi-source reviews (Steam + Metacritic + OpenCritic) ---
@@ -820,6 +1035,8 @@ export const GameData = (() => {
         fetchedAt: Date.now(),
         liveSource: `Live: ${sources.join(' · ')}`,
         liveLinks: { metacritic: live.metacriticLink || null, openCritic: live.openCriticUrl || null, steamAppID: live.steamAppID || null },
+        features: live.features || null,
+        family: live.family || null,
         scores: {
           steamPositivePercent: steamPct,
           steamStatus: live.steamRatingText,
@@ -853,6 +1070,8 @@ export const GameData = (() => {
         },
         topQuotes: liveQuotes
       };
+      built.bomb = bombSignal({ steamPct, steamCount: live.steamRatingCount || 0, trend });
+      upsertSeed(built); // refresh any stale snapshot entry in-session
       if (!recentLive.some(g => g.id === built.id)) {
         recentLive.unshift(built);
         if (recentLive.length > 12) recentLive.pop();
@@ -931,6 +1150,21 @@ export const GameData = (() => {
     costPerHourOf,
     estimateHours,
     getSimilar,
-    fuzzyMatch
+    fuzzyMatch,
+    parseSteamInput,
+    computeLibraryStats,
+    sessionFit,
+    finishOrCut,
+    seriesGroups,
+    setSeedPool,
+    getSeedPool,
+    getSeedMeta,
+    surprisePick,
+    bombSignal,
+    deviceFit,
+    hasCoop,
+    familyLine,
+    dropFor,
+    achievementPct
   };
 })();

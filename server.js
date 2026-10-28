@@ -117,6 +117,86 @@ async function protonLookup(appID) {
   return { tier: String(data.tier), total: data.total || 0 };
 }
 
+const COOP_TAGS = ['co-op', 'online co-op', 'lan co-op', 'shared/split screen', 'remote play together', 'cross-platform multiplayer'];
+
+/** Store-category signals: controller/co-op feature flags, IAP, age + descriptors. Null-safe. */
+function extractStoreSignals(details) {
+  if (!details) return { features: null, family: null, hasInAppPurchases: null };
+  const cats = Array.isArray(details.categories) ? details.categories.map(c => c.description || '') : [];
+  const lower = cats.map(c => c.toLowerCase());
+  const controller = lower.some(c => /full controller support/.test(c)) ? 'full'
+    : lower.some(c => /partial controller/.test(c)) ? 'partial' : null;
+  const coop = cats.filter(c => COOP_TAGS.some(t => c.toLowerCase().includes(t)));
+  const cd = details.content_descriptors;
+  const descriptors = Array.isArray(cd) ? [] : (cd?.notes ? [cd.notes] : []);
+  const ageRaw = details.required_age;
+  const requiredAge = ageRaw != null && String(ageRaw).trim() !== '' ? parseInt(ageRaw, 10) : null;
+  return {
+    features: { controller, coop },
+    family: (requiredAge != null || descriptors.length) ? { requiredAge, descriptors } : null,
+    hasInAppPurchases: cats.length ? lower.some(c => /in-app purchases/.test(c)) : null
+  };
+}
+
+const STEAM_KEY = process.env.STEAM_API_KEY || '';
+
+/** Resolve a vanity name to a SteamID64 (needs STEAM_API_KEY). */
+async function resolveVanity(vanity) {
+  if (!STEAM_KEY) return null;
+  const data = await jfetch(`https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${STEAM_KEY}&vanityurl=${encodeURIComponent(vanity)}`);
+  return data?.response?.steamid || null;
+}
+
+/** Owned library: persona + games with playtime and last-played timestamps. */
+async function steamLibraryById(steamId) {
+  const [summary, owned, recent] = await Promise.all([
+    jfetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_KEY}&steamids=${steamId}`),
+    jfetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${STEAM_KEY}&steamid=${steamId}&include_appinfo=true&include_played_free_games=true`),
+    jfetch(`https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${STEAM_KEY}&steamid=${steamId}&count=10`)
+  ]);
+  const player = summary?.response?.players?.[0] || null;
+  const rawGames = owned?.response?.games;
+  const games = Array.isArray(rawGames) ? rawGames.map(g => ({
+    appid: g.appid,
+    name: g.name || `App ${g.appid}`,
+    playtimeMins: g.playtime_forever || 0,
+    playtime2wksMins: g.playtime_2weeks || 0,
+    rtimeLastPlayed: g.rtime_last_played || 0
+  })) : null; // null = private or unreachable, [] = genuinely empty
+  const recentGames = Array.isArray(recent?.response?.games) ? recent.response.games.map(g => ({
+    appid: g.appid,
+    name: g.name || `App ${g.appid}`,
+    playtime2wksMins: g.playtime_2weeks || 0,
+    playtimeMins: g.playtime_forever || 0
+  })) : [];
+  return {
+    steamId,
+    persona: player ? { name: player.personaname || 'Steam player', avatar: player.avatarmedium || null } : null,
+    gameCount: owned?.response?.game_count ?? (games ? games.length : 0),
+    games,
+    recent: recentGames
+  };
+}
+
+/** Batched store details for owned games (public API, no key). Capped upstream. */
+async function steamDetailsBatch(ids) {
+  const data = await jfetch(`https://store.steampowered.com/api/appdetails?appids=${ids.join(',')}&l=en&cc=US`, 10000);
+  return ids.map(id => {
+    const d = data?.[String(id)]?.success ? data[String(id)].data : null;
+    if (!d) return { appid: id, ok: false };
+    return {
+      appid: id,
+      ok: true,
+      name: d.name || `App ${id}`,
+      genres: (d.genres || []).map(g => g.description).slice(0, 4),
+      developers: (d.developers || []).slice(0, 2),
+      header: d.header_image || null,
+      ...extractStoreSignals(d),
+      metacritic: d.metacritic?.score ? { score: d.metacritic.score, url: d.metacritic.url || null } : null
+    };
+  });
+}
+
 /** OpenCritic public API (best-effort, no key): search then score */
 async function openCriticLookup(title, steamAppID) {
   try {
@@ -182,9 +262,7 @@ async function fetchLiveGameFromWeb(query) {
     steamReviews: steamRev?.reviews || [],
     steamRecent: steamRecent || null,
     deckProton: proton || null,
-    hasInAppPurchases: details?.categories
-      ? details.categories.some(c => /in-app purchases/i.test(c.description || ''))
-      : null,
+    ...extractStoreSignals(details),
     metacriticScore: metaScore,
     metacriticLink: cs?.metacriticLink || null,
     openCriticScore: oc.score,
@@ -255,7 +333,105 @@ const server = http.createServer(async (req, res) => {
 
   if (reqUrl.pathname === '/api/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ ok: true }));
+    res.end(JSON.stringify({ ok: true, steamKey: !!STEAM_KEY }));
+    return;
+  }
+
+  if (reqUrl.pathname === '/api/steam-library') {
+    const input = (reqUrl.searchParams.get('input') || '').trim();
+    if (!input) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Missing query parameter "input"' }));
+      return;
+    }
+    if (!STEAM_KEY) {
+      res.writeHead(503, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Steam API key not configured. Set STEAM_API_KEY (free at steamcommunity.com/dev/apikey).' }));
+      return;
+    }
+    let steamId = /^\d{17,}$/.test(input) ? input : null;
+    if (!steamId) {
+      const vanity = (input.match(/steamcommunity\.com\/id\/([^/?#]+)/i)?.[1] || input).replace(/\/+$/, '');
+      steamId = await resolveVanity(vanity);
+    }
+    if (!steamId) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Steam profile not found. Check the URL, ID, or vanity name.' }));
+      return;
+    }
+    const cacheKey = `lib:${steamId}`;
+    const cached = cacheGet(cacheKey);
+    if (cached) {
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600', 'X-Cache': 'HIT' });
+      res.end(JSON.stringify({ success: true, cached: true, ...cached }));
+      return;
+    }
+    const lib = await steamLibraryById(steamId);
+    if (lib.games == null) {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, steamId, private: true, error: 'Game library is private. Set the Steam profile game details to Public.' }));
+      return;
+    }
+    cacheSet(cacheKey, lib);
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600', 'X-Cache': 'MISS' });
+    res.end(JSON.stringify({ success: true, ...lib }));
+    return;
+  }
+
+  if (reqUrl.pathname === '/api/steam-details') {
+    const ids = (reqUrl.searchParams.get('ids') || '').split(',')
+      .map(s => s.trim()).filter(s => /^\d+$/.test(s)).slice(0, 40)
+      .map(Number);
+    if (!ids.length) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Missing query parameter "ids" (comma-separated Steam app IDs, max 40)' }));
+      return;
+    }
+    const cacheKey = `det:${[...ids].sort((a, b) => a - b).join(',')}`;
+    const cached = cacheGet(cacheKey);
+    if (cached) {
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=86400', 'X-Cache': 'HIT' });
+      res.end(JSON.stringify({ success: true, cached: true, details: cached }));
+      return;
+    }
+    const details = await steamDetailsBatch(ids);
+    cacheSet(cacheKey, details);
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=86400', 'X-Cache': 'MISS' });
+    res.end(JSON.stringify({ success: true, details }));
+    return;
+  }
+
+  if (reqUrl.pathname === '/api/steam-achievements') {
+    const steamId = (reqUrl.searchParams.get('steamid') || '').trim();
+    const appId = (reqUrl.searchParams.get('appid') || '').trim();
+    if (!/^\d{17,}$/.test(steamId) || !/^\d+$/.test(appId)) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Missing query parameters "steamid" (17-digit) and "appid"' }));
+      return;
+    }
+    if (!STEAM_KEY) {
+      res.writeHead(503, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Steam API key not configured. Set STEAM_API_KEY.' }));
+      return;
+    }
+    const cacheKey = `ach:${steamId}:${appId}`;
+    const cached = cacheGet(cacheKey);
+    if (cached) {
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600', 'X-Cache': 'HIT' });
+      res.end(JSON.stringify({ success: true, cached: true, ...cached }));
+      return;
+    }
+    const data = await jfetch(`https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${appId}&key=${STEAM_KEY}&steamid=${steamId}`);
+    const list = data?.playerstats?.achievements;
+    if (!Array.isArray(list)) {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, steamId, appId: Number(appId), error: 'No achievements found (private profile or no achievements in this game).' }));
+      return;
+    }
+    const result = { steamId, appId: Number(appId), total: list.length, unlocked: list.filter(a => a.achieved === 1).length };
+    cacheSet(cacheKey, result);
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600', 'X-Cache': 'MISS' });
+    res.end(JSON.stringify({ success: true, ...result }));
     return;
   }
 

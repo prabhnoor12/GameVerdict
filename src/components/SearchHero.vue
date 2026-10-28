@@ -64,6 +64,14 @@
         <option value="hours">Sort: Hours</option>
         <option value="value">Sort: Value ($/hr)</option>
       </select>
+      <select :value="store.device" @change="setDevice($event.target.value)" class="bg-zinc-900 border border-zinc-700 rounded-full text-xs text-zinc-300 px-3 py-1" aria-label="Your device">
+        <option value="pc">Device: PC</option>
+        <option value="deck">Device: Deck</option>
+        <option value="laptop">Device: Old laptop</option>
+        <option value="ps5">Device: PS5</option>
+        <option value="xbox">Device: Xbox</option>
+        <option value="switch">Device: Switch</option>
+      </select>
     </div>
 
     <div class="pt-2">
@@ -87,7 +95,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { store, filteredGames, selectGame, search, refreshSuggestions } from '../store.js';
+import { store, filteredGames, selectGame, search, refreshSuggestions, setDevice } from '../store.js';
 
 const hl = ref(-1);
 let debounce = null;

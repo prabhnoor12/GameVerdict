@@ -14,6 +14,9 @@
         <button @click="store.showWishlist = true" class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-medium text-xs flex items-center gap-1.5 transition">
           <span>❤️</span><span class="hidden sm:inline">Wishlist ({{ store.wishlist.length }})</span>
         </button>
+        <button @click="scrollToLibrary" class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-medium text-xs flex items-center gap-1.5 transition">
+          <span>📚</span><span class="hidden sm:inline">Library{{ libraryStats.total ? ` (${libraryStats.total})` : '' }}</span>
+        </button>
         <button @click="scrollToCalculator" class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-medium text-xs flex items-center gap-1.5 transition">
           <span>🧮</span><span class="hidden sm:inline">Backlog ROI</span>
         </button>
@@ -27,9 +30,11 @@
     </header>
 
     <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 flex flex-col gap-6 relative z-10">
+      <OnboardingQuiz />
       <SearchHero />
       <VerdictCard :game="store.currentGame" />
       <RoiCalculator />
+      <LibraryPanel />
     </main>
 
     <footer class="border-t border-zinc-900 py-6 text-center text-xs text-zinc-500 relative z-10">
@@ -62,12 +67,21 @@
           <button @click="store.showWishlist = false" class="text-zinc-400 hover:text-white">✕</button>
         </div>
         <div v-if="!store.wishlist.length" class="text-xs text-zinc-500">Nothing saved yet — tap 🤍 on any game.</div>
+        <button v-else @click="checkPrices" :disabled="store.checkingPrices" class="w-full py-2 rounded-xl bg-emerald-500/15 border border-emerald-700 text-emerald-300 hover:bg-emerald-500/25 disabled:opacity-60 text-xs font-bold">
+          {{ store.checkingPrices ? 'Checking live prices…' : '💸 Check for price drops' }}
+        </button>
+        <div v-for="d in store.priceDrops" :key="d.id" class="text-xs bg-emerald-950/60 border border-emerald-700 rounded-xl px-3 py-2">
+          <span class="text-emerald-300 font-bold">💸 {{ d.title }}: ${{ d.saved.toFixed(2) }} → ${{ d.now.toFixed(2) }} (−{{ d.pct }}%)</span>
+        </div>
         <div v-if="store.wishlist.length" class="text-[11px] text-zinc-400 bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2">
           Queue: <span class="text-white font-mono font-bold">{{ backlogTotals.hours }}h</span> · <span class="text-white font-mono font-bold">{{ backlogTotals.weeks.toFixed(1) }} wks</span> · <span class="text-emerald-400 font-mono font-bold">${{ backlogTotals.cost.toFixed(2) }}</span>
         </div>
-        <div v-for="w in store.wishlist" :key="w.id" class="flex items-center justify-between text-xs bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2">
-          <span class="text-zinc-200 font-medium truncate">{{ w.title }}</span>
-          <span class="text-emerald-400 font-mono ml-2">${{ w.price.toFixed(2) }}</span>
+        <div v-for="w in wishlistPatience" :key="w.id" class="text-xs bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 space-y-0.5">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-zinc-200 font-medium truncate">{{ w.title }}</span>
+            <span class="text-emerald-400 font-mono ml-2 shrink-0">${{ w.price.toFixed(2) }}</span>
+          </div>
+          <div class="text-[10px] text-zinc-500">{{ w.waitVerdict }}</div>
         </div>
       </div>
     </div>
@@ -93,10 +107,12 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted } from 'vue';
-import { store, share, toggleCompare, toast, initFromHash, backlogTotals } from './store.js';
+import { store, share, toggleCompare, toast, initFromHash, backlogTotals, libraryStats, wishlistPatience, checkPrices } from './store.js';
 import SearchHero from './components/SearchHero.vue';
 import VerdictCard from './components/VerdictCard.vue';
 import RoiCalculator from './components/RoiCalculator.vue';
+import LibraryPanel from './components/LibraryPanel.vue';
+import OnboardingQuiz from './components/OnboardingQuiz.vue';
 
 const backdropStyle = computed(() => ({
   backgroundImage: `url('${store.currentGame.backdropImg}')`
@@ -104,6 +120,10 @@ const backdropStyle = computed(() => ({
 
 function scrollToCalculator() {
   document.getElementById('roiCalculatorCard')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function scrollToLibrary() {
+  document.getElementById('libraryPanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function onKey(e) {

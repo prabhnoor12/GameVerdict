@@ -99,6 +99,184 @@ describe('Tier 3 unknown state (no invented scores)', () => {
   });
 });
 
+describe('parseSteamInput (profile URL, id, or vanity)', () => {
+  it('reads raw SteamID64', () => {
+    assert.deepEqual(GameData.parseSteamInput('76561198012345678'), { kind: 'id', value: '76561198012345678' });
+  });
+  it('reads profile and vanity URLs', () => {
+    assert.deepEqual(
+      GameData.parseSteamInput('https://steamcommunity.com/profiles/76561198012345678/'),
+      { kind: 'id', value: '76561198012345678' }
+    );
+    assert.deepEqual(
+      GameData.parseSteamInput('https://steamcommunity.com/id/someplayer'),
+      { kind: 'vanity', value: 'someplayer' }
+    );
+  });
+  it('reads bare vanity names and rejects junk', () => {
+    assert.deepEqual(GameData.parseSteamInput('someplayer'), { kind: 'vanity', value: 'someplayer' });
+    assert.equal(GameData.parseSteamInput('http://example.com/nope'), null);
+    assert.equal(GameData.parseSteamInput(''), null);
+  });
+});
+
+describe('computeLibraryStats (owned-library triage inputs)', () => {
+  const lib = [
+    { appid: 1, name: 'A', playtimeMins: 0, rtimeLastPlayed: 0 },
+    { appid: 2, name: 'B', playtimeMins: 600, rtimeLastPlayed: Date.now() / 1000 - 100 * 86400 },
+    { appid: 3, name: 'C', playtimeMins: 60, rtimeLastPlayed: Date.now() / 1000 - 3600 }
+  ];
+  it('totals owned, unplayed, and hours', () => {
+    const s = GameData.computeLibraryStats(lib);
+    assert.equal(s.total, 3);
+    assert.equal(s.unplayed, 1);
+    assert.equal(s.hoursPlayed, 11);
+  });
+});
+
+describe('sessionFit (weeknight vs epic from genres)', () => {
+  it('routes roguelikes to short sessions and RPGs to epics', () => {
+    assert.equal(GameData.sessionFit(['Roguelike', 'Deckbuilder']), 'short');
+    assert.equal(GameData.sessionFit(['Action RPG', 'Open World']), 'epic');
+    assert.equal(GameData.sessionFit(['Adventure']), 'either');
+  });
+});
+
+describe('finishOrCut (started-stale vs never-played)', () => {
+  const day = 86400, now = Date.now() / 1000;
+  it('flags a started-stale game to finish', () => {
+    const out = GameData.finishOrCut([
+      { appid: 1, name: 'Epic', playtimeMins: 1800, rtimeLastPlayed: now - 120 * day, estMainHrs: 60 }
+    ]);
+    assert.equal(out.finish.length, 1);
+    assert.equal(out.cut.length, 0);
+    assert.ok(out.finish[0].remainingHrs > 0);
+  });
+  it('flags a never-played game to cut-or-start, not finish', () => {
+    const out = GameData.finishOrCut([
+      { appid: 2, name: 'Dusty', playtimeMins: 0, rtimeLastPlayed: 0, estMainHrs: 20 }
+    ]);
+    assert.equal(out.finish.length, 0);
+    assert.equal(out.cut.length, 1);
+  });
+  it('leaves fresh and finished games alone', () => {
+    const out = GameData.finishOrCut([
+      { appid: 3, name: 'Fresh', playtimeMins: 30, rtimeLastPlayed: now - 3600, estMainHrs: 25 },
+      { appid: 4, name: 'Done', playtimeMins: 4000, rtimeLastPlayed: now - 200 * day, estMainHrs: 60 }
+    ]);
+    assert.equal(out.finish.length + out.cut.length, 0);
+  });
+});
+
+describe('seriesGroups (sequel catch-up, conservative)', () => {
+  it('groups numbered entries and spots a missing predecessor', () => {
+    const groups = GameData.seriesGroups([
+      { appid: 1, name: 'Dark Souls III', playtimeMins: 0 },
+      { appid: 2, name: 'Dark Souls', playtimeMins: 5000 }
+    ]);
+    assert.equal(groups.length, 1);
+    assert.ok(groups[0].missingPredecessor === false);
+  });
+  it('ignores one-offs', () => {
+    assert.equal(GameData.seriesGroups([{ appid: 1, name: 'Balatro', playtimeMins: 0 }]).length, 0);
+  });
+});
+
+describe('surprisePick (weighted backlog pick with a reason)', () => {
+  it('favors quick wins and explains itself', () => {
+    const pick = GameData.surprisePick([
+      { appid: 1, name: 'Epic', playtimeMins: 0, estMainHrs: 80, fit: 'epic', curated: null },
+      { appid: 2, name: 'Quick', playtimeMins: 0, estMainHrs: 8, fit: 'short', curated: null }
+    ], 4);
+    assert.equal(pick.pick.name, 'Quick');
+    assert.match(pick.reason, /8h/i);
+  });
+  it('skips started games and returns null on an empty pile', () => {
+    assert.equal(GameData.surprisePick([{ appid: 1, name: 'Busy', playtimeMins: 600, estMainHrs: 40, fit: 'epic' }], 8).pick, null);
+    assert.equal(GameData.surprisePick([], 8).pick, null);
+  });
+});
+
+describe('bombSignal (review-bomb guard, careful wording)', () => {
+  it('flags recent cratering against a solid overall', () => {
+    const b = GameData.bombSignal({ steamPct: 89, steamCount: 120000, trend: { pct: 52, n: 20 } });
+    assert.ok(b);
+    assert.equal(b.gap, 37);
+  });
+  it('stays quiet on thin samples and aligned scores', () => {
+    assert.equal(GameData.bombSignal({ steamPct: 89, steamCount: 120000, trend: { pct: 52, n: 4 } }), null);
+    assert.equal(GameData.bombSignal({ steamPct: 89, steamCount: 500, trend: { pct: 52, n: 20 } }), null);
+    assert.equal(GameData.bombSignal({ steamPct: 71, steamCount: 120000, trend: { pct: 66, n: 20 } }), null);
+    assert.equal(GameData.bombSignal({ steamPct: 89, steamCount: 120000, trend: null }), null);
+  });
+});
+
+describe('seed pool (static top-100 database)', () => {
+  it('serves pooled verdicts before hitting live', async () => {
+    GameData.setSeedPool([{
+      id: 'seed-1', title: 'Seeded Game', genres: ['Action'],
+      unifiedConsensusPercent: 88, verdictBadge: 'Seeded', badgeType: 'emerald',
+      scores: { steamPositivePercent: 90, steamStatus: 'Very Positive', steamReviewCount: '50k', openCritic: 85, metaCritic: 86, userBacklogRating: 8.8 },
+      realityCheck: { mainStoryHours: 20, completionistHours: 50 },
+      topQuotes: [], isLive: false, isEstimate: false
+    }]);
+    const g = await GameData.searchGame('seeded game');
+    assert.equal(g.title, 'Seeded Game');
+    assert.equal(g.seedPooled, true);
+    GameData.setSeedPool([]);
+  });
+});
+
+describe('deviceFit (Deck/proxy/platform, honest unknowns)', () => {
+  const decked = { platforms: ['PC (Steam)'], realityCheck: { steamDeckRating: 'Verified via ProtonDB (platinum, 900 reports)' }, features: null };
+  it('fits Deck-verified games on Deck', () => {
+    assert.equal(GameData.deviceFit(decked, 'deck'), 'fits');
+  });
+  it('answers unknown when there is no signal', () => {
+    assert.equal(GameData.deviceFit({ platforms: [], realityCheck: {} }, 'deck'), 'unknown');
+    assert.equal(GameData.deviceFit(decked, 'switch'), 'unknown');
+  });
+  it('matches console platforms by string', () => {
+    assert.equal(GameData.deviceFit({ platforms: ['PC (Steam)', 'PS5'], realityCheck: {} }, 'ps5'), 'fits');
+    assert.equal(GameData.deviceFit({ platforms: ['PC (Steam)'], realityCheck: {} }, 'ps5'), 'no');
+  });
+});
+
+describe('familyLine (required_age + descriptors, one line)', () => {
+  it('states clean all-ages plainly', () => {
+    assert.equal(GameData.familyLine({ requiredAge: 0, descriptors: [] }), 'All ages · no content descriptors');
+  });
+  it('names age gate and descriptors', () => {
+    assert.equal(
+      GameData.familyLine({ requiredAge: 17, descriptors: ['Violence', 'Strong Language'] }),
+      'Age 17+ · Violence, Strong Language'
+    );
+  });
+  it('returns null with no data instead of guessing', () => {
+    assert.equal(GameData.familyLine(null), null);
+    assert.equal(GameData.familyLine({ requiredAge: null, descriptors: [] }), null);
+  });
+});
+
+describe('dropFor (wishlist price-drop math)', () => {
+  it('flags a real drop with percent', () => {
+    assert.deepEqual(GameData.dropFor(59.99, 29.99), { now: 29.99, saved: 59.99, pct: 50 });
+  });
+  it('stays quiet on no-change, rise, and missing prices', () => {
+    assert.equal(GameData.dropFor(59.99, 59.99), null);
+    assert.equal(GameData.dropFor(29.99, 59.99), null);
+    assert.equal(GameData.dropFor(59.99, null), null);
+  });
+});
+
+describe('achievementPct (completionist signal)', () => {
+  it('computes unlocked share, null-safe', () => {
+    assert.equal(GameData.achievementPct({ total: 50, unlocked: 25 }), 50);
+    assert.equal(GameData.achievementPct({ total: 0, unlocked: 0 }), null);
+    assert.equal(GameData.achievementPct(null), null);
+  });
+});
+
 describe('existing engine behavior (no regressions)', () => {
   it('fuzzy-matches typos', () => {
     assert.ok(GameData.fuzzyMatch('elden rng', 'Elden Ring'));
