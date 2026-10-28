@@ -1,0 +1,247 @@
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const PORT = process.env.PORT || 3000;
+
+const MIME_TYPES = {
+  '.html': 'text/html',
+  '.css': 'text/css',
+  '.js': 'application/javascript',
+  '.json': 'application/json',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon'
+};
+
+const UA = { 'User-Agent': 'GameVerdict/2.0 (live-review-aggregator)' };
+const jfetch = async (url, ms = 7000) => {
+  const c = new AbortController();
+  const t = setTimeout(() => c.abort(), ms);
+  try {
+    const r = await fetch(url, { signal: c.signal, headers: UA });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch { return null; } finally { clearTimeout(t); }
+};
+
+/** CheapShark: price + metacritic score/link + steamAppID candidate */
+async function cheapSharkLookup(query) {
+  const deals = await jfetch(`https://www.cheapshark.com/api/1.0/deals?title=${encodeURIComponent(query)}&limit=8`);
+  if (!Array.isArray(deals) || !deals.length) return null;
+  const withSteam = deals.filter(d => d.steamAppID && d.steamAppID !== '0');
+  const ranked = (withSteam.length ? withSteam : deals).sort(
+    (a, b) => (parseInt(b.steamRatingCount, 10) || 0) - (parseInt(a.steamRatingCount, 10) || 0)
+  );
+  const b = ranked[0];
+  return {
+    title: b.title,
+    steamAppID: b.steamAppID && b.steamAppID !== '0' ? String(b.steamAppID) : null,
+    steamRatingPercent: parseInt(b.steamRatingPercent, 10) || null,
+    steamRatingText: b.steamRatingText || null,
+    steamRatingCount: parseInt(b.steamRatingCount, 10) || 0,
+    metacriticScore: parseInt(b.metacriticScore, 10) || null,
+    metacriticLink: b.metacriticLink ? `https://www.metacritic.com${b.metacriticLink}` : null,
+    salePrice: parseFloat(b.salePrice) || null,
+    normalPrice: parseFloat(b.normalPrice) || 59.99,
+    thumb: b.thumb || null,
+    dealID: b.dealID || null
+  };
+}
+
+/** Resolve a Steam appID via store search when CheapShark has none */
+async function steamSearchAppId(query) {
+  const data = await jfetch(`https://store.steampowered.com/api/storesearch/?term=${encodeURIComponent(query)}&l=en&cc=US`);
+  const items = data?.items;
+  if (!Array.isArray(items) || !items.length) return null;
+  const q = query.toLowerCase();
+  const exact = items.find(i => i.name?.toLowerCase() === q) || items[0];
+  return exact?.id ? String(exact.id) : null;
+}
+
+async function steamAppDetails(appID) {
+  const data = await jfetch(`https://store.steampowered.com/api/appdetails?appids=${appID}&l=en&cc=US`);
+  return data?.[appID]?.success ? data[appID].data : null;
+}
+
+/** Real player reviews: summary + top helpful review texts */
+async function steamReviews(appID) {
+  const data = await jfetch(
+    `https://store.steampowered.com/appreviews/${appID}?json=1&language=all&purchase_type=all&num_per_page=10&filter=all&summary_num_reviews=100`,
+    8000
+  );
+  if (!data?.query_summary) return null;
+  const q = data.query_summary;
+  const total = (q.total_positive || 0) + (q.total_negative || 0);
+  const pct = total ? Math.round((q.total_positive / total) * 100) : null;
+  const reviews = (data.reviews || []).slice(0, 6).map(r => ({
+    source: 'Steam',
+    author: `Steam player (${Math.round((r.author?.playtime_forever || 0) / 60)} hrs)`,
+    quote: (r.review || '').slice(0, 280),
+    votes: r.votes_up || 0,
+    votedUp: r.voted_up !== false,
+    url: r.recommendationid ? `https://steamcommunity.com/id/reviews/` : null
+  })).filter(r => r.quote && r.quote.length > 40);
+  return {
+    percent: pct,
+    text: q.review_score_desc || null,
+    total,
+    reviews
+  };
+}
+
+/** OpenCritic public API (best-effort, no key): search then score */
+async function openCriticLookup(title, steamAppID) {
+  try {
+    const search = await jfetch(`https://api.opencritic.com/api/game/search?criteria=${encodeURIComponent(title)}`);
+    const list = Array.isArray(search) ? search : search?.results || search?.games || null;
+    if (!Array.isArray(list) || !list.length) return { score: null, reviews: [] };
+    const q = title.toLowerCase();
+    const game = list.find(g => (g.name || '').toLowerCase() === q) || list[0];
+    const id = game?.id;
+    if (!id) return { score: null, reviews: [] };
+    const detail = await jfetch(`https://api.opencritic.com/api/game/${id}`);
+    const score = detail?.topCriticScore ?? detail?.averageScore ?? game?.topCriticScore ?? null;
+    const reviews = (detail?.reviews || game?.reviews || []).slice(0, 4).map(r => ({
+      source: 'OpenCritic',
+      author: r.outletName || r.publication?.name || r.author || 'Critic',
+      quote: (r.snippet || r.quote || r.title || '').slice(0, 280),
+      score: r.score ?? null,
+      url: r.externalUrl || (r.url ? `https://opencritic.com${r.url}` : 'https://opencritic.com')
+    })).filter(r => r.quote && r.quote.length > 30);
+    return { score: typeof score === 'number' ? Math.round(score) : null, url: `https://opencritic.com/game/${id}/a`, reviews };
+  } catch { return { score: null, reviews: [] }; }
+}
+
+/**
+ * GET /api/live-game?q=<title>
+ * Aggregates: CheapShark (price/Metacritic) + Steam store (metadata, real reviews) + OpenCritic (critic score/quotes)
+ */
+async function fetchLiveGameFromWeb(query) {
+  const cs = await cheapSharkLookup(query);
+  let appID = cs?.steamAppID || null;
+  if (!appID) appID = await steamSearchAppId(query);
+  if (!appID && !cs) return null;
+
+  const [details, steamRev] = appID
+    ? await Promise.all([steamAppDetails(appID), steamReviews(appID)])
+    : [null, null];
+  const oc = await openCriticLookup(cs?.title || details?.name || query, appID);
+
+  const title = details?.name || cs?.title || query;
+  const steamPct = steamRev?.percent ?? cs?.steamRatingPercent ?? null;
+  const steamText = steamRev?.text ?? cs?.steamRatingText ?? 'Unknown';
+  const steamCount = steamRev?.total ?? cs?.steamRatingCount ?? 0;
+  const metaScore = cs?.metacriticScore ?? null;
+
+  const platforms = [];
+  if (details?.platforms?.windows) platforms.push('PC (Steam)');
+  if (details?.platforms?.mac) platforms.push('Mac');
+  if (details?.platforms?.linux) platforms.push('Linux/Deck');
+  if (!platforms.length && cs) platforms.push('PC (Steam)', 'Windows');
+
+  return {
+    title,
+    steamAppID: appID,
+    developer: details?.developers?.join(', ') || null,
+    publisher: details?.publishers?.join(', ') || null,
+    releaseDate: details?.release_date?.date || null,
+    genres: (details?.genres || []).map(g => g.description).slice(0, 4),
+    headerImg: details?.header_image || (appID ? `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${appID}/header.jpg` : cs?.thumb),
+    platforms,
+    steamRatingPercent: steamPct,
+    steamRatingText: steamText,
+    steamRatingCount: steamCount,
+    steamReviews: steamRev?.reviews || [],
+    metacriticScore: metaScore,
+    metacriticLink: cs?.metacriticLink || null,
+    openCriticScore: oc.score,
+    openCriticUrl: oc.url || null,
+    openCriticReviews: oc.reviews || [],
+    salePrice: cs?.salePrice ?? null,
+    normalPrice: details?.price_overview?.final
+      ? details.price_overview.final / 100
+      : (cs?.normalPrice ?? 59.99),
+    priceText: details?.price_overview?.final_formatted || null,
+    thumb: cs?.thumb || null,
+    sources: [
+      steamPct != null && 'Steam',
+      metaScore != null && 'Metacritic',
+      oc.score != null && 'OpenCritic',
+      'CheapShark'
+    ].filter(Boolean)
+  };
+}
+
+const server = http.createServer(async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  const reqUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+
+  if (reqUrl.pathname === '/api/live-game') {
+    const query = reqUrl.searchParams.get('q') || reqUrl.searchParams.get('query') || '';
+    if (!query.trim()) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Missing query parameter "q"' }));
+      return;
+    }
+    const liveData = await fetchLiveGameFromWeb(query.trim());
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: !!liveData, query, data: liveData }));
+    return;
+  }
+
+  if (reqUrl.pathname === '/api/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ ok: true }));
+    return;
+  }
+
+  // Static frontend: prefer Vite build output (dist/), fall back to repo root (dev sources)
+  const distDir = path.join(__dirname, 'dist');
+  const useDist = fs.existsSync(path.join(distDir, 'index.html'));
+  const baseDir = useDist ? distDir : __dirname;
+  const rel = reqUrl.pathname === '/' ? 'index.html' : decodeURIComponent(reqUrl.pathname.slice(1));
+
+  let filePath = path.join(baseDir, rel);
+  if (!path.resolve(filePath).startsWith(path.resolve(baseDir))) {
+    res.writeHead(403, { 'Content-Type': 'text/plain' });
+    res.end('Forbidden');
+    return;
+  }
+  // SPA fallback: unknown paths serve index.html (preserves #game= deep links on refresh)
+  if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+    filePath = path.join(baseDir, 'index.html');
+  }
+  const ext = path.extname(filePath).toLowerCase();
+  const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+
+  fs.readFile(filePath, (err, content) => {
+    if (err) {
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end(`Server Error: ${err.code}`);
+    } else {
+      res.writeHead(200, { 'Content-Type': contentType });
+      res.end(content);
+    }
+  });
+});
+
+server.listen(PORT, () => {
+  console.log(`\n🎮 GameVerdict Server running live at:`);
+  console.log(`👉 http://localhost:${PORT}`);
+  console.log(`⚡ Live multi-source API: http://localhost:${PORT}/api/live-game?q=cyberpunk\n`);
+});
