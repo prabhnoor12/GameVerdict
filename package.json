@@ -25,6 +25,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "pg": "^8.23.1",
     "vue": "^3.5.44"
   },
   "devDependencies": {

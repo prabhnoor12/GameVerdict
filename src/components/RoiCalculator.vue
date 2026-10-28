@@ -1,9 +1,9 @@
 <template>
-  <section id="roiCalculatorCard" class="bg-zinc-900/80 border border-zinc-800 rounded-3xl p-6 sm:p-8 backdrop-blur-md space-y-4">
-    <div class="flex items-center justify-between">
+  <section id="roiCalculatorCard" class="bg-zinc-900/80 border border-zinc-800 rounded-3xl p-4 sm:p-8 backdrop-blur-md space-y-4">
+    <div class="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:justify-between">
       <div class="flex items-center gap-2">
         <span class="text-xl">🧮</span>
-        <h3 class="text-lg font-bold text-white">Backlog ROI & Cost-per-Joy-Hour Calculator</h3>
+        <h3 class="text-base sm:text-lg font-bold text-white">Backlog ROI & Cost-per-Joy-Hour Calculator</h3>
       </div>
       <span class="text-xs text-zinc-500 font-mono">Personalized Reality Check</span>
     </div>
@@ -11,19 +11,19 @@
       Adjust your weekly free gaming time to see how long it will take to beat this title and whether the cost-per-hour justifies starting now or waiting for a Steam sale.
     </p>
     <div class="flex flex-wrap gap-2 text-[11px]">
-      <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300 cursor-pointer">
-        <input type="checkbox" v-model="store.useSalePrice" class="accent-emerald-500" /> Use sale price when available
+      <label class="flex items-center gap-1.5 px-3 py-2 rounded-full border border-zinc-700 text-zinc-300 cursor-pointer min-h-[40px]">
+        <input type="checkbox" v-model="store.useSalePrice" class="accent-emerald-500 w-4 h-4" /> Use sale price when available
       </label>
       <div class="flex items-center gap-1 px-3 py-1.5 rounded-full border border-zinc-700 text-zinc-300">
-        <button @click="store.hoursMode = 'main'" :class="['px-2 py-0.5 rounded-full', store.hoursMode === 'main' ? 'bg-emerald-500 text-zinc-950 font-bold' : 'text-zinc-400']">Main story</button>
-        <button @click="store.hoursMode = 'completionist'" :class="['px-2 py-0.5 rounded-full', store.hoursMode === 'completionist' ? 'bg-emerald-500 text-zinc-950 font-bold' : 'text-zinc-400']">100%</button>
+        <button @click="store.hoursMode = 'main'" :class="['px-2 py-1 rounded-full min-h-[32px]', store.hoursMode === 'main' ? 'bg-emerald-500 text-zinc-950 font-bold' : 'text-zinc-400']">Main story</button>
+        <button @click="store.hoursMode = 'completionist'" :class="['px-2 py-1 rounded-full min-h-[32px]', store.hoursMode === 'completionist' ? 'bg-emerald-500 text-zinc-950 font-bold' : 'text-zinc-400']">100%</button>
       </div>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
       <div class="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-2">
         <label class="block text-xs font-bold text-zinc-300">Your Free Gaming Time / Week:</label>
         <div class="flex items-center gap-3">
-          <input type="range" min="2" max="40" v-model.number="store.weeklyHours" class="flex-1 accent-emerald-500" aria-label="Weekly free gaming hours" />
+          <input type="range" min="2" max="40" v-model.number="store.weeklyHours" class="flex-1 accent-emerald-500 cursor-pointer" aria-label="Weekly free gaming hours" />
           <span class="font-mono text-emerald-400 font-bold text-sm w-12 text-right">{{ store.weeklyHours }} hrs</span>
         </div>
         <div class="text-[10px] text-zinc-500">e.g. 1 hour/day + weekend session</div>

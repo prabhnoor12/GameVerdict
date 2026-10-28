@@ -277,6 +277,35 @@ describe('achievementPct (completionist signal)', () => {
   });
 });
 
+describe('mergeRows (last-write-wins sync merge)', () => {
+  it('keeps newer local rows and adds unseen remote rows', async () => {
+    const { mergeRows } = await import('../js/sync.js');
+    const out = mergeRows(
+      [{ id: 'a', title: 'Local newer', addedAt: 200 }, { id: 'b', title: 'Local only', addedAt: 50 }],
+      [{ id: 'a', title: 'Remote older', addedAt: 100 }, { id: 'c', title: 'Remote only', addedAt: 10 }],
+      'id', 'addedAt'
+    );
+    const byId = Object.fromEntries(out.map((r) => [r.id, r]));
+    assert.equal(byId.a.title, 'Local newer');
+    assert.equal(byId.b.title, 'Local only');
+    assert.equal(byId.c.title, 'Remote only');
+  });
+});
+
+describe('sync guards (disconnected by default)', () => {
+  it('skips every network op with no credentials', async () => {
+    const sync = await import('../js/sync.js');
+    assert.deepEqual(await sync.pushLocal({ wishlist: [{ id: 'x' }] }), { skipped: true, reason: 'supabase not connected' });
+    assert.deepEqual((await sync.pullRemote({})).reason, 'supabase not connected');
+    assert.deepEqual((await sync.submitRating('g', 8)).reason, 'supabase not connected');
+    assert.deepEqual((await sync.communityAverage('g')).reason, 'supabase not connected');
+  });
+  it('rejects out-of-range scores without a network round-trip', async () => {
+    const sync = await import('../js/sync.js');
+    assert.deepEqual(await sync.submitRating('g', 99), { ok: false, error: 'Score must be 1–10.' });
+  });
+});
+
 describe('existing engine behavior (no regressions)', () => {
   it('fuzzy-matches typos', () => {
     assert.ok(GameData.fuzzyMatch('elden rng', 'Elden Ring'));

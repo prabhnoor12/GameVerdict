@@ -47,6 +47,14 @@ export const store = reactive({
   achievements: {},
   priceDrops: [],
   checkingPrices: false,
+  priceDropBadge: 0,
+  lastPriceCheckAt: 0,
+  syncUrl: '',
+  syncKey: '',
+  syncStatus: 'disconnected',
+  syncError: '',
+  syncing: false,
+  myRatings: {},
   device: loadJson('gv:device:v1', 'pc'),
   onboarded: loadJson('gv:onboarded:v1', false),
   showLibrary: false,
@@ -58,11 +66,27 @@ export const store = reactive({
 });
 
 let toastTimer = null;
-export function toast(msg) {
+const toastQueue = [];
+function showToast(msg) {
   store.toastMsg = msg;
   store.toastVisible = true;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => (store.toastVisible = false), 2500);
+  toastTimer = setTimeout(() => {
+    store.toastVisible = false;
+    if (toastQueue.length) {
+      const next = toastQueue.shift();
+      // Brief beat so the swap reads as a new message, not a flicker.
+      setTimeout(() => showToast(next), 250);
+    }
+  }, 2500);
+}
+export function toast(msg) {
+  if (!msg) return;
+  if (store.toastVisible) {
+    if (toastQueue.length < 3) toastQueue.push(msg);
+    return;
+  }
+  showToast(msg);
 }
 
 function allGames() {
@@ -492,13 +516,112 @@ export async function fetchAchievements(appid) {
   return store.achievements[id];
 }
 
-/** On-visit price check: compare saved wishlist prices against live prices. */
-export async function checkPrices() {
+/* ---------- Supabase cloud sync (disconnected until configured) ---------- */
+
+export async function connectSync() {
+  const { connect, currentUserId } = await import('../js/supabase-client.js');
+  store.syncing = true;
+  store.syncError = '';
+  try {
+    const res = await connect({ url: store.syncUrl, anonKey: store.syncKey });
+    if (!res.ok) {
+      store.syncStatus = 'disconnected';
+      store.syncError = res.error;
+      return;
+    }
+    const userId = await currentUserId();
+    store.syncStatus = userId ? 'synced' : 'connected';
+    store.syncUrl = '';
+    store.syncKey = '';
+    toast(userId ? 'Cloud sync on — welcome back' : 'Connected — sign in to sync');
+  } finally {
+    store.syncing = false;
+  }
+}
+
+export async function syncNow() {
+  if (store.syncing) return;
+  const mod = await import('../js/sync.js');
+  store.syncing = true;
+  try {
+    const pulled = await mod.pullRemote({ wishlist: store.wishlist, manualGames: store.manualGames });
+    if (pulled.skipped) {
+      toast('Sync needs a connected, signed-in Supabase project');
+      return;
+    }
+    if (pulled.ok) {
+      store.wishlist = pulled.wishlist;
+      store.manualGames = pulled.manualGames;
+      if (pulled.prefs?.weeklyHours) store.weeklyHours = pulled.prefs.weeklyHours;
+      if (pulled.prefs?.device) store.device = pulled.prefs.device;
+      saveWishlist();
+      saveManual();
+    }
+    const pushed = await mod.pushLocal({
+      wishlist: store.wishlist,
+      manualGames: store.manualGames,
+      prefs: { weeklyHours: store.weeklyHours, device: store.device }
+    });
+    if (pushed.ok) toast(`Synced ${pushed.pushed} rows to the cloud`);
+  } finally {
+    store.syncing = false;
+  }
+}
+
+export async function rateGame(gameKey, score) {
+  const mod = await import('../js/sync.js');
+  const res = await mod.submitRating(gameKey, score);
+  if (res.skipped) {
+    toast('Ratings need cloud sync — connect Supabase first');
+    return res;
+  }
+  if (res.ok) {
+    store.myRatings[gameKey] = score;
+    toast(`Rated ${score}/10 — thanks, it counts`);
+  } else {
+    toast(res.error || 'Rating failed — try again');
+  }
+  return res;
+}
+
+const PRICE_CHECK_KEY = 'gv:price-check:v1';
+const PRICE_CHECK_TTL_MS = 24 * 3600 * 1000; // auto-check at most once a day
+
+function loadPriceCheck() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(PRICE_CHECK_KEY) || '{}');
+    return { at: raw.at || 0, notified: Array.isArray(raw.notified) ? raw.notified : [] };
+  } catch {
+    return { at: 0, notified: [] };
+  }
+}
+
+function savePriceCheck(notified) {
+  store.lastPriceCheckAt = Date.now();
+  try {
+    localStorage.setItem(PRICE_CHECK_KEY, JSON.stringify({ at: store.lastPriceCheckAt, notified }));
+  } catch { /* private mode: memory only */ }
+}
+
+// Restore last-check stamp for the "checked X ago" hint.
+store.lastPriceCheckAt = loadPriceCheck().at;
+
+/**
+ * Price check: compare saved wishlist prices against live prices.
+ * Manual runs check everything and report in full. Auto runs (once daily,
+ * newest `limit` titles) stay silent unless there are *new* drops, which
+ * surface as a badge + digest toast.
+ */
+export async function checkPrices(opts = {}) {
+  const { auto = false, limit = 0 } = opts;
   if (store.checkingPrices || !store.wishlist.length) return;
+  if (auto && Date.now() - loadPriceCheck().at < PRICE_CHECK_TTL_MS) return;
   store.checkingPrices = true;
   store.priceDrops = [];
   try {
-    for (const w of store.wishlist) {
+    let queue = [...store.wishlist].sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0));
+    if (limit > 0) queue = queue.slice(0, limit);
+    for (const w of queue) {
       try {
         const result = await GameData.searchGame(w.title);
         const now = result.salePrice != null && result.salePrice < result.basePriceUsd
@@ -508,9 +631,24 @@ export async function checkPrices() {
       } catch { /* one title failing must not stop the rest */ }
       await new Promise((r) => setTimeout(r, 800));
     }
-    toast(store.priceDrops.length
-      ? `💸 ${store.priceDrops.length} price drop${store.priceDrops.length > 1 ? 's' : ''} on your wishlist`
-      : 'No drops right now — patience pays');
+    const seen = new Set(loadPriceCheck().notified);
+    const fresh = store.priceDrops.filter((d) => !seen.has(d.id));
+    savePriceCheck(store.priceDrops.map((d) => d.id));
+    if (!store.priceDrops.length) {
+      store.priceDropBadge = 0;
+      if (!auto) toast('No drops right now — patience pays');
+    } else if (auto) {
+      store.priceDropBadge = fresh.length;
+      if (fresh.length) {
+        toast(fresh.length === 1
+          ? `💸 ${fresh[0].title} dropped to $${fresh[0].now.toFixed(2)} (−${fresh[0].pct}%)`
+          : `💸 ${fresh.length} new price drops on your wishlist`);
+      }
+    } else {
+      // Manual run means the user is looking at the drawer right now.
+      store.priceDropBadge = 0;
+      toast(`💸 ${store.priceDrops.length} price drop${store.priceDrops.length > 1 ? 's' : ''} on your wishlist`);
+    }
   } finally {
     store.checkingPrices = false;
   }

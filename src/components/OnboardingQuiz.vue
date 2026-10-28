@@ -1,5 +1,5 @@
 <template>
-  <section v-if="!store.onboarded" class="bg-zinc-900/90 border border-emerald-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-4">
+  <section v-if="!store.onboarded" class="bg-zinc-900/90 border border-emerald-500/40 rounded-3xl p-4 sm:p-8 shadow-2xl space-y-4">
     <div class="flex items-center justify-between">
       <h3 class="font-bold text-white text-sm">Three quick questions — we tune everything to you</h3>
       <button @click="skip" class="text-[11px] text-zinc-500 hover:text-white">Skip</button>
@@ -10,31 +10,31 @@
 
     <div v-if="step === 1" class="space-y-2">
       <p class="text-xs text-zinc-300 font-bold">How much do you play in a normal week?</p>
-      <div class="flex flex-wrap gap-2">
-        <button v-for="h in [3, 6, 10, 20]" :key="h" @click="hours = h" :class="['px-4 py-2 rounded-xl text-xs font-bold border transition', hours === h ? 'bg-emerald-500 text-zinc-950 border-emerald-400' : 'bg-zinc-950 text-zinc-300 border-zinc-700 hover:border-zinc-500']">{{ h }} hrs</button>
+      <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
+        <button v-for="h in [3, 6, 10, 20]" :key="h" @click="hours = h" :class="['w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold border transition min-h-[44px]', hours === h ? 'bg-emerald-500 text-zinc-950 border-emerald-400' : 'bg-zinc-950 text-zinc-300 border-zinc-700 hover:border-zinc-500']">{{ h }} hrs</button>
       </div>
     </div>
 
     <div v-if="step === 2" class="space-y-2">
       <p class="text-xs text-zinc-300 font-bold">Where do you mostly play?</p>
-      <div class="flex flex-wrap gap-2">
+      <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
         <button
           v-for="d in devices"
           :key="d.id"
           @click="device = d.id"
-          :class="['px-4 py-2 rounded-xl text-xs font-bold border transition', device === d.id ? 'bg-emerald-500 text-zinc-950 border-emerald-400' : 'bg-zinc-950 text-zinc-300 border-zinc-700 hover:border-zinc-500']"
+          :class="['w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold border transition min-h-[44px]', device === d.id ? 'bg-emerald-500 text-zinc-950 border-emerald-400' : 'bg-zinc-950 text-zinc-300 border-zinc-700 hover:border-zinc-500']"
         >{{ d.label }}</button>
       </div>
     </div>
 
     <div v-if="step === 3" class="space-y-2">
       <p class="text-xs text-zinc-300 font-bold">What nights are you chasing?</p>
-      <div class="flex flex-wrap gap-2">
+      <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
         <button
           v-for="v in vibes"
           :key="v.id"
           @click="vibe = v.id"
-          :class="['px-4 py-2 rounded-xl text-xs font-bold border transition', vibe === v.id ? 'bg-emerald-500 text-zinc-950 border-emerald-400' : 'bg-zinc-950 text-zinc-300 border-zinc-700 hover:border-zinc-500']"
+          :class="['w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold border transition min-h-[44px]', vibe === v.id ? 'bg-emerald-500 text-zinc-950 border-emerald-400' : 'bg-zinc-950 text-zinc-300 border-zinc-700 hover:border-zinc-500']"
         >{{ v.label }}</button>
       </div>
     </div>

@@ -2,28 +2,29 @@
   <div class="min-h-full flex flex-col font-sans select-none overflow-x-hidden relative bg-zinc-950">
     <div class="fixed inset-0 pointer-events-none z-0 backdrop-blur-cinema opacity-40 transition-all duration-700" :style="backdropStyle"></div>
 
-    <header class="border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur sticky top-0 z-40 px-4 sm:px-6 h-14 flex items-center justify-between shrink-0">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md font-black text-sm">🎮</div>
-        <div class="flex items-center gap-2">
-          <span class="font-bold text-base text-white tracking-tight">GameVerdict</span>
-          <span class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">Backlog Reality</span>
+    <header class="border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur sticky top-0 z-40 px-3 sm:px-6 h-14 flex items-center justify-between gap-2 shrink-0">
+      <div class="flex items-center gap-2 min-w-0">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md font-black text-sm shrink-0">🎮</div>
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="font-bold text-sm sm:text-base text-white tracking-tight whitespace-nowrap">GameVerdict</span>
+          <span class="hidden md:inline-flex px-2 py-0.5 text-[10px] font-semibold rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 whitespace-nowrap">Backlog Reality</span>
         </div>
       </div>
-      <div class="flex items-center gap-2 sm:gap-3">
-        <button @click="store.showWishlist = true" class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-medium text-xs flex items-center gap-1.5 transition">
+      <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
+        <button @click="openWishlist" aria-label="Open wishlist" class="relative px-2.5 sm:px-3 py-2 sm:py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-medium text-xs flex items-center gap-1.5 transition">
           <span>❤️</span><span class="hidden sm:inline">Wishlist ({{ store.wishlist.length }})</span>
+          <span v-if="store.priceDropBadge" class="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 rounded-full bg-emerald-500 text-zinc-950 text-[10px] font-black flex items-center justify-center shadow-lg">💸{{ store.priceDropBadge }}</span>
         </button>
-        <button @click="scrollToLibrary" class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-medium text-xs flex items-center gap-1.5 transition">
+        <button @click="scrollToLibrary" aria-label="Go to library" class="px-2.5 sm:px-3 py-2 sm:py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-medium text-xs flex items-center gap-1.5 transition">
           <span>📚</span><span class="hidden sm:inline">Library{{ libraryStats.total ? ` (${libraryStats.total})` : '' }}</span>
         </button>
-        <button @click="scrollToCalculator" class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-medium text-xs flex items-center gap-1.5 transition">
+        <button @click="scrollToCalculator" aria-label="Go to backlog calculator" class="px-2.5 sm:px-3 py-2 sm:py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-medium text-xs flex items-center gap-1.5 transition">
           <span>🧮</span><span class="hidden sm:inline">Backlog ROI</span>
         </button>
-        <button @click="share" class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-medium text-xs flex items-center gap-1.5 transition">
+        <button @click="share" aria-label="Share this verdict" class="px-2.5 sm:px-3 py-2 sm:py-1.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-medium text-xs flex items-center gap-1.5 transition">
           <span>🔗</span><span class="hidden sm:inline">Share</span>
         </button>
-        <button @click="store.showCoffee = true" class="btn-coffee px-3.5 py-1.5 rounded-lg text-zinc-950 font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-sm">
+        <button @click="store.showCoffee = true" aria-label="Support the project" class="btn-coffee px-2.5 sm:px-3.5 py-2 sm:py-1.5 rounded-lg text-zinc-950 font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-sm">
           <span>☕</span><span class="hidden sm:inline">Buy Coffee</span>
         </button>
       </div>
@@ -32,7 +33,8 @@
     <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 flex flex-col gap-6 relative z-10">
       <OnboardingQuiz />
       <SearchHero />
-      <VerdictCard :game="store.currentGame" />
+      <VerdictSkeleton v-if="store.isLoading" />
+      <VerdictCard v-else :game="store.currentGame" />
       <RoiCalculator />
       <LibraryPanel />
     </main>
@@ -47,7 +49,7 @@
       </div>
     </footer>
 
-    <div v-if="store.compareList.length" class="fixed bottom-4 left-4 z-40 bg-zinc-900 border border-emerald-500/40 rounded-2xl p-3 shadow-2xl max-w-xs w-[calc(100vw-2rem)]">
+    <div v-if="store.compareList.length" style="bottom: max(1rem, env(safe-area-inset-bottom))" class="fixed inset-x-4 sm:inset-x-auto sm:left-4 sm:max-w-xs sm:w-[calc(100vw-2rem)] z-40 bg-zinc-900 border border-emerald-500/40 rounded-2xl p-3 shadow-2xl">
       <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 mb-2">Compare ({{ store.compareList.length }}/3)</div>
       <div class="overflow-x-auto">
         <table class="text-[11px] w-full">
@@ -67,9 +69,10 @@
           <button @click="store.showWishlist = false" class="text-zinc-400 hover:text-white">✕</button>
         </div>
         <div v-if="!store.wishlist.length" class="text-xs text-zinc-500">Nothing saved yet — tap 🤍 on any game.</div>
-        <button v-else @click="checkPrices" :disabled="store.checkingPrices" class="w-full py-2 rounded-xl bg-emerald-500/15 border border-emerald-700 text-emerald-300 hover:bg-emerald-500/25 disabled:opacity-60 text-xs font-bold">
+        <button v-else @click="checkPrices" :disabled="store.checkingPrices" class="w-full py-2 rounded-xl bg-emerald-500/15 border border-emerald-700 text-emerald-300 hover:bg-emerald-500/25 disabled:opacity-60 text-xs font-bold min-h-[40px]">
           {{ store.checkingPrices ? 'Checking live prices…' : '💸 Check for price drops' }}
         </button>
+        <div v-if="store.lastPriceCheckAt" class="text-[10px] text-zinc-400 text-center">Auto-checks daily · last checked {{ lastCheckAge }}</div>
         <div v-for="d in store.priceDrops" :key="d.id" class="text-xs bg-emerald-950/60 border border-emerald-700 rounded-xl px-3 py-2">
           <span class="text-emerald-300 font-bold">💸 {{ d.title }}: ${{ d.saved.toFixed(2) }} → ${{ d.now.toFixed(2) }} (−{{ d.pct }}%)</span>
         </div>
@@ -99,7 +102,7 @@
       </div>
     </div>
 
-    <div :class="['fixed bottom-6 right-6 z-50 bg-zinc-900 border border-emerald-500/50 text-white px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 text-xs transition-all duration-300', store.toastVisible ? 'opacity-100' : 'opacity-0 pointer-events-none translate-y-2']">
+    <div style="bottom: max(1.5rem, env(safe-area-inset-bottom))" :class="['fixed right-4 sm:right-6 z-50 bg-zinc-900 border border-emerald-500/50 text-white px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 text-xs transition-all duration-300 max-w-[calc(100vw-2rem)]', store.toastVisible ? 'opacity-100' : 'opacity-0 pointer-events-none translate-y-2']">
       <span>🎮</span><span>{{ store.toastMsg }}</span>
     </div>
   </div>
@@ -108,8 +111,10 @@
 <script setup>
 import { computed, onMounted, onUnmounted } from 'vue';
 import { store, share, toggleCompare, toast, initFromHash, backlogTotals, libraryStats, wishlistPatience, checkPrices } from './store.js';
+import { GameData } from '../js/game-data.js';
 import SearchHero from './components/SearchHero.vue';
 import VerdictCard from './components/VerdictCard.vue';
+import VerdictSkeleton from './components/VerdictSkeleton.vue';
 import RoiCalculator from './components/RoiCalculator.vue';
 import LibraryPanel from './components/LibraryPanel.vue';
 import OnboardingQuiz from './components/OnboardingQuiz.vue';
@@ -117,6 +122,12 @@ import OnboardingQuiz from './components/OnboardingQuiz.vue';
 const backdropStyle = computed(() => ({
   backgroundImage: `url('${store.currentGame.backdropImg}')`
 }));
+const lastCheckAge = computed(() => GameData.timeAgo(store.lastPriceCheckAt));
+
+function openWishlist() {
+  store.showWishlist = true;
+  store.priceDropBadge = 0;
+}
 
 function scrollToCalculator() {
   document.getElementById('roiCalculatorCard')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -140,6 +151,8 @@ function onKey(e) {
 onMounted(() => {
   initFromHash();
   window.addEventListener('keydown', onKey);
+  // Daily background price check (newest 10 titles) — silent unless new drops.
+  if (store.wishlist.length) checkPrices({ auto: true, limit: 10 });
 });
 onUnmounted(() => window.removeEventListener('keydown', onKey));
 </script>

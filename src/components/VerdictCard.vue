@@ -1,5 +1,5 @@
 <template>
-  <section id="heroCard" class="bg-zinc-900/90 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-6">
+  <section id="heroCard" class="bg-zinc-900/90 border border-zinc-800 rounded-3xl p-4 sm:p-8 shadow-2xl backdrop-blur-md space-y-6">
     <div v-if="game.isEstimate" class="p-3 rounded-2xl bg-amber-950/40 border border-amber-700/60 text-[11px] text-amber-200">
       ⚠️ {{ game.estimateNote || 'Offline estimate — live reviews unreachable. Treat scores as a rough guess.' }}
     </div>
@@ -13,7 +13,7 @@
       🚨 Possible review-bombing: recent reviews sit at {{ game.bomb.recentPct }}% (n={{ game.bomb.recentN }}) against {{ game.bomb.overallPct }}% overall — a {{ game.bomb.gap }}-point crater. Read recent reviews before trusting the average.
     </div>
     <div class="flex flex-col sm:flex-row gap-6 items-start">
-      <div class="w-full sm:w-48 h-64 rounded-2xl overflow-hidden shrink-0 cover-shadow bg-zinc-800 relative group">
+      <div class="w-full sm:w-48 h-48 sm:h-64 rounded-2xl overflow-hidden shrink-0 cover-shadow bg-zinc-800 relative group">
         <img :src="game.headerImg" alt="Game Cover Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
         <div class="absolute bottom-2 right-2 px-2 py-1 rounded-md text-[11px] font-mono font-bold bg-zinc-950/80 text-emerald-400 border border-zinc-700 backdrop-blur-sm">
           <span v-if="game.salePrice != null && game.salePrice < game.basePriceUsd"><s class="text-zinc-500 font-normal mr-1">${{ game.basePriceUsd.toFixed(2) }}</s>${{ game.salePrice.toFixed(2) }}</span>
@@ -35,10 +35,10 @@
             </span>
             <span v-if="(game.subscriptionServices || []).some(s => s.toLowerCase().includes('game pass'))" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-400 border border-emerald-700">🟢 Included with Game Pass</span>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-black text-white leading-tight">{{ game.title }}</h2>
-          <div class="flex gap-2 mt-1">
-            <button @click="toggleWishlist(game)" class="text-xs px-2 py-1 rounded-lg border border-zinc-700 text-zinc-300 hover:border-emerald-500">{{ isWishlisted(game) ? '❤️ Saved' : '🤍 Wishlist' }}</button>
-            <button @click="toggleCompare(game)" class="text-xs px-2 py-1 rounded-lg border border-zinc-700 text-zinc-300 hover:border-emerald-500">⚖️ Compare</button>
+          <h2 class="text-xl sm:text-3xl font-black text-white leading-tight">{{ game.title }}</h2>
+          <div class="flex gap-2 mt-2">
+            <button @click="toggleWishlist(game)" class="text-xs px-3 py-2 rounded-lg border border-zinc-700 text-zinc-300 hover:border-emerald-500 min-h-[40px]">{{ isWishlisted(game) ? '❤️ Saved' : '🤍 Wishlist' }}</button>
+            <button @click="toggleCompare(game)" class="text-xs px-3 py-2 rounded-lg border border-zinc-700 text-zinc-300 hover:border-emerald-500 min-h-[40px]">⚖️ Compare</button>
           </div>
           <div class="text-xs text-zinc-400 mt-1 font-mono">{{ game.releaseYear }} · Dev. {{ game.developer }} · Pub. {{ game.publisher }} · {{ game.genres.join(', ') }}</div>
         </div>
@@ -56,28 +56,50 @@
             <span v-if="game.isLive && game.fetchedAt">Updated {{ age }}</span>
             <span v-if="game.trend" :class="trendClass">Recent reviews: {{ game.trend.direction }} ({{ game.trend.pct }}%, n={{ game.trend.n }})</span>
           </div>
+          <div v-if="contributions.length" class="pt-1 space-y-1">
+            <div class="flex h-1.5 w-full rounded-full overflow-hidden bg-zinc-900 border border-zinc-800" role="img" :aria-label="'Consensus sources: ' + contributions.map(c => `${c.label} ${Math.round(c.share)}%`).join(', ')">
+              <div v-for="c in contributions" :key="c.label" :class="['h-full', c.cls]" :style="{ width: c.share + '%' }" :title="`${c.label} — ~${Math.round(c.share)}% weight`"></div>
+            </div>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[10px] text-zinc-400">
+              <span v-for="c in contributions" :key="c.label" class="flex items-center gap-1">
+                <span :class="['w-1.5 h-1.5 rounded-full', c.cls]"></span>{{ c.label }} {{ c.value }}
+              </span>
+              <span v-if="game.isLive && game.liveLinks" class="flex items-center gap-1.5">
+                <span class="text-zinc-600">·</span>
+                <a v-if="game.liveLinks.steamAppID" :href="`https://store.steampowered.com/app/${game.liveLinks.steamAppID}/`" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 underline decoration-dotted underline-offset-2">Steam ↗</a>
+                <a v-if="game.liveLinks.openCritic" :href="game.liveLinks.openCritic" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 underline decoration-dotted underline-offset-2">OpenCritic ↗</a>
+                <a v-if="game.liveLinks.metacritic" :href="game.liveLinks.metacritic" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 underline decoration-dotted underline-offset-2">Metacritic ↗</a>
+              </span>
+            </div>
+          </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-2 text-center text-xs">
-          <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800">
-            <div class="text-[10px] text-zinc-500 font-bold uppercase">Steam Rating</div>
-            <div class="text-base font-black text-white mt-0.5">{{ game.scores?.steamPositivePercent == null ? '—' : `${game.scores.steamPositivePercent}%` }}</div>
-            <div class="text-[9px] text-emerald-400 mt-0.5 truncate">{{ game.scores?.steamStatus || 'No data' }}</div>
-          </div>
-          <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800">
-            <div class="text-[10px] text-zinc-500 font-bold uppercase">OpenCritic</div>
-            <div class="text-base font-black text-emerald-400 mt-0.5">{{ game.scores?.openCritic ?? '—' }}</div>
-            <div class="text-[9px] text-zinc-400 mt-0.5">Top Critic Avg</div>
-          </div>
-          <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800">
-            <div class="text-[10px] text-zinc-500 font-bold uppercase">Metacritic</div>
-            <div class="text-base font-black text-white mt-0.5">{{ game.scores?.metaCritic ?? '—' }}</div>
-            <div class="text-[9px] text-zinc-400 mt-0.5">Metascore / 100</div>
-          </div>
-          <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800">
-            <div class="text-[10px] text-zinc-500 font-bold uppercase">Backlog User</div>
-            <div class="text-base font-black text-teal-400 mt-0.5">{{ game.scores?.userBacklogRating ?? '—' }}</div>
-            <div class="text-[9px] text-zinc-400 mt-0.5">⭐ / 10</div>
+        <div class="rounded-xl bg-zinc-950 border border-zinc-800">
+          <button @click="expanded = !expanded" :aria-expanded="expanded" class="w-full flex items-center justify-between gap-2 px-3 py-2.5 min-h-[44px] text-xs">
+            <span class="font-bold text-zinc-300">Score breakdown</span>
+            <span class="text-zinc-400 font-mono truncate">{{ scoreSummary }} <span class="text-zinc-500">{{ expanded ? '▾' : '▸' }}</span></span>
+          </button>
+          <div v-if="expanded" class="grid grid-cols-2 sm:grid-cols-4 gap-2 px-3 pb-3 text-center text-xs">
+            <div class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-800">
+              <div class="text-[10px] text-zinc-500 font-bold uppercase">Steam Rating</div>
+              <div class="text-base font-black text-white mt-0.5">{{ game.scores?.steamPositivePercent == null ? '—' : `${game.scores.steamPositivePercent}%` }}</div>
+              <div class="text-[9px] text-emerald-400 mt-0.5 truncate">{{ game.scores?.steamStatus || 'No data' }}</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-800">
+              <div class="text-[10px] text-zinc-500 font-bold uppercase">OpenCritic</div>
+              <div class="text-base font-black text-emerald-400 mt-0.5">{{ game.scores?.openCritic ?? '—' }}</div>
+              <div class="text-[9px] text-zinc-400 mt-0.5">Top Critic Avg</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-800">
+              <div class="text-[10px] text-zinc-500 font-bold uppercase">Metacritic</div>
+              <div class="text-base font-black text-white mt-0.5">{{ game.scores?.metaCritic ?? '—' }}</div>
+              <div class="text-[9px] text-zinc-400 mt-0.5">Metascore / 100</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-800">
+              <div class="text-[10px] text-zinc-500 font-bold uppercase">Backlog User</div>
+              <div class="text-base font-black text-teal-400 mt-0.5">{{ game.scores?.userBacklogRating ?? '—' }}</div>
+              <div class="text-[9px] text-zinc-400 mt-0.5">⭐ / 10</div>
+            </div>
           </div>
         </div>
       </div>
@@ -191,23 +213,40 @@
           </div>
         </div>
       </div>
-      <div v-if="game.isLive && game.liveLinks" class="flex flex-wrap gap-2 pt-1 text-[11px]">
-        <span class="text-zinc-500">Verify live:</span>
-        <a v-if="game.liveLinks.steamAppID" :href="`https://store.steampowered.com/app/${game.liveLinks.steamAppID}/`" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 underline decoration-dotted underline-offset-2">Steam store ↗</a>
-        <a v-if="game.liveLinks.openCritic" :href="game.liveLinks.openCritic" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 underline decoration-dotted underline-offset-2">OpenCritic ↗</a>
-        <a v-if="game.liveLinks.metacritic" :href="game.liveLinks.metacritic" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 underline decoration-dotted underline-offset-2">Metacritic ↗</a>
-      </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { store, similarGames, isWishlisted, toggleWishlist, toggleCompare, selectGame } from '../store.js';
 import { GameData } from '../../js/game-data.js';
 
 const props = defineProps({ game: { type: Object, required: true } });
 const similar = similarGames;
+const expanded = ref(false);
+
+/** Nominal consensus weights (Steam 55 · Metacritic 35 · Backlog-user 10),
+ *  renormalized over whichever sources are present. Approximate by design. */
+const contributions = computed(() => {
+  const s = props.game.scores || {};
+  const parts = [];
+  if (s.steamPositivePercent != null) parts.push({ label: 'Steam', value: `${s.steamPositivePercent}%`, w: 55, cls: 'bg-emerald-400' });
+  if (s.metaCritic != null) parts.push({ label: 'Meta', value: s.metaCritic, w: 35, cls: 'bg-teal-300' });
+  if (s.userBacklogRating != null) parts.push({ label: 'You', value: s.userBacklogRating, w: 10, cls: 'bg-zinc-400' });
+  const total = parts.reduce((a, p) => a + p.w, 0) || 1;
+  return parts.map((p) => ({ ...p, share: (p.w / total) * 100 }));
+});
+
+const scoreSummary = computed(() => {
+  const s = props.game.scores || {};
+  const bits = [];
+  if (s.steamPositivePercent != null) bits.push(`Steam ${s.steamPositivePercent}%`);
+  if (s.openCritic != null) bits.push(`OC ${s.openCritic}`);
+  if (s.metaCritic != null) bits.push(`Meta ${s.metaCritic}`);
+  if (s.userBacklogRating != null) bits.push(`You ${s.userBacklogRating}`);
+  return bits.length ? bits.join(' · ') : 'No scores yet';
+});
 
 const badgeClass = computed(() => ({
   emerald: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
