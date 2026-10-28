@@ -73,5 +73,7 @@ python -m http.server 8081
 - Press `/` anywhere to instantly focus the game search bar.
 - Press `Esc` to close modals.
 
-### Free Deployment:
-Drag and drop the `D:\GameVerdict` folder directly into [Netlify](https://app.netlify.com/drop) or [Cloudflare Pages](https://pages.cloudflare.com/) for instant, 100% free hosting with zero server costs!
+### Free Deployment (Cloudflare Pages + Functions):
+Connect the GitHub repo in [Cloudflare Pages](https://pages.cloudflare.com/) with build command `npm run build` and output directory `dist`.
+The `functions/api/` directory auto-deploys the live-game API (Steam + Metacritic + OpenCritic) to `/api/*` on the same domain — no extra config needed.
+Note: Git-connected deploys are required; drag-and-drop uploads do not support Functions.
