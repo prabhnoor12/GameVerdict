@@ -5,6 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "test": "node --test tests/engine.test.js",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",

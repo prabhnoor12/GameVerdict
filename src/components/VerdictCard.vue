@@ -1,20 +1,34 @@
 <template>
   <section id="heroCard" class="bg-zinc-900/90 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-6">
+    <div v-if="game.isEstimate" class="p-3 rounded-2xl bg-amber-950/40 border border-amber-700/60 text-[11px] text-amber-200">
+      ⚠️ {{ game.estimateNote || 'Offline estimate — live reviews unreachable. Treat scores as a rough guess.' }}
+    </div>
+    <div v-if="game.split" class="p-3 rounded-2xl bg-rose-950/40 border border-rose-700/60 text-[11px] text-rose-200">
+      ⚖️ Players vs critics split: {{ game.split.low.label }} {{ game.split.low.value }} vs {{ game.split.high.label }} {{ game.split.high.value }} ({{ game.split.gap }}-point gap). The average describes neither side — read both.
+    </div>
+    <div v-else-if="game.coverage === 'thin'" class="p-3 rounded-2xl bg-amber-950/40 border border-amber-700/60 text-[11px] text-amber-200">
+      🔍 Thin data: a single source backs this score. Provisional — revisit when a second source lands.
+    </div>
     <div class="flex flex-col sm:flex-row gap-6 items-start">
       <div class="w-full sm:w-48 h-64 rounded-2xl overflow-hidden shrink-0 cover-shadow bg-zinc-800 relative group">
         <img :src="game.headerImg" alt="Game Cover Art" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
         <div class="absolute bottom-2 right-2 px-2 py-1 rounded-md text-[11px] font-mono font-bold bg-zinc-950/80 text-emerald-400 border border-zinc-700 backdrop-blur-sm">
-          ${{ game.basePriceUsd.toFixed(2) }}
+          <span v-if="game.salePrice != null && game.salePrice < game.basePriceUsd"><s class="text-zinc-500 font-normal mr-1">${{ game.basePriceUsd.toFixed(2) }}</s>${{ game.salePrice.toFixed(2) }}</span>
+          <span v-else>${{ game.basePriceUsd.toFixed(2) }}</span>
         </div>
       </div>
 
       <div class="flex-1 space-y-4 w-full">
         <div>
           <div class="flex items-center gap-2 flex-wrap mb-1">
-            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">{{ game.verdictBadge }}</span>
+            <span :class="['px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border', badgeClass]">{{ game.verdictBadge }}</span>
             <span v-if="game.isLive" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-400 border border-emerald-500/50 flex items-center gap-1 shadow-sm" :title="game.liveSource || 'Live reviews'">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               <span>{{ game.liveSource || 'Live reviews' }}</span>
+            </span>
+            <span v-if="game.isEstimate" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-950 text-amber-300 border border-amber-700">Estimated</span>
+            <span v-if="game.confidence" class="px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide bg-zinc-950 text-zinc-300 border border-zinc-700" :title="`Review-count confidence: ${game.confidence.detail}`">
+              {{ game.confidence.level }} confidence · {{ game.confidence.detail }}
             </span>
             <span v-if="(game.subscriptionServices || []).some(s => s.toLowerCase().includes('game pass'))" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-400 border border-emerald-700">🟢 Included with Game Pass</span>
           </div>
@@ -28,33 +42,38 @@
 
         <div class="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 space-y-2">
           <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-zinc-300">Unified Player & Critic Consensus <span class="text-[10px] font-normal text-zinc-500">(Steam + OpenCritic + Backlog)</span></span>
-            <span class="font-black text-emerald-400 text-lg font-mono">{{ game.unifiedConsensusPercent }}%</span>
+            <span class="font-bold text-zinc-300" title="Steam 55% · Metacritic 35% · Backlog-user 10%, Bayesian-weighted by review count">Unified Player & Critic Consensus <span class="text-[10px] font-normal text-zinc-500">(Steam 55 · Meta 35 · User 10)</span></span>
+            <span class="font-black text-emerald-400 text-lg font-mono">{{ game.unifiedConsensusPercent == null ? '—' : `${game.unifiedConsensusPercent}%` }}</span>
           </div>
           <div class="w-full h-2.5 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
-            <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-700" :style="{ width: game.unifiedConsensusPercent + '%' }"></div>
+            <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-700" :style="{ width: (game.unifiedConsensusPercent || 0) + '%' }"></div>
+          </div>
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-zinc-500">
+            <span title="Raw source inputs — no hidden averaging">Steam {{ srcVal(game.scores?.steamPositivePercent, '%') }} · Meta {{ srcVal(game.scores?.metaCritic) }} · OC {{ srcVal(game.scores?.openCritic) }}</span>
+            <span v-if="game.isLive && game.fetchedAt">Updated {{ age }}</span>
+            <span v-if="game.trend" :class="trendClass">Recent reviews: {{ game.trend.direction }} ({{ game.trend.pct }}%, n={{ game.trend.n }})</span>
           </div>
         </div>
 
         <div class="grid grid-cols-4 gap-2 text-center text-xs">
           <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800">
             <div class="text-[10px] text-zinc-500 font-bold uppercase">Steam Rating</div>
-            <div class="text-base font-black text-white mt-0.5">{{ game.scores.steamPositivePercent }}%</div>
-            <div class="text-[9px] text-emerald-400 mt-0.5 truncate">{{ game.scores.steamStatus }}</div>
+            <div class="text-base font-black text-white mt-0.5">{{ game.scores?.steamPositivePercent == null ? '—' : `${game.scores.steamPositivePercent}%` }}</div>
+            <div class="text-[9px] text-emerald-400 mt-0.5 truncate">{{ game.scores?.steamStatus || 'No data' }}</div>
           </div>
           <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800">
             <div class="text-[10px] text-zinc-500 font-bold uppercase">OpenCritic</div>
-            <div class="text-base font-black text-emerald-400 mt-0.5">{{ game.scores.openCritic }}</div>
+            <div class="text-base font-black text-emerald-400 mt-0.5">{{ game.scores?.openCritic ?? '—' }}</div>
             <div class="text-[9px] text-zinc-400 mt-0.5">Top Critic Avg</div>
           </div>
           <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800">
             <div class="text-[10px] text-zinc-500 font-bold uppercase">Metacritic</div>
-            <div class="text-base font-black text-white mt-0.5">{{ game.scores.metaCritic }}</div>
+            <div class="text-base font-black text-white mt-0.5">{{ game.scores?.metaCritic ?? '—' }}</div>
             <div class="text-[9px] text-zinc-400 mt-0.5">Metascore / 100</div>
           </div>
           <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800">
             <div class="text-[10px] text-zinc-500 font-bold uppercase">Backlog User</div>
-            <div class="text-base font-black text-teal-400 mt-0.5">{{ game.scores.userBacklogRating }}</div>
+            <div class="text-base font-black text-teal-400 mt-0.5">{{ game.scores?.userBacklogRating ?? '—' }}</div>
             <div class="text-[9px] text-zinc-400 mt-0.5">⭐ / 10</div>
           </div>
         </div>
@@ -91,20 +110,37 @@
           <div class="text-[10px] text-zinc-500">How long until the actual fun starts</div>
         </div>
         <div class="p-3.5 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-1">
-          <div class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">⏳ Backlog Hours</div>
-          <div class="font-bold text-white text-sm">{{ game.realityCheck.mainStoryHours }} hrs (Main)</div>
-          <div class="text-[10px] text-zinc-500">~{{ game.realityCheck.completionistHours }} hrs for 100% completionist run</div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">⏳ Backlog Hours <span v-if="game.realityCheck.hoursEstimated" class="text-amber-300 normal-case font-medium">(est.)</span></div>
+          <div class="font-bold text-white text-sm">{{ game.realityCheck.hoursUnknown ? 'Unknown' : `${game.realityCheck.mainStoryHours} hrs (Main)` }}</div>
+          <div v-if="!game.realityCheck.hoursUnknown" class="text-[10px] text-zinc-500">~{{ game.realityCheck.completionistHours }} hrs for 100% completionist run</div>
+          <div v-if="game.realityCheck.sampledMedianHrs != null" class="text-[10px] text-teal-300">Sampled Steam players: median {{ game.realityCheck.sampledMedianHrs }}h (n={{ game.realityCheck.sampledN }})</div>
         </div>
         <div class="p-3.5 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-1">
-          <div class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">🎮 Steam Deck / Handheld</div>
-          <div class="font-bold text-teal-300 text-xs truncate">{{ game.realityCheck.steamDeckRating }}</div>
-          <div class="text-[10px] text-zinc-500">Frame stability & battery profile</div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">🎮 Steam Deck / Handheld <span v-if="game.realityCheck.deckEstimated" class="text-amber-300 normal-case font-medium">(est.)</span></div>
+          <div class="font-bold text-xs" :class="deckClass">{{ deckLabel }}</div>
+          <div class="text-[10px] text-zinc-500">{{ deckSub }}</div>
         </div>
         <div class="p-3.5 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-1">
           <div class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">💎 Monetization Model</div>
           <div class="font-bold text-zinc-200 text-xs">{{ game.realityCheck.monetization }}</div>
           <div class="text-[10px] text-zinc-500">Battle passes, MTX, or 100% clean</div>
         </div>
+      </div>
+    </div>
+
+    <div class="space-y-3 pt-4 border-t border-zinc-800">
+      <h3 class="font-bold text-sm text-zinc-200">💡 If you like this, try:</h3>
+      <div class="flex flex-wrap gap-2">
+        <button
+          v-for="g in similar"
+          :key="g.id"
+          @click="selectGame(g)"
+          class="px-3 py-1.5 rounded-xl text-xs border bg-zinc-950 border-zinc-800 text-zinc-200 hover:border-emerald-500 hover:text-white transition flex items-center gap-1.5"
+        >
+          <span class="font-medium">{{ g.title }}</span>
+          <span class="font-mono text-emerald-400 text-[10px]">{{ g.unifiedConsensusPercent }}%</span>
+          <span class="text-zinc-500 text-[10px]">{{ (g.genres || []).slice(0, 2).join(' · ') }}</span>
+        </button>
       </div>
     </div>
 
@@ -153,7 +189,42 @@
 </template>
 
 <script setup>
-import { store, isWishlisted, toggleWishlist, toggleCompare } from '../store.js';
+import { computed } from 'vue';
+import { store, similarGames, isWishlisted, toggleWishlist, toggleCompare, selectGame } from '../store.js';
+import { GameData } from '../../js/game-data.js';
 
-defineProps({ game: { type: Object, required: true } });
+const props = defineProps({ game: { type: Object, required: true } });
+const similar = similarGames;
+
+const badgeClass = computed(() => ({
+  emerald: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+  amber: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+  rose: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+  zinc: 'bg-zinc-500/20 text-zinc-300 border-zinc-500/40'
+}[props.game.badgeType] || 'bg-amber-500/20 text-amber-300 border-amber-500/40'));
+const age = computed(() => GameData.timeAgo(props.game.fetchedAt));
+const trendClass = computed(() => ({
+  rising: 'text-emerald-300',
+  falling: 'text-rose-300',
+  steady: 'text-zinc-400'
+}[props.game.trend?.direction] || 'text-zinc-400'));
+function srcVal(v, suffix = '') {
+  return v == null ? '—' : `${v}${suffix}`;
+}
+
+const deck = computed(() => GameData.getDeckInfo(store.currentGame.realityCheck.steamDeckRating));
+const deckLabel = computed(() => {
+  const d = deck.value;
+  return d.status + (d.fps ? ` · ${d.fps} FPS` : '') + (d.battery ? ` · ${d.battery}` : '');
+});
+const deckSub = computed(() => {
+  const raw = store.currentGame.realityCheck.steamDeckRating || '';
+  const short = raw.replace(/^[^(]*\(/, '').replace(/\)$/, '');
+  return short || 'Frame stability & battery profile';
+});
+const deckClass = computed(() => ({
+  Verified: 'text-teal-300',
+  Playable: 'text-amber-300',
+  Unsupported: 'text-rose-400'
+}[deck.value.status] || 'text-zinc-200'));
 </script>

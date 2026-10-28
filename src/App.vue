@@ -47,8 +47,8 @@
       <div class="overflow-x-auto">
         <table class="text-[11px] w-full">
           <tr class="text-zinc-500"><td></td><td v-for="g in store.compareList" :key="g.id" class="px-2 font-bold text-white whitespace-nowrap">{{ g.title }}</td></tr>
-          <tr><td class="text-zinc-500 pr-2">Score</td><td v-for="g in store.compareList" :key="g.id" class="px-2 font-mono text-emerald-400">{{ g.unifiedConsensusPercent }}%</td></tr>
-          <tr><td class="text-zinc-500 pr-2">Hours</td><td v-for="g in store.compareList" :key="g.id" class="px-2 text-zinc-200">{{ g.realityCheck.mainStoryHours }}h</td></tr>
+          <tr><td class="text-zinc-500 pr-2">Score</td><td v-for="g in store.compareList" :key="g.id" class="px-2 font-mono text-emerald-400">{{ g.unifiedConsensusPercent == null ? '—' : `${g.unifiedConsensusPercent}%` }}</td></tr>
+          <tr><td class="text-zinc-500 pr-2">Hours</td><td v-for="g in store.compareList" :key="g.id" class="px-2 text-zinc-200">{{ g.realityCheck.hoursUnknown ? '—' : `${g.realityCheck.mainStoryHours}h` }}</td></tr>
           <tr><td class="text-zinc-500 pr-2">Price</td><td v-for="g in store.compareList" :key="g.id" class="px-2 text-zinc-200">${{ g.basePriceUsd.toFixed(2) }}</td></tr>
           <tr><td></td><td v-for="g in store.compareList" :key="g.id" class="px-2"><button @click="toggleCompare(g)" class="text-rose-400 hover:text-rose-300">✕</button></td></tr>
         </table>
@@ -62,6 +62,9 @@
           <button @click="store.showWishlist = false" class="text-zinc-400 hover:text-white">✕</button>
         </div>
         <div v-if="!store.wishlist.length" class="text-xs text-zinc-500">Nothing saved yet — tap 🤍 on any game.</div>
+        <div v-if="store.wishlist.length" class="text-[11px] text-zinc-400 bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2">
+          Queue: <span class="text-white font-mono font-bold">{{ backlogTotals.hours }}h</span> · <span class="text-white font-mono font-bold">{{ backlogTotals.weeks.toFixed(1) }} wks</span> · <span class="text-emerald-400 font-mono font-bold">${{ backlogTotals.cost.toFixed(2) }}</span>
+        </div>
         <div v-for="w in store.wishlist" :key="w.id" class="flex items-center justify-between text-xs bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2">
           <span class="text-zinc-200 font-medium truncate">{{ w.title }}</span>
           <span class="text-emerald-400 font-mono ml-2">${{ w.price.toFixed(2) }}</span>
@@ -90,7 +93,7 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted } from 'vue';
-import { store, share, toggleCompare, toast, initFromHash } from './store.js';
+import { store, share, toggleCompare, toast, initFromHash, backlogTotals } from './store.js';
 import SearchHero from './components/SearchHero.vue';
 import VerdictCard from './components/VerdictCard.vue';
 import RoiCalculator from './components/RoiCalculator.vue';

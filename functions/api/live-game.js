@@ -71,10 +71,10 @@ async function steamAppDetails(appID) {
   return data?.[appID]?.success ? data[appID].data : null;
 }
 
-/** Real player reviews: summary + top helpful review texts */
+/** Real player reviews: summary + top helpful review texts (with raw playtime for median-hours). */
 async function steamReviews(appID) {
   const data = await jfetch(
-    `https://store.steampowered.com/appreviews/${appID}?json=1&language=all&purchase_type=all&num_per_page=10&filter=all&summary_num_reviews=100`,
+    `https://store.steampowered.com/appreviews/${appID}?json=1&language=all&purchase_type=all&num_per_page=20&filter=all&summary_num_reviews=100`,
     8000,
   );
   if (!data?.query_summary) return null;
@@ -82,13 +82,14 @@ async function steamReviews(appID) {
   const total = (q.total_positive || 0) + (q.total_negative || 0);
   const pct = total ? Math.round((q.total_positive / total) * 100) : null;
   const reviews = (data.reviews || [])
-    .slice(0, 6)
+    .slice(0, 8)
     .map((r) => ({
       source: 'Steam',
       author: `Steam player (${Math.round((r.author?.playtime_forever || 0) / 60)} hrs)`,
       quote: (r.review || '').slice(0, 280),
       votes: r.votes_up || 0,
       votedUp: r.voted_up !== false,
+      playtimeMins: typeof r.author?.playtime_forever === 'number' ? r.author.playtime_forever : null,
       url: r.recommendationid ? `https://steamcommunity.com/id/reviews/` : null,
     }))
     .filter((r) => r.quote && r.quote.length > 40);
@@ -98,6 +99,27 @@ async function steamReviews(appID) {
     total,
     reviews,
   };
+}
+
+/** Recent-sample trend: % positive across the 20 most recent reviews (n-guarded upstream). */
+async function steamRecentSample(appID) {
+  const data = await jfetch(
+    `https://store.steampowered.com/appreviews/${appID}?json=1&language=all&purchase_type=all&num_per_page=20&filter=recent`,
+    8000,
+  );
+  const list = Array.isArray(data?.reviews) ? data.reviews : [];
+  const votes = list.filter((r) => typeof r.voted_up === 'boolean');
+  if (!votes.length) return null;
+  const up = votes.filter((r) => r.voted_up).length;
+  return { pct: Math.round((up / votes.length) * 100), n: votes.length };
+}
+
+/** ProtonDB Deck tier: real handheld signal instead of a static guess. */
+async function protonLookup(appID) {
+  if (!appID) return null;
+  const data = await jfetch(`https://www.protondb.com/api/v1/reports/summaries/${appID}.json`);
+  if (!data?.tier) return null;
+  return { tier: String(data.tier), total: data.total || 0 };
 }
 
 /** OpenCritic public API (best-effort, no key): search then score */
@@ -138,9 +160,9 @@ async function fetchLiveGameFromWeb(query) {
   if (!appID) appID = await steamSearchAppId(query);
   if (!appID && !cs) return null;
 
-  const [details, steamRev] = appID
-    ? await Promise.all([steamAppDetails(appID), steamReviews(appID)])
-    : [null, null];
+  const [details, steamRev, steamRecent, proton] = appID
+    ? await Promise.all([steamAppDetails(appID), steamReviews(appID), steamRecentSample(appID), protonLookup(appID)])
+    : [null, null, null, null];
   const oc = await openCriticLookup(cs?.title || details?.name || query, appID);
 
   const title = details?.name || cs?.title || query;
@@ -170,6 +192,11 @@ async function fetchLiveGameFromWeb(query) {
     steamRatingText: steamText,
     steamRatingCount: steamCount,
     steamReviews: steamRev?.reviews || [],
+    steamRecent: steamRecent || null,
+    deckProton: proton || null,
+    hasInAppPurchases: details?.categories
+      ? details.categories.some((c) => /in-app purchases/i.test(c.description || ''))
+      : null,
     metacriticScore: metaScore,
     metacriticLink: cs?.metacriticLink || null,
     openCriticScore: oc.score,

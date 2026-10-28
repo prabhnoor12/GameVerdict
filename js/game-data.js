@@ -13,8 +13,10 @@ export const GameData = (() => {
       developer: 'FromSoftware',
       publisher: 'Bandai Namco',
       genres: ['Action RPG', 'Open World', 'Souls-like'],
-      headerImg: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop&q=80',
-      backdropImg: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1600&auto=format&fit=crop&q=80',
+      steamAppID: '1245620',
+      salePrice: null,
+      headerImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg',
+      backdropImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1245620/library_hero.jpg',
       platforms: ['PC (Steam)', 'PS5', 'Xbox Series X/S', 'PS4', 'Xbox One'],
       subscriptionServices: [],
       basePriceUsd: 59.99,
@@ -72,8 +74,10 @@ export const GameData = (() => {
       developer: 'Larian Studios',
       publisher: 'Larian Studios',
       genres: ['CRPG', 'Story Rich', 'Turn-Based Combat', 'Co-Op'],
-      headerImg: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=80',
-      backdropImg: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=1600&auto=format&fit=crop&q=80',
+      steamAppID: '1086940',
+      salePrice: null,
+      headerImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/header.jpg',
+      backdropImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/library_hero.jpg',
       platforms: ['PC (Steam/GOG)', 'PS5', 'Xbox Series X/S', 'Mac'],
       subscriptionServices: [],
       basePriceUsd: 59.99,
@@ -131,8 +135,10 @@ export const GameData = (() => {
       developer: 'CD PROJEKT RED',
       publisher: 'CD PROJEKT RED',
       genres: ['Sci-Fi', 'FPS RPG', 'Story Rich', 'Open World'],
-      headerImg: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?w=600&auto=format&fit=crop&q=80',
-      backdropImg: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=1600&auto=format&fit=crop&q=80',
+      steamAppID: '1091500',
+      salePrice: null,
+      headerImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/header.jpg',
+      backdropImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/library_hero.jpg',
       platforms: ['PC (Steam/GOG)', 'PS5', 'Xbox Series X/S'],
       subscriptionServices: [],
       basePriceUsd: 59.99,
@@ -190,8 +196,10 @@ export const GameData = (() => {
       developer: 'LocalThunk',
       publisher: 'Playstack',
       genres: ['Deckbuilder', 'Roguelike', 'Poker', 'Casual', 'Strategy'],
-      headerImg: 'https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=600&auto=format&fit=crop&q=80',
-      backdropImg: 'https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=1600&auto=format&fit=crop&q=80',
+      steamAppID: '2379780',
+      salePrice: null,
+      headerImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2379780/header.jpg',
+      backdropImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2379780/library_hero.jpg',
       platforms: ['PC (Steam)', 'Nintendo Switch', 'PS5', 'Xbox', 'iOS/Android'],
       subscriptionServices: ['Xbox Game Pass'],
       basePriceUsd: 14.99,
@@ -249,8 +257,10 @@ export const GameData = (() => {
       developer: 'Supergiant Games',
       publisher: 'Supergiant Games',
       genres: ['Roguelite', 'Action', 'Mythology', 'Fast-Paced'],
-      headerImg: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=600&auto=format&fit=crop&q=80',
-      backdropImg: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1600&auto=format&fit=crop&q=80',
+      steamAppID: '1145350',
+      salePrice: null,
+      headerImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/header.jpg',
+      backdropImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/library_hero.jpg',
       platforms: ['PC (Steam/Epic)'],
       subscriptionServices: [],
       basePriceUsd: 29.99,
@@ -308,8 +318,10 @@ export const GameData = (() => {
       developer: 'Bethesda Game Studios',
       publisher: 'Bethesda Softworks',
       genres: ['Sci-Fi RPG', 'Space Exploration', 'Shooter'],
-      headerImg: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80',
-      backdropImg: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=1600&auto=format&fit=crop&q=80',
+      steamAppID: '1716740',
+      salePrice: null,
+      headerImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1716740/header.jpg',
+      backdropImg: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1716740/library_hero.jpg',
       platforms: ['PC (Steam/MS Store)', 'Xbox Series X/S'],
       subscriptionServices: ['Xbox Game Pass (Included Free)'],
       basePriceUsd: 69.99,
@@ -366,14 +378,211 @@ export const GameData = (() => {
     { id: 'all', label: 'All Curated Titles' },
     { id: 'short', label: '⚡ Short & Sweet (<20h)' },
     { id: 'gamepass', label: '🟢 Free on Game Pass' },
-    { id: 'deck', label: '🎮 Steam Deck Kings (60 FPS)' },
-    { id: 'masterpiece', label: '🏆 95%+ Masterpieces' }
+    { id: 'deck', label: '🎮 Steam Deck Verified' },
+    { id: 'masterpiece', label: '🏆 95%+ Masterpieces' },
+    { id: 'clean', label: '💎 Clean MTX-free' },
+    { id: 'value', label: '💰 Best value (<$1.50/hr)' }
   ];
+
+  /** Unified consensus: single formula everywhere (Steam 55 / Metacritic 35 / Backlog-user 10). */
+  const CONSENSUS_WEIGHTS = { steam: 0.55, meta: 0.35, user: 0.10 };
+  function computeUnified({ steam, meta, user10 }) {
+    const s = steam ?? meta ?? (user10 != null ? user10 * 10 : 80);
+    const m = meta ?? steam ?? (user10 != null ? user10 * 10 : 80);
+    const u = user10 != null ? user10 * 10 : ((s + m) / 2);
+    return Math.round(s * CONSENSUS_WEIGHTS.steam + m * CONSENSUS_WEIGHTS.meta + u * CONSENSUS_WEIGHTS.user);
+  }
+
+  /** Review-count confidence so a 97% from 65k votes is not shown as equal to 700k. */
+  function confidenceFor(count) {
+    if (!count) return { level: 'Low', detail: 'Few reviews' };
+    if (count >= 100000) return { level: 'High', detail: `${Math.round(count / 1000)}k reviews` };
+    if (count >= 10000) return { level: 'Medium', detail: `${(count / 1000).toFixed(1)}k reviews` };
+    return { level: 'Emerging', detail: `${count.toLocaleString()} reviews` };
+  }
+  function parseReviewCount(label) {
+    if (label == null) return 0;
+    if (typeof label === 'number') return label;
+    const m = String(label).match(/([\d,.]+)\s*k\+?/i);
+    if (m) return Math.round(parseFloat(m[1].replace(/,/g, '')) * 1000);
+    const n = String(label).replace(/[^\d]/g, '');
+    return parseInt(n, 10) || 0;
+  }
+
+  /** Structured Steam Deck info parsed from the legacy rating string. */
+  function getDeckInfo(rating) {
+    const r = String(rating || '');
+    const lower = r.toLowerCase();
+    const status = lower.includes('verif') ? 'Verified' : lower.includes('playable') ? 'Playable' : lower.includes('unsupport') || lower.includes('poor') ? 'Unsupported' : 'Unknown';
+    const fps = (r.match(/(\d+\s*-\s*\d+|\d+)\s*fps/i) || [])[1]?.replace(/\s/g, '') || null;
+    const battery = (r.match(/(\d+\+?\s*hour)/i) || [])[1] || null;
+    return { status, fps, battery, label: r };
+  }
+  function isCleanMtx(game) {
+    return /clean|zero|100% free|no micro|no battle|no gacha|expansion model/i.test(game?.realityCheck?.monetization || '');
+  }
+  function costPerHourOf(game, { useSale = true, hoursMode = 'main' } = {}) {
+    const hours = hoursMode === 'completionist'
+      ? (game?.realityCheck?.completionistHours || 0)
+      : (game?.realityCheck?.mainStoryHours || 0);
+    const price = (useSale && game?.salePrice != null && game.salePrice < game.basePriceUsd)
+      ? game.salePrice : game.basePriceUsd;
+    if (!hours || hours <= 0) return null;
+    return { value: price / hours, price, hours };
+  }
+
+  /** Solid verdict math: Bayesian pull toward a prior when review counts are thin,
+   *  so a 97% from 400 votes never outranks a 93% from 700k. */
+  const CONSENSUS_PRIOR = 75;
+  const BAYES_M = 25000;
+  function computeUnifiedSolid({ steam, meta, user10, steamCount }) {
+    const count = steamCount || 0;
+    const adjSteam = steam == null
+      ? steam
+      : (count * steam + BAYES_M * CONSENSUS_PRIOR) / (count + BAYES_M);
+    return computeUnified({ steam: adjSteam, meta, user10 });
+  }
+
+  /** Coverage gate: how many independent score sources back this verdict. */
+  function assessCoverage({ steam, meta, oc }) {
+    const n = [steam, meta, oc].filter(v => v != null).length;
+    return n === 0 ? 'estimated' : n === 1 ? 'thin' : 'solid';
+  }
+
+  /** Critics-vs-players split detector: a gap over 15 points across any two
+   *  sources describes nobody when averaged, so flag it instead. */
+  const SPLIT_GAP = 15;
+  function detectSplit({ steam, meta, oc }) {
+    const pts = [
+      steam != null ? { label: 'Steam', value: steam } : null,
+      meta != null ? { label: 'Metacritic', value: meta } : null,
+      oc != null ? { label: 'OpenCritic', value: oc } : null
+    ].filter(Boolean);
+    if (pts.length < 2) return null;
+    let hi = pts[0], lo = pts[0];
+    for (const p of pts) {
+      if (p.value > hi.value) hi = p;
+      if (p.value < lo.value) lo = p;
+    }
+    const gap = hi.value - lo.value;
+    return gap > SPLIT_GAP ? { gap, high: hi, low: lo } : null;
+  }
+
+  /** Median sampled playtime (review minutes → hours), junk-tolerant. */
+  function medianPlaytime(samples) {
+    const hrs = (samples || [])
+      .map(s => s?.playtimeMins)
+      .filter(v => typeof v === 'number' && isFinite(v) && v > 0)
+      .map(v => v / 60)
+      .sort((a, b) => a - b);
+    if (!hrs.length) return null;
+    const mid = Math.floor(hrs.length / 2);
+    const med = hrs.length % 2 ? hrs[mid] : (hrs[mid - 1] + hrs[mid]) / 2;
+    return Math.round(med * 10) / 10;
+  }
+
+  /** Quote hygiene: length floor, cross-source dedupe, most-backed first. */
+  const QUOTE_MIN_LEN = 40;
+  function cleanQuotes(quotes, limit = 3) {
+    const seen = new Set();
+    return (quotes || [])
+      .filter(q => q?.quote && q.quote.trim().length >= QUOTE_MIN_LEN)
+      .map(q => ({ ...q, votes: q.votes || 0 }))
+      .sort((a, b) => b.votes - a.votes)
+      .filter(q => {
+        const key = q.quote.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 60);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .slice(0, limit);
+  }
+
+  /** Data-age stamp for cached live verdicts. */
+  function timeAgo(ts) {
+    if (!ts) return 'unknown age';
+    const s = Math.max(0, (Date.now() - ts) / 1000);
+    if (s < 3600) return 'just now';
+    if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
+    return `${Math.floor(s / 86400)}d ago`;
+  }
+
+  /** Genre-based hour estimate for live games (HLTB has no public API; heuristic, labelled estimated). */
+  function estimateHours(genres, hash) {
+    const g = (genres || []).join(' ').toLowerCase();
+    let base = 24;
+    if (/crpg|rpg|open world|epic/i.test(g)) base = 55;
+    else if (/roguel|deckbuild|strategy|tactic/i.test(g)) base = 25;
+    else if (/casual|puzzle|platform|indie/i.test(g)) base = 12;
+    else if (/shooter|action|adventure|narrative|story/i.test(g)) base = 18;
+    const main = base + (hash % 12);
+    return { main, comp: Math.round(main * 2.6 + (hash % 20)) };
+  }
+
+  const norm = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
+  function levenshtein(a, b) {
+    const m = a.length, n = b.length;
+    if (!m) return n; if (!n) return m;
+    const d = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]);
+    for (let j = 1; j <= n; j++) d[0][j] = j;
+    for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return d[m][n];
+  }
+  function fuzzyMatch(query, text) {
+    const q = norm(query), t = norm(text);
+    if (!q || !t) return false;
+    if (t.includes(q)) return true;
+    return q.split(' ').every(tok =>
+      t.split(' ').some(w => w.startsWith(tok) || levenshtein(tok, w) <= Math.max(1, Math.floor(tok.length / 4)))
+    );
+  }
+  function matchCurated(query) {
+    const q = query.trim().toLowerCase();
+    return CURATED_GAMES.find(g =>
+      fuzzyMatch(q, g.title) || fuzzyMatch(q, g.developer) || fuzzyMatch(q, g.publisher) ||
+      g.genres.some(genre => fuzzyMatch(q, genre))
+    ) || null;
+  }
+
+  /** Similar-games recommender: genre overlap first, then consensus closeness, Deck bonus. */
+  function getSimilar(game, pool, n = 3) {
+    if (!game) return [];
+    const genres = new Set((game.genres || []).map(x => String(x).toLowerCase()));
+    return (pool || CURATED_GAMES)
+      .filter(g => g.id !== game.id)
+      .map(g => {
+        const overlap = (g.genres || []).filter(x => genres.has(String(x).toLowerCase())).length;
+        const gap = Math.abs((g.unifiedConsensusPercent || 0) - (game.unifiedConsensusPercent || 0));
+        const deckBonus = /verif/i.test(g?.realityCheck?.steamDeckRating || '') ? 2 : 0;
+        return { game: g, score: overlap * 50 - gap * 0.5 + deckBonus };
+      })
+      .sort((a, b) => b.score - a.score)
+      .slice(0, n)
+      .map(x => x.game);
+  }
+
+  /** Frontend memory cache for live lookups (10 min TTL) to avoid refetching per keystroke. */
+  const liveMemoryCache = new Map();
+  const LIVE_TTL_MS = 10 * 60 * 1000;
+  function getCachedLive(query) {
+    const hit = liveMemoryCache.get(norm(query));
+    if (hit && Date.now() - hit.ts < LIVE_TTL_MS) return hit.data;
+    liveMemoryCache.delete(norm(query));
+    return null;
+  }
+  function setCachedLive(query, data) {
+    liveMemoryCache.set(norm(query), { data, ts: Date.now() });
+    if (liveMemoryCache.size > 60) liveMemoryCache.delete(liveMemoryCache.keys().next().value);
+  }
+  const recentLive = [];
 
   /**
    * Fetch Live Data from Reputed Review Sites (Steam Reviews & Metacritic via CheapShark API)
    */
   async function fetchLiveGameReviewData(query) {
+    const cached = getCachedLive(query);
+    if (cached) return cached;
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 9000);
 
@@ -384,6 +593,7 @@ export const GameData = (() => {
         const json = await localRes.json();
         if (json.success && json.data && (json.data.steamRatingPercent != null || json.data.metacriticScore != null || json.data.openCriticScore != null)) {
           clearTimeout(timeout);
+          setCachedLive(query, json.data);
           return json.data;
         }
       }
@@ -397,7 +607,7 @@ export const GameData = (() => {
       if (!Array.isArray(deals) || !deals.length) return null;
       const withSteam = deals.filter(d => d.steamAppID && d.steamRatingCount);
       const best = withSteam.sort((a, b) => (parseInt(b.steamRatingCount, 10) || 0) - (parseInt(a.steamRatingCount, 10) || 0))[0] || deals[0];
-      return {
+      const fallback = {
         title: best.title,
         steamAppID: best.steamAppID || null,
         steamRatingPercent: parseInt(best.steamRatingPercent, 10) || null,
@@ -411,6 +621,8 @@ export const GameData = (() => {
         thumb: best.thumb || null,
         sources: ['CheapShark']
       };
+      setCachedLive(query, fallback);
+      return fallback;
     } catch (err) {
       console.warn('[GameVerdict] Live API unavailable:', err.message);
       return null;
@@ -426,30 +638,57 @@ export const GameData = (() => {
    * Tier 3: Algorithmic Consensus Engine Fallback
    */
   async function searchGame(query) {
-    const q = query.trim().toLowerCase();
-
-    // --- Tier 1: Check in curated collection ---
-    const match = CURATED_GAMES.find(g =>
-      g.title.toLowerCase().includes(q) ||
-      g.developer.toLowerCase().includes(q) ||
-      g.publisher.toLowerCase().includes(q) ||
-      g.genres.some(genre => genre.toLowerCase().includes(q))
-    );
+    // --- Tier 1: Check in curated collection (fuzzy: typos + partial tokens) ---
+    const match = matchCurated(query);
 
     if (match) {
-      return { ...match, isLive: false };
+      const count = match.scores?.steamReviewCount != null ? parseReviewCount(match.scores.steamReviewCount) : 0;
+      return {
+        ...match,
+        isLive: false,
+        isEstimate: false,
+        unknownScores: false,
+        confidence: confidenceFor(count),
+        coverage: 'solid',
+        split: match.scores ? detectSplit({
+          steam: match.scores.steamPositivePercent,
+          meta: match.scores.metaCritic,
+          oc: match.scores.openCritic
+        }) : null,
+        trend: null,
+        fetchedAt: null
+      };
     }
 
     // --- Tier 2: Live multi-source reviews (Steam + Metacritic + OpenCritic) ---
     const live = await fetchLiveGameReviewData(query);
     if (live && (live.steamRatingPercent != null || live.metacriticScore != null || live.openCriticScore != null)) {
-      const steamPct = live.steamRatingPercent ?? live.openCriticScore ?? live.metacriticScore ?? 80;
-      const metaScore = live.metacriticScore ?? Math.round(steamPct * 0.95);
-      const openScore = live.openCriticScore ?? Math.min(100, Math.round(metaScore * 1.01));
-      const userRating = (steamPct / 10).toFixed(1);
+      // Missing sources stay missing: no fabrication, coverage gate decides trust.
+      const steamPct = live.steamRatingPercent ?? null;
+      const metaScore = live.metacriticScore ?? null;
+      const openScore = live.openCriticScore ?? null;
+      const userRating = steamPct != null ? (steamPct / 10).toFixed(1) : null;
 
-      // Unified consensus computation
-      const unifiedPercent = Math.round((steamPct * 0.55) + (metaScore * 0.35) + (parseFloat(userRating) * 1.0));
+      const coverage = assessCoverage({ steam: steamPct, meta: metaScore, oc: openScore });
+      const split = detectSplit({ steam: steamPct, meta: metaScore, oc: openScore });
+      // Solid math: Bayesian pull toward the prior when review counts are thin.
+      const unifiedPercent = computeUnifiedSolid({
+        steam: steamPct, meta: metaScore,
+        user10: userRating != null ? parseFloat(userRating) : null,
+        steamCount: live.steamRatingCount || 0
+      });
+
+      // Recent-sample trend: needs a real sample, else no claim.
+      let trend = null;
+      if (live.steamRecent && live.steamRecent.n >= 10 && steamPct != null) {
+        const d = live.steamRecent.pct - steamPct;
+        trend = {
+          pct: live.steamRecent.pct, n: live.steamRecent.n,
+          direction: d >= 5 ? 'rising' : d <= -5 ? 'falling' : 'steady'
+        };
+      }
+      const sampledMedianHrs = medianPlaytime((live.steamReviews || []).map(r => ({ playtimeMins: r.playtimeMins })));
+      const sampledN = (live.steamReviews || []).filter(r => typeof r.playtimeMins === 'number' && r.playtimeMins > 0).length;
 
       let badge = 'Worth a Play';
       let badgeType = 'amber';
@@ -457,16 +696,33 @@ export const GameData = (() => {
       let flawDesc = 'Minor pacing variations and occasional genre difficulty spikes.';
       let audienceDesc = 'Gamers looking for high-quality genre entertainment.';
 
-      if (unifiedPercent >= 93) {
+      if (split) {
+        badge = 'Divisive — Players vs Critics';
+        badgeType = 'rose';
+        hookDesc = `${split.low.label} sits at ${split.low.value} while ${split.high.label} scores ${split.high.value} — a ${split.gap}-point gap. Read both sides before buying.`;
+        flawDesc = 'The two audiences disagree sharply: check whether you side with players or critics on this one.';
+        audienceDesc = 'Only for players who match the happier side of the split; everyone else should wait for a deep sale.';
+      } else if (coverage === 'thin') {
+        badge = 'Thin Data — Treat With Care';
+        badgeType = 'amber';
+        const only = steamPct != null ? `Steam at ${steamPct}%` : metaScore != null ? `Metacritic at ${metaScore}` : `OpenCritic at ${openScore}`;
+        hookDesc = `Only one source backs this verdict so far (${only}). The score is provisional.`;
+        flawDesc = 'Single-source verdicts miss blind spots — wait for a second source before treating this as settled.';
+        audienceDesc = 'Early adopters comfortable with uncertainty; cautious buyers should wishlist and revisit.';
+      } else if (unifiedPercent >= 93) {
         badge = 'Essential Masterpiece';
         badgeType = 'emerald';
-        hookDesc = `Celebrated by over ${live.steamRatingCount.toLocaleString()} verified Steam players with ${live.steamRatingText} acclaim and award-level execution.`;
+        hookDesc = live.steamRatingCount > 0
+          ? `Celebrated by over ${live.steamRatingCount.toLocaleString()} verified Steam players with ${live.steamRatingText} acclaim and award-level execution.`
+          : 'Celebrated across critics and players with award-level execution.';
         flawDesc = 'Demands high commitment and patience with complex systems or challenging difficulty curves.';
         audienceDesc = 'Essential for anyone who values peak game design, deep storytelling, and polished mechanics.';
       } else if (unifiedPercent >= 84) {
         badge = 'Strong Recommendation';
         badgeType = 'emerald';
-        hookDesc = `Solid ${steamPct}% positive Steam consensus supported by a ${metaScore}/100 Metascore.`;
+        hookDesc = steamPct != null && metaScore != null
+          ? `Solid ${steamPct}% positive Steam consensus supported by a ${metaScore}/100 Metascore.`
+          : 'Solid cross-source consensus with strong execution.';
         flawDesc = 'Occasional repetitive quest design or mid-campaign pacing dips.';
         audienceDesc = 'Highly recommended for genre enthusiasts and fans of this style of gameplay.';
       } else if (unifiedPercent >= 70) {
@@ -479,7 +735,9 @@ export const GameData = (() => {
         badge = 'Divisive / Wait for Sale';
         badgeType = 'rose';
         hookDesc = 'Interesting conceptual ideas that struggle under technical execution.';
-        flawDesc = `Currently sitting at ${steamPct}% Steam approval (${live.steamRatingText}) due to technical bugs, gameplay balance, or monetization.`;
+        flawDesc = steamPct != null
+          ? `Currently sitting at ${steamPct}% Steam approval (${live.steamRatingText}) due to technical bugs, gameplay balance, or monetization.`
+          : 'Currently sitting at low cross-source approval due to technical bugs, gameplay balance, or monetization.';
         audienceDesc = 'Only recommend for patient players who can wait for upcoming patches and discount sales.';
       }
 
@@ -489,48 +747,88 @@ export const GameData = (() => {
         : (live.thumb || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=80');
 
       const sources = live.sources || ['Steam', 'Metacritic'];
-      const liveQuotes = [];
-      (live.steamReviews || []).slice(0, 2).forEach(r => liveQuotes.push({
+      const rawQuotes = [];
+      [...(live.steamReviews || [])].sort((a, b) => (b.votes || 0) - (a.votes || 0)).slice(0, 4).forEach(r => rawQuotes.push({
         source: `Steam · ${r.votes > 50 ? 'Top helpful' : 'Verified player'}`,
-        author: r.author, quote: r.quote, sentiment: r.votedUp ? 'positive' : 'neutral', url: 'https://store.steampowered.com'
+        author: r.author, quote: r.quote, sentiment: r.votedUp ? 'positive' : 'neutral', url: 'https://store.steampowered.com',
+        votes: r.votes || 0
       }));
-      (live.openCriticReviews || []).slice(0, 2).forEach(r => liveQuotes.push({
-        source: 'OpenCritic · Critic', author: r.author, quote: r.quote, sentiment: 'neutral', url: r.url
+      (live.openCriticReviews || []).slice(0, 2).forEach(r => rawQuotes.push({
+        source: 'OpenCritic · Critic', author: r.author, quote: r.quote, sentiment: 'neutral', url: r.url, votes: 0
       }));
-      if (live.metacriticScore && liveQuotes.length < 3) liveQuotes.push({
+      if (live.metacriticScore && rawQuotes.length < 3) rawQuotes.push({
         source: 'Metacritic', author: 'Critic aggregate',
         quote: `Metascore ${live.metacriticScore}/100. Full breakdown: ${live.metacriticLink || 'metacritic.com'}`,
-        sentiment: 'neutral', url: live.metacriticLink
+        sentiment: 'neutral', url: live.metacriticLink, votes: 0
       });
-      if (!liveQuotes.length) liveQuotes.push({
+      if (!rawQuotes.length && steamPct != null) rawQuotes.push({
         source: sources.join(' + ') || 'Live consensus',
         author: `${(live.steamRatingCount || 0).toLocaleString()} players`,
         quote: `Rated "${live.steamRatingText}" with ${steamPct}% positive reception.`,
-        sentiment: steamPct >= 80 ? 'positive' : 'neutral', url: null
+        sentiment: steamPct >= 80 ? 'positive' : 'neutral', url: null, votes: 0
       });
+      const liveQuotes = cleanQuotes(rawQuotes, 3);
 
-      return {
-        id: `live-${live.steamAppID || 'game'}`,
+      // Genre-based hour estimate (HLTB has no public API) — labelled estimated in the UI.
+      let titleHash = 0;
+      for (let i = 0; i < String(live.title).length; i++) titleHash = (titleHash << 5) - titleHash + String(live.title).charCodeAt(i);
+      titleHash = Math.abs(titleHash);
+      const estHours = estimateHours(live.genres, titleHash);
+
+      // Deck status: ProtonDB tier when available, else an explicitly estimated guess.
+      let deckRating = 'Playable (Unverified — no ProtonDB reports)';
+      let deckEstimated = true;
+      if (live.deckProton && live.deckProton.tier) {
+        const t = live.deckProton.tier;
+        deckEstimated = false;
+        deckRating = /platinum|gold/i.test(t)
+          ? `Verified via ProtonDB (${t}, ${live.deckProton.total} reports)`
+          : /silver/i.test(t)
+            ? `Playable via ProtonDB (${t}, ${live.deckProton.total} reports)`
+            : `Unsupported via ProtonDB (${t}, ${live.deckProton.total} reports)`;
+      }
+      // Monetization: Steam store categories flag in-app purchases; never assume clean.
+      const priceBase = (live.normalPrice || 59.99).toFixed(2);
+      const saleBit = live.salePrice && live.salePrice < live.normalPrice ? ` · Sale: $${live.salePrice.toFixed(2)}` : '';
+      const monetization = live.hasInAppPurchases === true
+        ? `⚠️ In-App Purchases flagged on Steam ($${priceBase}${saleBit})`
+        : live.hasInAppPurchases === false
+          ? `💎 No in-app purchases on Steam ($${priceBase}${saleBit})`
+          : `💎 Standard Retail ($${priceBase}${saleBit})`;
+
+      const built = {
+        id: `live-${live.steamAppID || norm(live.title).replace(/ /g, '-')}`,
         title: live.title,
         releaseYear: live.releaseDate || 'Verified Title',
         developer: live.developer || 'Verified Developer',
         publisher: live.publisher || 'Steam Verified Publisher',
         genres: (live.genres && live.genres.length ? live.genres : ['Action', 'Adventure']),
+        steamAppID: live.steamAppID || null,
         headerImg: live.headerImg || steamImg,
         backdropImg: live.headerImg || steamImg,
         platforms: (live.platforms && live.platforms.length ? live.platforms : ['PC (Steam)', 'Windows']),
         subscriptionServices: [],
         basePriceUsd: live.normalPrice || 59.99,
+        salePrice: (live.salePrice != null && live.salePrice < (live.normalPrice || 59.99)) ? live.salePrice : null,
         isLive: true,
+        isEstimate: false,
+        unknownScores: false,
+        confidence: confidenceFor(live.steamRatingCount || 0),
+        coverage,
+        split,
+        trend,
+        fetchedAt: Date.now(),
         liveSource: `Live: ${sources.join(' · ')}`,
         liveLinks: { metacritic: live.metacriticLink || null, openCritic: live.openCriticUrl || null, steamAppID: live.steamAppID || null },
         scores: {
           steamPositivePercent: steamPct,
           steamStatus: live.steamRatingText,
-          steamReviewCount: `${live.steamRatingCount ? live.steamRatingCount.toLocaleString() : '10,000+'} Verified Steam Reviews`,
+          steamReviewCount: live.steamRatingCount
+            ? `${live.steamRatingCount.toLocaleString()} Verified Steam Reviews`
+            : 'Review count unavailable',
           openCritic: openScore,
           metaCritic: metaScore,
-          userBacklogRating: parseFloat(userRating)
+          userBacklogRating: userRating != null ? parseFloat(userRating) : null
         },
         unifiedConsensusPercent: unifiedPercent,
         verdictBadge: badge,
@@ -542,112 +840,97 @@ export const GameData = (() => {
         },
         realityCheck: {
           timeToFun: '⚡ 15 mins (Standard campaign onboarding)',
-          mainStoryHours: 24,
-          completionistHours: 65,
-          steamDeckRating: 'Verified (Target 40-60 FPS)',
-          monetization: `💎 Standard Retail ($${live.normalPrice.toFixed(2)}${live.salePrice && live.salePrice < live.normalPrice ? ` · Sale: $${live.salePrice.toFixed(2)}` : ''})`,
+          mainStoryHours: estHours.main,
+          completionistHours: estHours.comp,
+          hoursEstimated: true,
+          sampledMedianHrs,
+          sampledN,
+          steamDeckRating: deckRating,
+          deckEstimated,
+          monetization,
           pacing: 'Dynamic Player-Driven Flow',
           difficultyCurve: 'Moderate Progression'
         },
-        topQuotes: liveQuotes.slice(0, 3)
+        topQuotes: liveQuotes
       };
+      if (!recentLive.some(g => g.id === built.id)) {
+        recentLive.unshift(built);
+        if (recentLive.length > 12) recentLive.pop();
+      }
+      return built;
     }
 
-    // --- Tier 3: Algorithmic Consensus Engine Fallback ---
-    let hash = 0;
-    for (let i = 0; i < query.length; i++) hash = (hash << 5) - hash + query.charCodeAt(i);
-    hash = Math.abs(hash);
-
-    const steamPercent = 75 + (hash % 22);
-    const openCritic = 72 + (hash % 24);
-    const metaCritic = 70 + ((hash * 2) % 25);
-    const userRating = (7.2 + (hash % 22) / 10).toFixed(1);
-
-    const unifiedPercent = Math.round((steamPercent + openCritic + metaCritic + (parseFloat(userRating) * 10)) / 4);
-
-    let badge = 'Worth a Play';
-    let badgeType = 'amber';
-    if (unifiedPercent >= 92) {
-      badge = 'Essential Masterpiece';
-      badgeType = 'emerald';
-    } else if (unifiedPercent >= 84) {
-      badge = 'Strong Recommendation';
-      badgeType = 'emerald';
-    } else if (unifiedPercent >= 74) {
-      badge = 'Good with Flaws';
-      badgeType = 'amber';
-    } else {
-      badge = 'Divisive / Wait for Sale';
-      badgeType = 'rose';
-    }
-
-    const mainHours = 14 + (hash % 34);
-    const compHours = mainHours + 22 + (hash % 40);
-
+    // --- Tier 3: Honest unknown state. No invented scores: the live APIs are
+    // unreachable and this title is not curated, so there is nothing real to
+    // average. The card shows "not enough data" plus similar curated titles.
+    const titleCased = query.trim().split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     return {
-      id: `custom-${hash}`,
-      title: query.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-      releaseYear: '2023-2024',
-      developer: 'Acclaimed Studio',
-      publisher: 'Global Publisher',
+      id: `unknown-${norm(query).replace(/ /g, '-') || 'game'}`,
+      title: titleCased,
+      releaseYear: 'Unknown',
+      developer: 'Unknown',
+      publisher: 'Unknown',
       genres: ['Action', 'Adventure', 'Singleplayer'],
+      steamAppID: null,
       headerImg: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&auto=format&fit=crop&q=80',
       backdropImg: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1600&auto=format&fit=crop&q=80',
-      platforms: ['PC (Steam)', 'PS5', 'Xbox Series X/S'],
-      subscriptionServices: (hash % 4 === 0) ? ['Xbox Game Pass'] : [],
-      basePriceUsd: 59.99,
+      platforms: ['PC (Steam)'],
+      subscriptionServices: [],
+      basePriceUsd: 0,
+      salePrice: null,
       isLive: false,
-      scores: {
-        steamPositivePercent: steamPercent,
-        steamStatus: steamPercent >= 90 ? 'Very Positive' : (steamPercent >= 80 ? 'Positive' : 'Mostly Positive'),
-        steamReviewCount: `${(25 + (hash % 75))}k+ Community Reviews`,
-        openCritic: openCritic,
-        metaCritic: metaCritic,
-        userBacklogRating: parseFloat(userRating)
-      },
-      unifiedConsensusPercent: unifiedPercent,
-      verdictBadge: badge,
-      badgeType: badgeType,
+      isEstimate: true,
+      unknownScores: true,
+      estimateNote: 'Not enough data — live reviews are unreachable and this title is not curated. No score shown rather than a guessed one.',
+      liveSource: 'Unverified (no live data)',
+      confidence: { level: 'None', detail: 'No sources' },
+      coverage: 'estimated',
+      split: null,
+      fetchedAt: Date.now(),
+      scores: null,
+      unifiedConsensusPercent: null,
+      verdictBadge: 'Unverified — Not Enough Data',
+      badgeType: 'zinc',
       threeSentenceVerdict: {
-        coreHook: 'Engaging primary gameplay loop with polished audiovisual feedback and confident mechanics.',
-        flaw: 'Suffers from occasional pacing dips and repetitive secondary quests in the middle campaign.',
-        targetAudience: 'Gamers who enjoy solid, high-production genre mechanics without needing revolutionary novelty.'
+        coreHook: 'We could not reach Steam, OpenCritic, or Metacritic for this title, so there is no verified verdict.',
+        flaw: 'Anything shown here would be a guess. Rely on the similar verified titles below instead.',
+        targetAudience: 'Hold off until live consensus loads — check back with a connection.'
       },
       realityCheck: {
-        timeToFun: '⚡ 15 mins (Standard tutorial intro)',
-        mainStoryHours: mainHours,
-        completionistHours: compHours,
-        steamDeckRating: (hash % 3 !== 0) ? 'Verified (Target 40-50 FPS)' : 'Playable (Requires resolution tweaks)',
-        monetization: '💎 Standard Full Game Release',
-        pacing: 'Steady Campaign Progression',
-        difficultyCurve: 'Balanced Standard Difficulty'
+        timeToFun: 'Unknown',
+        mainStoryHours: 0,
+        completionistHours: 0,
+        hoursEstimated: false,
+        hoursUnknown: true,
+        steamDeckRating: 'Unknown',
+        monetization: 'Unknown',
+        pacing: 'Unknown',
+        difficultyCurve: 'Unknown'
       },
-      topQuotes: [
-        {
-          source: 'Community Consensus',
-          author: 'Verified Steam Player',
-          quote: `Delivers exactly what it promises on the box with solid controls and satisfying progression.`,
-          sentiment: 'positive'
-        },
-        {
-          source: 'Games Media Roundup',
-          author: 'Critic Aggregate',
-          quote: `A well-crafted experience that hits all its intended marks, even if it plays by familiar rules.`,
-          sentiment: 'positive'
-        },
-        {
-          source: 'Performance Check',
-          author: 'Hardware Tester',
-          quote: `Runs reliably on modern hardware with responsive frame times and clean controller mapping.`,
-          sentiment: 'positive'
-        }
-      ]
+      topQuotes: []
     };
   }
 
   return {
     CURATED_GAMES,
     FILTER_PRESETS,
-    searchGame
+    CONSENSUS_WEIGHTS,
+    recentLive,
+    searchGame,
+    computeUnified,
+    computeUnifiedSolid,
+    assessCoverage,
+    detectSplit,
+    medianPlaytime,
+    cleanQuotes,
+    timeAgo,
+    confidenceFor,
+    parseReviewCount,
+    getDeckInfo,
+    isCleanMtx,
+    costPerHourOf,
+    estimateHours,
+    getSimilar,
+    fuzzyMatch
   };
 })();
