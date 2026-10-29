@@ -20,14 +20,28 @@ const MIME_TYPES = {
 };
 
 const UA = { 'User-Agent': 'GameVerdict/2.0 (live-review-aggregator)' };
+
+/** Per-upstream health counters, exposed on /api/health for outage visibility. */
+const sourceStats = new Map();
+function statRecord(url, ok) {
+  let host = 'unknown';
+  try { host = new URL(url).hostname; } catch { /* keep unknown */ }
+  const s = sourceStats.get(host) || { ok: 0, fail: 0, lastOk: null, lastFail: null };
+  if (ok) { s.ok++; s.lastOk = new Date().toISOString(); }
+  else { s.fail++; s.lastFail = new Date().toISOString(); }
+  sourceStats.set(host, s);
+}
+
 const jfetch = async (url, ms = 7000) => {
   const c = new AbortController();
   const t = setTimeout(() => c.abort(), ms);
   try {
     const r = await fetch(url, { signal: c.signal, headers: UA });
-    if (!r.ok) return null;
-    return await r.json();
-  } catch { return null; } finally { clearTimeout(t); }
+    if (!r.ok) { statRecord(url, false); return null; }
+    const body = await r.json();
+    statRecord(url, true);
+    return body;
+  } catch { statRecord(url, false); return null; } finally { clearTimeout(t); }
 };
 
 /** CheapShark: price + metacritic score/link + steamAppID candidate */
@@ -86,7 +100,7 @@ async function steamReviews(appID) {
     votes: r.votes_up || 0,
     votedUp: r.voted_up !== false,
     playtimeMins: typeof r.author?.playtime_forever === 'number' ? r.author.playtime_forever : null,
-    url: r.recommendationid ? `https://steamcommunity.com/id/reviews/` : null
+    url: `https://store.steampowered.com/app/${appID}/#app_reviews_hash`
   })).filter(r => r.quote && r.quote.length > 40);
   return {
     percent: pct,
@@ -296,6 +310,11 @@ function cacheSet(key, data) {
   liveCache.set(key, { data, ts: Date.now() });
   if (liveCache.size > 100) liveCache.delete(liveCache.keys().next().value);
 }
+/** Last-known data regardless of TTL: served flagged stale when upstream fails. */
+function cachePeek(key) {
+  const hit = liveCache.get(key);
+  return hit ? hit.data : null;
+}
 
 const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -325,15 +344,27 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     const liveData = await fetchLiveGameFromWeb(query.trim());
-    if (liveData) cacheSet(key, liveData);
-    res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600', 'X-Cache': 'MISS' });
-    res.end(JSON.stringify({ success: !!liveData, query, data: liveData }));
+    if (liveData) {
+      cacheSet(key, liveData);
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600', 'X-Cache': 'MISS' });
+      res.end(JSON.stringify({ success: true, query, data: liveData }));
+      return;
+    }
+    // Upstream failed: serve the last good card flagged stale instead of nothing.
+    const stale = cachePeek(key);
+    if (stale) {
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=60', 'X-Cache': 'STALE' });
+      res.end(JSON.stringify({ success: true, query, data: stale, stale: true, cached: true }));
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=60', 'X-Cache': 'MISS' });
+    res.end(JSON.stringify({ success: false, query, data: null }));
     return;
   }
 
   if (reqUrl.pathname === '/api/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ ok: true, steamKey: !!STEAM_KEY }));
+    res.end(JSON.stringify({ ok: true, steamKey: !!STEAM_KEY, sources: Object.fromEntries(sourceStats), cacheEntries: liveCache.size }));
     return;
   }
 

@@ -10,6 +10,10 @@
     <p class="text-xs text-zinc-400 max-w-xl">
       Adjust your weekly free gaming time to see how long it will take to beat this title and whether the cost-per-hour justifies starting now or waiting for a Steam sale.
     </p>
+    <p :class="['text-xs px-3 py-2 rounded-xl border w-fit', decisionToneClass]">
+      <span class="font-black">{{ decision.action }}</span>
+      <span class="opacity-80"> — {{ decision.reason }}</span>
+    </p>
     <div class="flex flex-wrap gap-2 text-[11px]">
       <label class="flex items-center gap-1.5 px-3 py-2 rounded-full border border-zinc-700 text-zinc-300 cursor-pointer min-h-[40px]">
         <input type="checkbox" v-model="store.useSalePrice" class="accent-emerald-500 w-4 h-4" /> Use sale price when available
@@ -49,7 +53,14 @@
 
 <script setup>
 import { computed } from 'vue';
-import { store, weeksToBeat, costPerHour, backlogTotals, effectivePrice } from '../store.js';
+import { store, weeksToBeat, costPerHour, backlogTotals, effectivePrice, decision } from '../store.js';
+
+const decisionToneClass = computed(() => ({
+  emerald: 'bg-emerald-950/50 border-emerald-700/60 text-emerald-200',
+  amber: 'bg-amber-950/50 border-amber-700/60 text-amber-200',
+  rose: 'bg-rose-950/50 border-rose-700/60 text-rose-200',
+  zinc: 'bg-zinc-950/60 border-zinc-700/60 text-zinc-300'
+}[decision.value.tone] || 'bg-zinc-950/60 border-zinc-700/60 text-zinc-300'));
 
 const verdictTip = computed(() => {
   if (costPerHour.value == null) return '❓ Hours unknown — no value call until playtime is known.';

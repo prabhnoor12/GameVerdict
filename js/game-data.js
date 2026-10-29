@@ -482,11 +482,13 @@ export const GameData = (() => {
     return Math.round(med * 10) / 10;
   }
 
-  /** Quote hygiene: length floor, cross-source dedupe, most-backed first. */
+  /** Quote hygiene: length floor, cross-source dedupe, most-backed first,
+   *  then one dissenting voice is guaranteed a seat — "unfiltered truth"
+   *  with three positive quotes and a buried critical one is filtered. */
   const QUOTE_MIN_LEN = 40;
   function cleanQuotes(quotes, limit = 3) {
     const seen = new Set();
-    return (quotes || [])
+    const cleaned = (quotes || [])
       .filter(q => q?.quote && q.quote.trim().length >= QUOTE_MIN_LEN)
       .map(q => ({ ...q, votes: q.votes || 0 }))
       .sort((a, b) => b.votes - a.votes)
@@ -495,8 +497,13 @@ export const GameData = (() => {
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
-      })
-      .slice(0, limit);
+      });
+    const top = cleaned.slice(0, limit);
+    if (limit >= 2 && top.length >= 2 && top.every(q => q.sentiment === 'positive')) {
+      const dissent = cleaned.slice(limit).find(q => q.sentiment && q.sentiment !== 'positive');
+      if (dissent) top[top.length - 1] = dissent;
+    }
+    return top;
   }
 
   /** Data-age stamp for cached live verdicts. */
@@ -634,12 +641,36 @@ export const GameData = (() => {
       t.split(' ').some(w => w.startsWith(tok) || levenshtein(tok, w) <= Math.max(1, Math.floor(tok.length / 4)))
     );
   }
+  /** Ranked curated lookup: exact title beats title-contains beats
+   *  fuzzy-title beats dev/pub beats genre, consensus breaks ties. First
+   *  match no longer wins — a genre word in game #1 used to shadow an exact
+   *  title in game #11. Pure — covered by tests. */
+  function rankCurated(query, pool) {
+    const list = pool || CURATED_GAMES;
+    const q = String(query || '').trim().toLowerCase();
+    if (!q) return [];
+    const scored = [];
+    for (const g of list) {
+      const title = norm(g.title);
+      const dev = norm(g.developer || '');
+      const pub = norm(g.publisher || '');
+      const genres = (g.genres || []).map(norm);
+      let s = -1;
+      if (title === q) s = 1000;
+      else if (title.includes(q)) s = 500;
+      else if (fuzzyMatch(q, g.title)) s = 300;
+      else if ((dev && (dev.includes(q) || fuzzyMatch(q, g.developer))) ||
+               (pub && (pub.includes(q) || fuzzyMatch(q, g.publisher)))) s = 200;
+      else if (genres.some((x) => x.includes(q) || fuzzyMatch(q, x))) s = 100;
+      if (s < 0) continue;
+      scored.push({ g, s });
+    }
+    scored.sort((a, b) =>
+      (b.s - a.s) || ((b.g.unifiedConsensusPercent || 0) - (a.g.unifiedConsensusPercent || 0)));
+    return scored.map((x) => x.g);
+  }
   function matchCurated(query) {
-    const q = query.trim().toLowerCase();
-    return CURATED_GAMES.find(g =>
-      fuzzyMatch(q, g.title) || fuzzyMatch(q, g.developer) || fuzzyMatch(q, g.publisher) ||
-      g.genres.some(genre => fuzzyMatch(q, genre))
-    ) || null;
+    return rankCurated(query)[0] || null;
   }
 
   /** Similar-games recommender: genre overlap first, then consensus closeness, Deck bonus. */
@@ -756,6 +787,59 @@ export const GameData = (() => {
     return Math.round((a.unlocked / a.total) * 100);
   }
 
+  /** One-line decision: Play now / Wait for sale / Skip.
+   *  Pure and testable. Consensus first, then value, time, and device fit. */
+  function decisionFor(game, opts = {}) {
+    const weeklyHours = opts.weeklyHours > 0 ? opts.weeklyHours : 8;
+    const useSale = opts.useSale !== false;
+    const hoursMode = opts.hoursMode === 'completionist' ? 'completionist' : 'main';
+    const device = opts.device || 'pc';
+    if (!game || game.unknownScores || game.unifiedConsensusPercent == null) {
+      return { action: 'Not enough data', tone: 'zinc', reason: 'No verified consensus yet — check similar titles below.', weeks: null, cph: null };
+    }
+    const hours = hoursMode === 'completionist'
+      ? (game?.realityCheck?.completionistHours || 0)
+      : (game?.realityCheck?.mainStoryHours || 0);
+    const price = (useSale && game?.salePrice != null && game.salePrice < game.basePriceUsd)
+      ? game.salePrice : game.basePriceUsd;
+    const weeks = hours > 0 ? Math.round((hours / weeklyHours) * 10) / 10 : null;
+    const cph = hours > 0 && price != null ? Math.round((price / hours) * 100) / 100 : null;
+    if (game.split) {
+      return { action: 'Wait for sale', tone: 'amber', reason: `Players vs critics split (${game.split.gap}-point gap) — be sure you side with the happy half first.`, weeks, cph };
+    }
+    if (game.bomb) {
+      return { action: 'Wait for sale', tone: 'amber', reason: `Recent reviews cratered to ${game.bomb.recentPct}% — read recent reviews before trusting the average.`, weeks, cph };
+    }
+    const fit = deviceFit(game, device);
+    if (fit === 'no') {
+      return { action: 'Skip for now', tone: 'rose', reason: 'Not listed for your device — pick a title you can actually play.', weeks, cph };
+    }
+    const score = game.unifiedConsensusPercent;
+    if (score < 70) {
+      return { action: 'Skip for now', tone: 'rose', reason: 'Consensus is soft — backlog time is better spent elsewhere.', weeks, cph };
+    }
+    if (cph != null && cph > 2.5) {
+      return { action: 'Wait for sale', tone: 'amber', reason: `$${cph.toFixed(2)}/hr is a premium ticket — a 30%+ sale fixes the math.`, weeks, cph };
+    }
+    if (weeks != null && weeks > 8) {
+      return { action: 'Wait for sale', tone: 'amber', reason: `${weeks} weeks of your time is a real commitment — buy it when you can start it.`, weeks, cph };
+    }
+    if (score >= 85) {
+      return { action: 'Play now', tone: 'emerald', reason: 'Strong consensus, fair value, fits your time — start it.', weeks, cph };
+    }
+    return { action: 'Wait for sale', tone: 'amber', reason: 'Good with flaws — worth it on sale, not full price.', weeks, cph };
+  }
+
+  /** Tonight picks: high consensus, finishable, sorted by value-per-hour. */
+  function tonightPicks(pool, n = 3) {
+    return (pool || [])
+      .filter((g) => (g?.unifiedConsensusPercent ?? 0) >= 80 && (g?.realityCheck?.mainStoryHours || 0) > 0)
+      .map((g) => ({ g, v: g.unifiedConsensusPercent / g.realityCheck.mainStoryHours }))
+      .sort((a, b) => b.v - a.v)
+      .slice(0, n)
+      .map((x) => x.g);
+  }
+
   /** Review-bomb guard: recent sample craters while a solid overall holds.
    *  Quiet on thin samples, thin overalls, and small dips — no false alarms. */
   const BOMB_GAP = 15;
@@ -767,6 +851,17 @@ export const GameData = (() => {
     const gap = steamPct - trend.pct;
     if (gap < BOMB_GAP) return null;
     return { gap, overallPct: steamPct, recentPct: trend.pct, recentN: trend.n };
+  }
+
+  /** Transport status of the last live lookup: ok (data), miss (reached
+   *  upstream, no match), down (network threw), unknown (none attempted yet).
+   *  Drives the offline-vs-no-data copy split in Tier 3. */
+  let liveStatus = { state: 'unknown', at: 0 };
+  function markLive(state) {
+    liveStatus = { state, at: Date.now() };
+  }
+  function getLiveStatus() {
+    return liveStatus;
   }
 
   /** Frontend memory cache for live lookups (10 min TTL) to avoid refetching per keystroke. */
@@ -789,7 +884,10 @@ export const GameData = (() => {
    */
   async function fetchLiveGameReviewData(query) {
     const cached = getCachedLive(query);
-    if (cached) return cached;
+    if (cached) {
+      markLive('ok');
+      return cached;
+    }
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 9000);
 
@@ -802,18 +900,28 @@ export const GameData = (() => {
         const json = await localRes.json();
         if (json.success && json.data && (json.data.steamRatingPercent != null || json.data.metacriticScore != null || json.data.openCriticScore != null)) {
           clearTimeout(timeout);
-          setCachedLive(query, json.data);
-          return json.data;
+          const live = { ...json.data, stale: !!json.stale };
+          if (!json.stale) setCachedLive(query, live);
+          markLive('ok');
+          return live;
         }
       }
     } catch (_) { /* fall through to direct CheapShark fallback */ }
 
-    // 2. Direct browser fallback: CheapShark only (price + Steam % + Metacritic), used on static hosts
+    // 2. Direct browser fallback: CheapShark only (price + Steam % + Metacritic), used on static hosts.
+    // Transport truth: a thrown fetch means the network is down; an HTTP
+    // answer with no deals means upstream is reachable but has no match.
     try {
       const csRes = await fetch(`https://www.cheapshark.com/api/1.0/deals?title=${encodeURIComponent(query)}&limit=5`, { signal: controller.signal });
-      if (!csRes.ok) return null;
+      if (!csRes.ok) {
+        markLive('miss');
+        return null;
+      }
       const deals = await csRes.json();
-      if (!Array.isArray(deals) || !deals.length) return null;
+      if (!Array.isArray(deals) || !deals.length) {
+        markLive('miss');
+        return null;
+      }
       const withSteam = deals.filter(d => d.steamAppID && d.steamRatingCount);
       const best = withSteam.sort((a, b) => (parseInt(b.steamRatingCount, 10) || 0) - (parseInt(a.steamRatingCount, 10) || 0))[0] || deals[0];
       const fallback = {
@@ -831,9 +939,11 @@ export const GameData = (() => {
         sources: ['CheapShark']
       };
       setCachedLive(query, fallback);
+      markLive('ok');
       return fallback;
     } catch (err) {
       console.warn('[GameVerdict] Live API unavailable:', err.message);
+      markLive('down');
       return null;
     } finally {
       clearTimeout(timeout);
@@ -847,8 +957,10 @@ export const GameData = (() => {
    * Tier 3: Algorithmic Consensus Engine Fallback
    */
   async function searchGame(query) {
+    // Cap absurd inputs before they become ids, cache keys, or titles.
+    const capped = String(query || '').trim().slice(0, 120);
     // --- Tier 1: Check in curated collection (fuzzy: typos + partial tokens) ---
-    const match = matchCurated(query);
+    const match = matchCurated(capped);
 
     if (match) {
       const count = match.scores?.steamReviewCount != null ? parseReviewCount(match.scores.steamReviewCount) : 0;
@@ -869,14 +981,35 @@ export const GameData = (() => {
       };
     }
 
-    // --- Tier 1.5: Seeded snapshot (top-100, weekly). Static but age-stamped. ---
-    const seeded = seedPool.find(e => fuzzyMatch(query, e.title));
+    // --- Tier 1.5: Seeded snapshot (top-100, weekly). Static but age-stamped.
+    // Seeds run the same trust pipeline as curated entries so a
+    // single-source seed still earns its thin-data warning. ---
+    const seeded = seedPool.find(e => fuzzyMatch(capped, e.title));
     if (seeded) {
-      return { ...seeded, seedPooled: true };
+      const sCount = seeded.scores?.steamReviewCount != null
+        ? parseReviewCount(seeded.scores.steamReviewCount) : 0;
+      const sScores = seeded.scores || {};
+      return {
+        confidence: confidenceFor(sCount),
+        coverage: assessCoverage({
+          steam: sScores.steamPositivePercent ?? null,
+          meta: sScores.metaCritic ?? null,
+          oc: sScores.openCritic ?? null
+        }),
+        split: detectSplit({
+          steam: sScores.steamPositivePercent ?? null,
+          meta: sScores.metaCritic ?? null,
+          oc: sScores.openCritic ?? null
+        }),
+        trend: null,
+        fetchedAt: null,
+        ...seeded,
+        seedPooled: true
+      };
     }
 
     // --- Tier 2: Live multi-source reviews (Steam + Metacritic + OpenCritic) ---
-    const live = await fetchLiveGameReviewData(query);
+    const live = await fetchLiveGameReviewData(capped);
     if (live && (live.steamRatingPercent != null || live.metacriticScore != null || live.openCriticScore != null)) {
       // Missing sources stay missing: no fabrication, coverage gate decides trust.
       const steamPct = live.steamRatingPercent ?? null;
@@ -1027,6 +1160,7 @@ export const GameData = (() => {
         salePrice: (live.salePrice != null && live.salePrice < (live.normalPrice || 59.99)) ? live.salePrice : null,
         isLive: true,
         isEstimate: false,
+        stale: !!live.stale,
         unknownScores: false,
         confidence: confidenceFor(live.steamRatingCount || 0),
         coverage,
@@ -1082,9 +1216,10 @@ export const GameData = (() => {
     // --- Tier 3: Honest unknown state. No invented scores: the live APIs are
     // unreachable and this title is not curated, so there is nothing real to
     // average. The card shows "not enough data" plus similar curated titles.
-    const titleCased = query.trim().split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    const titleCased = capped.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     return {
-      id: `unknown-${norm(query).replace(/ /g, '-') || 'game'}`,
+      id: `unknown-${norm(capped).replace(/ /g, '-') || 'game'}`,
+      liveDown: getLiveStatus().state === 'down',
       title: titleCased,
       releaseYear: 'Unknown',
       developer: 'Unknown',
@@ -1150,6 +1285,7 @@ export const GameData = (() => {
     costPerHourOf,
     estimateHours,
     getSimilar,
+    rankCurated,
     fuzzyMatch,
     parseSteamInput,
     computeLibraryStats,
@@ -1165,6 +1301,9 @@ export const GameData = (() => {
     hasCoop,
     familyLine,
     dropFor,
-    achievementPct
+    achievementPct,
+    decisionFor,
+    tonightPicks,
+    getLiveStatus
   };
 })();

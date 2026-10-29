@@ -1,7 +1,16 @@
 <template>
   <section id="heroCard" class="bg-zinc-900/90 border border-zinc-800 rounded-3xl p-4 sm:p-8 shadow-2xl backdrop-blur-md space-y-6">
-    <div v-if="game.isEstimate" class="p-3 rounded-2xl bg-amber-950/40 border border-amber-700/60 text-[11px] text-amber-200">
-      ⚠️ {{ game.estimateNote || 'Offline estimate — live reviews unreachable. Treat scores as a rough guess.' }}
+    <div :class="['p-4 rounded-2xl border text-sm flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4', decisionToneClass]">
+      <span class="font-black text-base whitespace-nowrap">{{ decision.action }}</span>
+      <span class="text-xs opacity-90">{{ decision.reason }}</span>
+      <span v-if="decisionMeta" class="text-[11px] font-mono opacity-80 sm:ml-auto shrink-0">{{ decisionMeta }}</span>
+    </div>
+    <div v-if="game.sharedSnapshot" class="p-3 rounded-2xl bg-teal-950/40 border border-teal-700/60 text-[11px] text-teal-200">
+      🔗 Shared verdict snapshot — numbers frozen at share time{{ sharedAge ? ` (${sharedAge} ago)` : '' }}.
+    </div>
+    <div v-if="game.isEstimate" class="p-3 rounded-2xl bg-amber-950/40 border border-amber-700/60 text-[11px] text-amber-200 flex items-center justify-between gap-3 flex-wrap">
+      <span v-if="game.liveDown">Live reviews unreachable right now — this is a no-data card, not a verdict. <button @click="retrySearch" :disabled="store.isLoading" class="underline underline-offset-2 font-bold hover:text-amber-100 disabled:opacity-60">Retry live lookup</button></span>
+      <span v-else>{{ game.estimateNote || 'Not enough data — live reviews are unreachable and this title is not curated. No score shown rather than a guessed one.' }}</span>
     </div>
     <div v-if="game.split" class="p-3 rounded-2xl bg-rose-950/40 border border-rose-700/60 text-[11px] text-rose-200">
       ⚖️ Players vs critics split: {{ game.split.low.label }} {{ game.split.low.value }} vs {{ game.split.high.label }} {{ game.split.high.value }} ({{ game.split.gap }}-point gap). The average describes neither side — read both.
@@ -33,12 +42,31 @@
             <span v-if="game.confidence" class="px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide bg-zinc-950 text-zinc-300 border border-zinc-700" :title="`Review-count confidence: ${game.confidence.detail}`">
               {{ game.confidence.level }} confidence · {{ game.confidence.detail }}
             </span>
+            <span v-if="game.stale" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-950 text-amber-300 border border-amber-700" title="Review sources are unreachable right now — showing the last good data instead of nothing">
+              Stale data
+            </span>
+            <span v-else-if="game.seedPooled && seedAge" class="px-2.5 py-0.5 rounded-full text-[10px] font-medium tracking-wide bg-zinc-950 text-zinc-300 border border-zinc-700" :title="`Weekly static snapshot from ${seedAge}`">
+              Snapshot · {{ seedAge }}
+            </span>
             <span v-if="(game.subscriptionServices || []).some(s => s.toLowerCase().includes('game pass'))" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-400 border border-emerald-700">🟢 Included with Game Pass</span>
           </div>
           <h2 class="text-xl sm:text-3xl font-black text-white leading-tight">{{ game.title }}</h2>
-          <div class="flex gap-2 mt-2">
-            <button @click="toggleWishlist(game)" class="text-xs px-3 py-2 rounded-lg border border-zinc-700 text-zinc-300 hover:border-emerald-500 min-h-[40px]">{{ isWishlisted(game) ? '❤️ Saved' : '🤍 Wishlist' }}</button>
-            <button @click="toggleCompare(game)" class="text-xs px-3 py-2 rounded-lg border border-zinc-700 text-zinc-300 hover:border-emerald-500 min-h-[40px]">⚖️ Compare</button>
+          <div class="sticky top-14 z-10 -mx-1 px-1 py-2 bg-zinc-900/95 backdrop-blur flex gap-2 mt-2 flex-wrap">
+            <button @click="toggleWishlist(game)" class="text-xs px-3 py-2 rounded-lg border border-zinc-700 text-zinc-300 hover:border-emerald-500 min-h-[40px]">{{ isWishlisted(game) ? 'Saved' : 'Save' }}</button>
+            <button @click="toggleCompare(game)" class="text-xs px-3 py-2 rounded-lg border border-zinc-700 text-zinc-300 hover:border-emerald-500 min-h-[40px]">Compare</button>
+            <button @click="shareVerdict(game)" class="text-xs px-3 py-2 rounded-lg border border-zinc-700 text-zinc-300 hover:border-emerald-500 min-h-[40px]">Share</button>
+            <button @click="downloadImage(game)" class="text-xs px-3 py-2 rounded-lg border border-zinc-700 text-zinc-300 hover:border-emerald-500 min-h-[40px]">Image</button>
+          </div>
+          <div class="flex items-center gap-1.5 mt-2 flex-wrap" role="group" aria-label="Rate this game">
+            <span class="text-[11px] text-zinc-500">Your rating:</span>
+            <button
+              v-for="s in [1,2,3,4,5,6,7,8,9,10]"
+              :key="s"
+              @click="rateGame(game, s)"
+              :aria-pressed="myRating === s"
+              :class="['w-8 h-8 rounded-lg text-[11px] font-bold border transition', myRating === s ? 'bg-emerald-500 text-zinc-950 border-emerald-400' : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-500 hover:text-white']"
+            >{{ s }}</button>
+            <span v-if="myRating" class="text-[11px] text-emerald-300 font-bold">{{ myRating }}/10 saved</span>
           </div>
           <div class="text-xs text-zinc-400 mt-1 font-mono">{{ game.releaseYear }} · Dev. {{ game.developer }} · Pub. {{ game.publisher }} · {{ game.genres.join(', ') }}</div>
         </div>
@@ -53,7 +81,7 @@
           </div>
           <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-zinc-500">
             <span title="Raw source inputs — no hidden averaging">Steam {{ srcVal(game.scores?.steamPositivePercent, '%') }} · Meta {{ srcVal(game.scores?.metaCritic) }} · OC {{ srcVal(game.scores?.openCritic) }}</span>
-            <span v-if="game.isLive && game.fetchedAt">Updated {{ age }}</span>
+            <span v-if="game.isLive && game.fetchedAt && !game.stale">Updated {{ age }}</span>
             <span v-if="game.trend" :class="trendClass">Recent reviews: {{ game.trend.direction }} ({{ game.trend.pct }}%, n={{ game.trend.n }})</span>
           </div>
           <div v-if="contributions.length" class="pt-1 space-y-1">
@@ -98,8 +126,14 @@
             <div class="p-2.5 rounded-xl bg-zinc-900 border border-zinc-800">
               <div class="text-[10px] text-zinc-500 font-bold uppercase">Backlog User</div>
               <div class="text-base font-black text-teal-400 mt-0.5">{{ game.scores?.userBacklogRating ?? '—' }}</div>
-              <div class="text-[9px] text-zinc-400 mt-0.5">⭐ / 10</div>
+              <div class="text-[9px] text-zinc-400 mt-0.5">Curator score / 10</div>
             </div>
+          </div>
+          <div v-if="expanded" class="px-3 pb-3 text-[11px] text-zinc-400 flex items-center gap-x-2 gap-y-1 flex-wrap">
+            <span v-if="store.communityLoading">Loading community ratings…</span>
+            <span v-else-if="store.communityVotes > 0">Community backlog avg: <span class="text-teal-300 font-bold font-mono">{{ store.communityAvg }}/10</span> <span class="text-zinc-500">({{ store.communityVotes }} votes)</span></span>
+            <span v-else>No community votes yet — yours could be first.</span>
+            <span v-if="myRating" class="text-emerald-300 font-bold">You rated {{ myRating }}/10</span>
           </div>
         </div>
       </div>
@@ -219,12 +253,39 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { store, similarGames, isWishlisted, toggleWishlist, toggleCompare, selectGame } from '../store.js';
+import { store, similarGames, isWishlisted, toggleWishlist, toggleCompare, selectGame, seedMeta, shareVerdict, decision, weeksToBeat, costPerHour, rateGame, retrySearch } from '../store.js';
+import { downloadVerdictImage } from '../../js/share-image.js';
 import { GameData } from '../../js/game-data.js';
+
+function downloadImage(game) {
+  downloadVerdictImage(game);
+}
+const sharedAge = computed(() => props.game.sharedAt ? GameData.timeAgo(props.game.sharedAt) : '');
 
 const props = defineProps({ game: { type: Object, required: true } });
 const similar = similarGames;
-const expanded = ref(false);
+const expanded = ref(true);
+
+const decisionToneClass = computed(() => ({
+  emerald: 'bg-emerald-950/50 border-emerald-700/60 text-emerald-200',
+  amber: 'bg-amber-950/50 border-amber-700/60 text-amber-200',
+  rose: 'bg-rose-950/50 border-rose-700/60 text-rose-200',
+  zinc: 'bg-zinc-950/60 border-zinc-700/60 text-zinc-300'
+}[decision.value.tone] || 'bg-zinc-950/60 border-zinc-700/60 text-zinc-300'));
+
+const decisionMeta = computed(() => {
+  const bits = [];
+  if (decision.value.weeks != null) bits.push(`${decision.value.weeks} wks at ${store.weeklyHours}h/wk`);
+  if (decision.value.cph != null) bits.push(`$${decision.value.cph.toFixed(2)}/hr`);
+  if (weeksToBeat.value == null && costPerHour.value == null) return bits.join(' · ');
+  return bits.join(' · ');
+});
+
+const myRating = computed(() => {
+  const r = store.myRatings?.[props.game.id];
+  return typeof r === 'number' ? r : (r?.score ?? null);
+});
+const seedAge = computed(() => seedMeta.value?.generatedAt ? GameData.timeAgo(seedMeta.value.generatedAt) : '');
 
 /** Nominal consensus weights (Steam 55 · Metacritic 35 · Backlog-user 10),
  *  renormalized over whichever sources are present. Approximate by design. */

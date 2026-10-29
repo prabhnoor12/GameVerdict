@@ -23,7 +23,7 @@ GameVerdict eliminates review-bombing noise, 40-minute YouTube sponsor fluff, an
   - Move the weekly free time slider to calculate **Weeks to Beat** and **Cost-per-Joy-Hour** compared to traditional entertainment.
 - **💬 Unfiltered Community & Critic Truth**:
   - Directly compares Steam Top Helpful Reviews (unvarnished gamer perspective), top games media (PC Gamer, Eurogamer, IGN), and tech performance labs (Digital Foundry).
-- **🌐 Live Multi-Source Reviews** (Steam + Metacritic + OpenCritic + CheapShark via `/api/live-game?q=`; real player/critic quotes with verify links; static-host fallback is CheapShark-only):
+- **🌐 Live Multi-Source Reviews** (Steam + Metacritic + OpenCritic + CheapShark via `/api/live-game?q=`; real player/critic quotes with verify links; static-host fallback is CheapShark-only; a live/stale/offline status pill plus retry on dead lookups instead of guesses):
 - **⚡ Smart Search & Dynamic Algorithmic Synthesis**:
   - Includes deep curated benchmarks (*Elden Ring, Baldur's Gate 3, Cyberpunk 2077, Hades II, Balatro, Black Myth: Wukong, Helldivers 2, Starfield, Red Dead Redemption 2, Hollow Knight, Doom Eternal*).
   - Automatically synthesizes realistic consensus data for **any game typed by the user**.
@@ -85,12 +85,11 @@ node scripts/seed.mjs --limit=5   # quick sample
 ```
 Unverifiable titles are skipped, never fabricated. A GitHub workflow (`.github/workflows/seed.yml`) refreshes the snapshot every Monday.
 
-### Supabase cloud sync (optional — works disconnected until you connect):
-The app runs fully on localStorage with zero backend. When you want cross-device sync, community ratings, and shareable snapshots:
-1. Create a free project at [supabase.com](https://supabase.com), then run `supabase/schema.sql` once in the SQL editor.
-2. Enable **Email (magic link)** under Authentication → Providers.
-3. Connect inside the app: 📚 Library → Cloud sync → paste the project URL + anon key (or set `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` in `.env`, see `.env.example`).
-4. Sign in, then ⇅ Sync now. Wishlist, manual games, and prefs merge last-write-wins — nothing local is ever deleted.
+### Supabase cloud sync (always on):
+The app connects to Supabase at boot from `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` in `.env` (see `.env.example`). Schema lives in `supabase/schema.sql` (apply with `node scripts/migrate.js`); auth uses **Email (magic link)** under Authentication → Providers.
+1. Hit Sign in (header) or Backlog → Library → Cloud sync and enter your email — one tap from your inbox, no password. Magic-link returns land back in the app with expired-link errors shown inline.
+2. Hit Sync now. Wishlist, manual games, and prefs merge last-write-wins — nothing local is ever deleted.
+3. Ratings count: 1–10 on any verdict feeds the public community average shown under Score breakdown, the Community top strip, and your My-ratings history in Backlog.
 Row-level security keeps every table owner-scoped except public rating averages and shared snapshots.
 
 ### Keyboard Shortcuts:

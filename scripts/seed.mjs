@@ -83,6 +83,11 @@ for (const [i, name] of names.entries()) {
   await sleep(2500); // stay polite to upstream Steam endpoints (avoids rate-limit aborts)
 }
 
+if (!games.length) {
+  console.error('[seed] Refusing to write an empty snapshot — every title was unverifiable. Upstream APIs may be down; fix and re-run.');
+  process.exit(1);
+}
+
 const { writeFileSync, mkdirSync } = await import('fs');
 mkdirSync(new URL('../src/data/', import.meta.url), { recursive: true });
 writeFileSync(

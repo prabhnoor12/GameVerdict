@@ -8,23 +8,6 @@
       <button v-if="store.steamLibrary" @click="clearLibrary" class="text-[11px] text-zinc-500 hover:text-rose-300">Disconnect library</button>
     </div>
 
-    <div class="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-2">
-      <div class="flex items-center justify-between">
-        <div class="font-bold text-zinc-300 uppercase tracking-wider text-[10px]">☁️ Cloud sync (Supabase)</div>
-        <span class="text-[10px] font-mono" :class="store.syncStatus === 'disconnected' ? 'text-zinc-500' : 'text-emerald-300'">{{ store.syncStatus }}</span>
-      </div>
-      <div v-if="store.syncStatus === 'disconnected'" class="flex flex-wrap gap-2">
-        <input v-model="store.syncUrl" type="text" placeholder="https://xyz.supabase.co" class="flex-1 min-w-40 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2.5 text-base sm:text-xs text-white placeholder:text-zinc-500 focus:outline-hidden focus:border-emerald-500" autocomplete="off" />
-        <input v-model="store.syncKey" type="password" placeholder="anon key" class="flex-1 min-w-40 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2.5 text-base sm:text-xs text-white placeholder:text-zinc-500 focus:outline-hidden focus:border-emerald-500" autocomplete="off" />
-        <button @click="connectSync" :disabled="store.syncing" class="px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-60 text-zinc-950 text-xs font-bold">Connect</button>
-      </div>
-      <button v-else @click="syncNow" :disabled="store.syncing" class="px-3 py-2 rounded-xl border border-zinc-700 text-zinc-300 hover:border-emerald-500 disabled:opacity-60 text-xs font-bold">
-        {{ store.syncing ? 'Syncing…' : '⇅ Sync now' }}
-      </button>
-      <p v-if="store.syncError" class="text-[11px] text-amber-300">⚠️ {{ store.syncError }}</p>
-      <p v-else class="text-[10px] text-zinc-500">Stay disconnected and everything works locally. See README → Supabase for the 10-minute setup.</p>
-    </div>
-
     <div v-if="!store.steamLibrary" class="space-y-3">
       <p class="text-xs text-zinc-400 max-w-xl">Paste your Steam profile to import every owned game with real playtime. Triage, queues, and progress all run on your actual library.</p>
       <form @submit.prevent="importLibrary" class="flex gap-2 max-w-xl">
@@ -140,6 +123,21 @@
         </div>
       </div>
     </div>
+
+    <div class="p-4 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-2">
+      <div class="flex items-center justify-between">
+        <div class="font-bold text-zinc-300 uppercase tracking-wider text-[10px]">Cloud sync</div>
+        <span class="text-[10px] font-mono" :class="store.syncStatus === 'synced' ? 'text-emerald-300' : store.syncStatus === 'error' ? 'text-rose-300' : 'text-zinc-500'">{{ store.syncStatus }}</span>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button @click="syncNow" :disabled="store.syncing" class="px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-60 text-zinc-950 text-xs font-bold">
+          {{ store.syncing ? 'Syncing…' : 'Sync now' }}
+        </button>
+        <button v-if="store.syncStatus === 'error'" @click="ensureSync" :disabled="store.syncing" class="px-3 py-2 rounded-xl border border-zinc-700 text-zinc-300 hover:border-emerald-500 disabled:opacity-60 text-xs font-bold">Retry</button>
+      </div>
+      <p v-if="store.syncError" class="text-[11px] text-amber-300">{{ store.syncError }}</p>
+      <AuthPanel />
+    </div>
   </section>
 </template>
 
@@ -148,8 +146,9 @@ import { ref, computed } from 'vue';
 import {
   store, libraryStats, triage, seriesWatch, weeknightQueue, weekendQueue,
   enrichedOwned, importLibrary, clearLibrary, addManualGame, verdictForOwned, surprise,
-  fetchAchievements, connectSync, syncNow
+  fetchAchievements, ensureSync, syncNow
 } from '../store.js';
+import AuthPanel from './AuthPanel.vue';
 
 function achText(appid) {
   const a = store.achievements[appid];

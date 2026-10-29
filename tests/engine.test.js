@@ -292,17 +292,151 @@ describe('mergeRows (last-write-wins sync merge)', () => {
   });
 });
 
-describe('sync guards (disconnected by default)', () => {
-  it('skips every network op with no credentials', async () => {
+describe('sync guards (client required, errors not skips)', () => {
+  it('fails every network op with a real error and no client', async () => {
     const sync = await import('../js/sync.js');
-    assert.deepEqual(await sync.pushLocal({ wishlist: [{ id: 'x' }] }), { skipped: true, reason: 'supabase not connected' });
-    assert.deepEqual((await sync.pullRemote({})).reason, 'supabase not connected');
-    assert.deepEqual((await sync.submitRating('g', 8)).reason, 'supabase not connected');
-    assert.deepEqual((await sync.communityAverage('g')).reason, 'supabase not connected');
+    assert.equal((await sync.pushLocal({ wishlist: [{ id: 'x' }] })).ok, false);
+    assert.equal((await sync.pullRemote({})).ok, false);
+    assert.equal((await sync.submitRating('g', 8)).ok, false);
+    assert.equal((await sync.communityAverage('g')).ok, false);
   });
   it('rejects out-of-range scores without a network round-trip', async () => {
     const sync = await import('../js/sync.js');
     assert.deepEqual(await sync.submitRating('g', 99), { ok: false, error: 'Score must be 1–10.' });
+  });
+  it('rejects malformed snapshot ids without a network round-trip', async () => {
+    const sync = await import('../js/sync.js');
+    assert.deepEqual(await sync.fetchSnapshot('not-a-uuid'), { ok: false, error: 'That shared verdict link is invalid.' });
+    assert.deepEqual(await sync.fetchSnapshot(''), { ok: false, error: 'That shared verdict link is invalid.' });
+  });
+  it('fails snapshot fetch with an error and no client', async () => {
+    const sync = await import('../js/sync.js');
+    assert.equal(
+      (await sync.fetchSnapshot('123e4567-e89b-12d3-a456-426614174000')).ok,
+      false
+    );
+  });
+});
+
+describe('decisionFor (one-line verdict call)', () => {
+  const base = {
+    unifiedConsensusPercent: 95, unknownScores: false, split: null, bomb: null,
+    basePriceUsd: 59.99, salePrice: null,
+    platforms: ['PC (Steam)'], realityCheck: { mainStoryHours: 50, completionistHours: 120 }
+  };
+  it('says play now on strong consensus with fair value and time', () => {
+    const d = GameData.decisionFor(base, { weeklyHours: 8, device: 'pc' });
+    assert.equal(d.action, 'Play now');
+    assert.equal(d.tone, 'emerald');
+  });
+  it('holds for splits, bombs, and soft consensus', () => {
+    assert.equal(GameData.decisionFor({ ...base, split: { gap: 20 } }).action, 'Wait for sale');
+    assert.equal(GameData.decisionFor({ ...base, bomb: { recentPct: 52 } }).action, 'Wait for sale');
+    assert.equal(GameData.decisionFor({ ...base, unifiedConsensusPercent: 60 }).action, 'Skip for now');
+  });
+  it('flags premium hourly cost and device mismatch', () => {
+    assert.equal(GameData.decisionFor({ ...base, unifiedConsensusPercent: 90 }).action, 'Play now');
+    const pricey = GameData.decisionFor({ ...base, unifiedConsensusPercent: 90, basePriceUsd: 70, realityCheck: { mainStoryHours: 10, completionistHours: 20 } });
+    assert.equal(pricey.action, 'Wait for sale');
+  });
+  it('returns honest unknown state with no scores', () => {
+    const d = GameData.decisionFor({ unknownScores: true, unifiedConsensusPercent: null, realityCheck: {} });
+    assert.equal(d.action, 'Not enough data');
+  });
+});
+
+describe('tonightPicks (value-per-hour instant picks)', () => {
+  it('ranks high consensus short games first', () => {
+    const pool = [
+      { id: 'a', unifiedConsensusPercent: 95, realityCheck: { mainStoryHours: 60 } },
+      { id: 'b', unifiedConsensusPercent: 90, realityCheck: { mainStoryHours: 10 } }
+    ];
+    const picks = GameData.tonightPicks(pool, 2);
+    assert.equal(picks[0].id, 'b');
+    assert.equal(picks.length, 2);
+  });
+  it('skips soft consensus and hour-less titles', () => {
+    assert.equal(GameData.tonightPicks([{ id: 'c', unifiedConsensusPercent: 60, realityCheck: { mainStoryHours: 10 } }]).length, 0);
+  });
+});
+
+describe('rankCurated (exact title beats early genre match)', () => {
+  it('ranks an exact title above a genre-only match', () => {
+    const pool = [
+      { id: 'early', title: 'Early Game', developer: 'A', publisher: 'A', genres: ['RPG', 'Adventure'], unifiedConsensusPercent: 99 },
+      { id: 'late', title: 'Rpg Legends', developer: 'B', publisher: 'B', genres: ['Action'], unifiedConsensusPercent: 80 }
+    ];
+    const ranked = GameData.rankCurated('rpg legends', pool);
+    assert.equal(ranked[0].id, 'late');
+  });
+  it('breaks genre-query ties by consensus, not list order', () => {
+    const pool = [
+      { id: 'early', title: 'Early Game', developer: 'A', publisher: 'A', genres: ['RPG'], unifiedConsensusPercent: 82 },
+      { id: 'late', title: 'Late Game', developer: 'B', publisher: 'B', genres: ['RPG'], unifiedConsensusPercent: 97 }
+    ];
+    assert.equal(GameData.rankCurated('rpg', pool)[0].id, 'late');
+  });
+  it('returns [] for blank queries and keeps real curated lookups working', async () => {
+    assert.deepEqual(GameData.rankCurated('   '), []);
+    const g = await GameData.searchGame('elden rng');
+    assert.equal(g.title, 'Elden Ring');
+  });
+});
+
+describe('cleanQuotes (a dissenting voice keeps its seat)', () => {
+  const long = (s) => s + ' — padded to clear the forty character hygiene floor for quotes.';
+  it('swaps the weakest praise for buried criticism', () => {
+    const out = GameData.cleanQuotes([
+      { source: 'Steam', author: 'a', quote: long('Praise one with lots of backing here'), sentiment: 'positive', votes: 300 },
+      { source: 'Steam', author: 'b', quote: long('Praise two with solid backing here'), sentiment: 'positive', votes: 200 },
+      { source: 'Steam', author: 'c', quote: long('Praise three with weak backing here'), sentiment: 'positive', votes: 100 },
+      { source: 'OC', author: 'd', quote: long('Critical dissent the votes buried deep'), sentiment: 'negative', votes: 5 }
+    ]);
+    assert.equal(out.length, 3);
+    assert.ok(out.some((q) => q.sentiment === 'negative'), 'expected the dissent to survive');
+    assert.ok(out.some((q) => q.author === 'a'), 'expected the top praise to stay');
+  });
+});
+
+describe('seed pool (same trust pipeline as curated)', () => {
+  it('flags single-source seeds as thin with review-count confidence', async () => {
+    GameData.setSeedPool([{
+      id: 'seed-1', title: 'Seeded Game', genres: ['Action'],
+      unifiedConsensusPercent: 88, verdictBadge: 'Seeded', badgeType: 'emerald',
+      scores: { steamPositivePercent: 90, steamStatus: 'Very Positive', steamReviewCount: '50k', openCritic: null, metaCritic: null, userBacklogRating: 8.8 },
+      realityCheck: { mainStoryHours: 20, completionistHours: 50 },
+      topQuotes: [], isLive: false, isEstimate: false
+    }]);
+    const g = await GameData.searchGame('seeded game');
+    assert.equal(g.seedPooled, true);
+    assert.equal(g.coverage, 'thin');
+    assert.equal(g.confidence.level, 'Medium');
+    GameData.setSeedPool([]);
+  });
+});
+
+describe('validEmail (sign-in form gate)', () => {
+  it('accepts real addresses and rejects junk', async () => {
+    const { validEmail } = await import('../js/supabase-client.js');
+    assert.equal(validEmail('player@example.com'), true);
+    assert.equal(validEmail('  player@example.com  '), true);
+    assert.equal(validEmail('not-an-email'), false);
+    assert.equal(validEmail('a@b'), false);
+    assert.equal(validEmail(''), false);
+    assert.equal(validEmail(null), false);
+  });
+});
+
+describe('live transport status (offline vs no-data)', () => {
+  it('exposes a known status shape', () => {
+    const s = GameData.getLiveStatus();
+    assert.ok(['unknown', 'ok', 'miss', 'down'].includes(s.state));
+    assert.equal(typeof s.at, 'number');
+  });
+  it('marks Tier-3 unknowns with a boolean transport flag', async () => {
+    const g = await GameData.searchGame('zzzzqqqq-no-such-game-123');
+    assert.equal(g.unknownScores, true);
+    assert.equal(typeof g.liveDown, 'boolean');
   });
 });
 

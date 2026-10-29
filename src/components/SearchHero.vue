@@ -48,6 +48,11 @@
       </button>
     </form>
     <p v-if="store.searchError" class="text-[11px] text-amber-300 max-w-xl mx-auto">⚠️ {{ store.searchError }}</p>
+    <p v-if="store.liveState !== 'unknown'" class="max-w-xl mx-auto">
+      <span :class="['inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border', liveClass]">
+        <span :class="['w-1.5 h-1.5 rounded-full', liveDot]"></span>{{ liveLabel }}
+      </span>
+    </p>
 
     <div class="flex flex-wrap items-center justify-center gap-1.5 pt-1">
       <div class="flex flex-wrap gap-1.5 justify-center">
@@ -91,7 +96,7 @@
       <div class="text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-2">Trending Games:</div>
       <div class="flex items-center gap-2 overflow-x-auto pb-1 snap-x sm:flex-wrap sm:justify-center sm:overflow-visible sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
         <button
-          v-for="g in filteredGames"
+          v-for="g in filteredGames.slice(0, 12)"
           :key="g.id"
           @click="selectGame(g)"
           :class="['px-3 py-1.5 rounded-xl text-xs font-medium transition border flex items-center gap-1.5 shrink-0 snap-start min-h-[36px]', store.currentGame.id === g.id ? 'bg-emerald-950 border-emerald-500/80 text-emerald-300 font-bold' : 'bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white hover:border-zinc-700']"
@@ -107,8 +112,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { store, filteredGames, selectGame, search, refreshSuggestions, setDevice } from '../store.js';
+
+const liveLabel = computed(() => ({
+  live: 'Live reviews online',
+  stale: 'Live reviews stale — showing last good data',
+  down: 'Live reviews unreachable — retry available',
+  nodata: 'No live data for this title'
+}[store.liveState] || 'Live reviews'));
+const liveClass = computed(() => ({
+  live: 'bg-emerald-950 text-emerald-300 border-emerald-700',
+  stale: 'bg-amber-950 text-amber-300 border-amber-700',
+  down: 'bg-rose-950 text-rose-300 border-rose-700',
+  nodata: 'bg-zinc-900 text-zinc-400 border-zinc-700'
+}[store.liveState] || 'bg-zinc-900 text-zinc-400 border-zinc-700'));
+const liveDot = computed(() => ({
+  live: 'bg-emerald-400',
+  stale: 'bg-amber-300',
+  down: 'bg-rose-400',
+  nodata: 'bg-zinc-500'
+}[store.liveState] || 'bg-zinc-500'));
 
 const RECENTS_KEY = 'gv:recent-searches:v1';
 function loadRecents() {

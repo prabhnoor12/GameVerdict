@@ -90,7 +90,7 @@ async function steamReviews(appID) {
       votes: r.votes_up || 0,
       votedUp: r.voted_up !== false,
       playtimeMins: typeof r.author?.playtime_forever === 'number' ? r.author.playtime_forever : null,
-      url: r.recommendationid ? `https://steamcommunity.com/id/reviews/` : null,
+      url: `https://store.steampowered.com/app/${appID}/#app_reviews_hash`,
     }))
     .filter((r) => r.quote && r.quote.length > 40);
   return {
