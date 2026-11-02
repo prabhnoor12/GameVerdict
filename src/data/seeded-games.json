@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-10-28T07:28:58.566Z",
- "count": 72,
+ "generatedAt": "2026-11-02T12:25:21.589Z",
+ "count": 71,
  "games": [
   {
    "id": "live-240",
@@ -23,6 +23,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -31,17 +32,29 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172124815,
+   "fetchedAt": 1793621981142,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/counter-strike-source/",
     "openCritic": null,
     "steamAppID": "240"
    },
+   "features": {
+    "controller": null,
+    "coop": [
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "Includes intense violence and blood."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 96,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "45,374 Verified Steam Reviews",
+    "steamReviewCount": "45,393 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 88,
     "userBacklogRating": 9.6
@@ -100,6 +113,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -108,17 +122,29 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172128795,
+   "fetchedAt": 1793621984262,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/half-life-2/",
     "openCritic": null,
     "steamAppID": "220"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Remote Play Together"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "Half-Life 2 includes violence throughout the game."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 97,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "91,760 Verified Steam Reviews",
+    "steamReviewCount": "91,846 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 96,
     "userBacklogRating": 9.7
@@ -127,7 +153,7 @@
    "verdictBadge": "Essential Masterpiece",
    "badgeType": "emerald",
    "threeSentenceVerdict": {
-    "coreHook": "Celebrated by over 91,760 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
+    "coreHook": "Celebrated by over 91,846 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
     "flaw": "Demands high commitment and patience with complex systems or challenging difficulty curves.",
     "targetAudience": "Essential for anyone who values peak game design, deep storytelling, and polished mechanics."
    },
@@ -178,10 +204,11 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Emerging",
-    "detail": "7,616 reviews"
+    "detail": "7,617 reviews"
    },
    "coverage": "solid",
    "split": {
@@ -196,17 +223,27 @@
     }
    },
    "trend": null,
-   "fetchedAt": 1793172132787,
+   "fetchedAt": 1793621987245,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/counter-strike-condition-zero/",
     "openCritic": null,
     "steamAppID": "80"
    },
+   "features": {
+    "controller": null,
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "This game includes frequent acts of violence."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 91,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "7,616 Verified Steam Reviews",
+    "steamReviewCount": "7,617 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 65,
     "userBacklogRating": 9.1
@@ -265,6 +302,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -273,17 +311,29 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172136637,
+   "fetchedAt": 1793621990900,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/half-life-2/",
     "openCritic": null,
     "steamAppID": "220"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Remote Play Together"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "Half-Life 2 includes violence throughout the game."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 97,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "91,760 Verified Steam Reviews",
+    "steamReviewCount": "91,846 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 96,
     "userBacklogRating": 9.7
@@ -292,7 +342,7 @@
    "verdictBadge": "Essential Masterpiece",
    "badgeType": "emerald",
    "threeSentenceVerdict": {
-    "coreHook": "Celebrated by over 91,760 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
+    "coreHook": "Celebrated by over 91,846 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
     "flaw": "Demands high commitment and patience with complex systems or challenging difficulty curves.",
     "targetAudience": "Essential for anyone who values peak game design, deep storytelling, and polished mechanics."
    },
@@ -342,6 +392,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -350,17 +401,29 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172140461,
+   "fetchedAt": 1793621994117,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/counter-strike-source/",
     "openCritic": null,
     "steamAppID": "240"
    },
+   "features": {
+    "controller": null,
+    "coop": [
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "Includes intense violence and blood."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 96,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "45,374 Verified Steam Reviews",
+    "steamReviewCount": "45,393 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 88,
     "userBacklogRating": 9.6
@@ -399,84 +462,6 @@
    "bomb": null
   },
   {
-   "id": "live-620",
-   "title": "Portal 2",
-   "releaseYear": "Apr 18, 2011",
-   "developer": "Valve",
-   "publisher": "Valve",
-   "genres": [
-    "Action",
-    "Adventure"
-   ],
-   "steamAppID": "620",
-   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/faffc0f560786e2f05104a8d2fac837c6969bf13/header.jpg?t=1790187113",
-   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620/faffc0f560786e2f05104a8d2fac837c6969bf13/header.jpg?t=1790187113",
-   "platforms": [
-    "PC (Steam)",
-    "Linux/Deck"
-   ],
-   "subscriptionServices": [],
-   "basePriceUsd": 9.99,
-   "salePrice": null,
-   "isLive": true,
-   "isEstimate": false,
-   "unknownScores": false,
-   "confidence": {
-    "level": "High",
-    "detail": "175k reviews"
-   },
-   "coverage": "solid",
-   "split": null,
-   "trend": null,
-   "fetchedAt": 1793172152214,
-   "liveSource": "Live: Steam · Metacritic · CheapShark",
-   "liveLinks": {
-    "metacritic": "https://www.metacritic.com/game/portal-2/",
-    "openCritic": null,
-    "steamAppID": "620"
-   },
-   "scores": {
-    "steamPositivePercent": 98,
-    "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "174,684 Verified Steam Reviews",
-    "openCritic": null,
-    "metaCritic": 95,
-    "userBacklogRating": 9.8
-   },
-   "unifiedConsensusPercent": 95,
-   "verdictBadge": "Essential Masterpiece",
-   "badgeType": "emerald",
-   "threeSentenceVerdict": {
-    "coreHook": "Celebrated by over 174,684 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
-    "flaw": "Demands high commitment and patience with complex systems or challenging difficulty curves.",
-    "targetAudience": "Essential for anyone who values peak game design, deep storytelling, and polished mechanics."
-   },
-   "realityCheck": {
-    "timeToFun": "⚡ 15 mins (Standard campaign onboarding)",
-    "mainStoryHours": 28,
-    "completionistHours": 75,
-    "hoursEstimated": true,
-    "sampledMedianHrs": null,
-    "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 349 reports)",
-    "deckEstimated": false,
-    "monetization": "💎 No in-app purchases on Steam ($9.99)",
-    "pacing": "Dynamic Player-Driven Flow",
-    "difficultyCurve": "Moderate Progression"
-   },
-   "topQuotes": [
-    {
-     "source": "Metacritic",
-     "author": "Critic aggregate",
-     "quote": "Metascore 95/100. Full breakdown: https://www.metacritic.com/game/portal-2/",
-     "sentiment": "neutral",
-     "url": "https://www.metacritic.com/game/portal-2/",
-     "votes": 0
-    }
-   ],
-   "bomb": null
-  },
-  {
    "id": "live-550",
    "title": "Left 4 Dead 2",
    "releaseYear": "Nov 16, 2009",
@@ -497,6 +482,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -505,17 +491,31 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172160182,
+   "fetchedAt": 1793622027149,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/left-4-dead-2/",
     "openCritic": null,
     "steamAppID": "550"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "Remote Play Together"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "Left 4 Dead 2 features intense violence, blood and gore (including decapitation or dismemberment of zombie-like creatures) and some strong language."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 97,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "234,561 Verified Steam Reviews",
+    "steamReviewCount": "234,730 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 89,
     "userBacklogRating": 9.7
@@ -524,7 +524,7 @@
    "verdictBadge": "Essential Masterpiece",
    "badgeType": "emerald",
    "threeSentenceVerdict": {
-    "coreHook": "Celebrated by over 234,561 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
+    "coreHook": "Celebrated by over 234,730 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
     "flaw": "Demands high commitment and patience with complex systems or challenging difficulty curves.",
     "targetAudience": "Essential for anyone who values peak game design, deep storytelling, and polished mechanics."
    },
@@ -535,7 +535,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 437 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 439 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($9.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -577,25 +577,39 @@
    "salePrice": 5,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
-    "detail": "542k reviews"
+    "detail": "543k reviews"
    },
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172167638,
+   "fetchedAt": 1793622036382,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/garrys-mod/",
     "openCritic": null,
     "steamAppID": "4000"
    },
+   "features": {
+    "controller": null,
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "LAN Co-op",
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 97,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "542,334 Verified Steam Reviews",
+    "steamReviewCount": "542,668 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 9.7
@@ -615,7 +629,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 504 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 506 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($9.99 · Sale: $5.00)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -624,7 +638,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "542,334 players",
+     "author": "542,668 players",
      "quote": "Rated \"Overwhelmingly Positive\" with 97% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -652,9 +666,10 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 59.99,
-   "salePrice": 5.1,
+   "salePrice": 5.36,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -663,17 +678,30 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172171641,
+   "fetchedAt": 1793622040344,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/sid-meiers-civilization-vi/",
     "openCritic": null,
     "steamAppID": "289070"
    },
+   "features": {
+    "controller": null,
+    "coop": [
+     "Shared/Split Screen PvP",
+     "Shared/Split Screen",
+     "Cross-Platform Multiplayer",
+     "Remote Play Together"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 85,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "107,993 Verified Steam Reviews",
+    "steamReviewCount": "108,055 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 88,
     "userBacklogRating": 8.5
@@ -693,9 +721,9 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 575 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 576 reports)",
     "deckEstimated": false,
-    "monetization": "⚠️ In-App Purchases flagged on Steam ($59.99 · Sale: $5.10)",
+    "monetization": "⚠️ In-App Purchases flagged on Steam ($59.99 · Sale: $5.36)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -730,9 +758,10 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 39.99,
-   "salePrice": 5.12,
+   "salePrice": 5.19,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -741,17 +770,19 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172175356,
+   "fetchedAt": 1793622043372,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/borderlands-2-game-of-the-year-edition/",
     "openCritic": null,
     "steamAppID": "32848"
    },
+   "features": null,
+   "family": null,
    "scores": {
     "steamPositivePercent": 89,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "210,744 Verified Steam Reviews",
+    "steamReviewCount": "210,780 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 8.9
@@ -773,14 +804,14 @@
     "sampledN": 0,
     "steamDeckRating": "Playable (Unverified — no ProtonDB reports)",
     "deckEstimated": true,
-    "monetization": "💎 Standard Retail ($39.99 · Sale: $5.12)",
+    "monetization": "💎 Standard Retail ($39.99 · Sale: $5.19)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "210,744 players",
+     "author": "210,780 players",
      "quote": "Rated \"Very Positive\" with 89% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -814,6 +845,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -822,17 +854,28 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172179177,
+   "fetchedAt": 1793622046710,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/terraria/",
     "openCritic": null,
     "steamAppID": "105600"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 97,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "604,972 Verified Steam Reviews",
+    "steamReviewCount": "605,252 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 83,
     "userBacklogRating": 9.7
@@ -852,7 +895,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 493 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 494 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($9.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -893,6 +936,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -911,17 +955,31 @@
     }
    },
    "trend": null,
-   "fetchedAt": 1793172183363,
+   "fetchedAt": 1793622049777,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/arma-3/",
     "openCritic": null,
     "steamAppID": "107410"
    },
+   "features": {
+    "controller": null,
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "LAN Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": [
+     "This Game may contain content not appropriate for all ages, or may not be appropriate for viewing at work: Frequent and Intense Violence, Bad Language, General Mature Content."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 91,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "111,646 Verified Steam Reviews",
+    "steamReviewCount": "111,675 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 74,
     "userBacklogRating": 9.1
@@ -972,8 +1030,8 @@
     "Early Access"
    ],
    "steamAppID": "108600",
-   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/108600/header.jpg?t=1787740093",
-   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/108600/header.jpg?t=1787740093",
+   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/108600/header.jpg?t=1793224893",
+   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/108600/header.jpg?t=1793224893",
    "platforms": [
     "PC (Steam)",
     "Mac",
@@ -984,25 +1042,41 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
-    "detail": "161k reviews"
+    "detail": "162k reviews"
    },
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172187092,
+   "fetchedAt": 1793622053148,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/pc/project-zomboid",
     "openCritic": null,
     "steamAppID": "108600"
    },
+   "features": {
+    "controller": "partial",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "Shared/Split Screen Co-op",
+     "Shared/Split Screen",
+     "Cross-Platform Multiplayer",
+     "Remote Play Together"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 93,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "161,410 Verified Steam Reviews",
+    "steamReviewCount": "161,724 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 9.3
@@ -1031,7 +1105,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "161,410 players",
+     "author": "161,724 players",
      "quote": "Rated \"Very Positive\" with 93% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -1061,6 +1135,7 @@
    "salePrice": 4.99,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -1069,17 +1144,30 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172190940,
+   "fetchedAt": 1793622056143,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/payday-2/",
     "openCritic": null,
     "steamAppID": "218620"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 18,
+    "descriptors": [
+     "PAYDAY 2 is a bank robbing game that glorifies clearly villanous acts. It contains high levels of violence, often against police officers or other law enforcement agencies. \r\n\r\nIt does not go out of its way to be gory or gruesome, but can appear that way in chance situations."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 87,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "175,629 Verified Steam Reviews",
+    "steamReviewCount": "175,656 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 79,
     "userBacklogRating": 8.7
@@ -1099,7 +1187,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 362 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 363 reports)",
     "deckEstimated": false,
     "monetization": "⚠️ In-App Purchases flagged on Steam ($9.99 · Sale: $4.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -1140,6 +1228,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -1148,17 +1237,31 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172194706,
+   "fetchedAt": 1793622059664,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/grim-dawn/",
     "openCritic": null,
     "steamAppID": "219990"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "LAN Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "Killing enemies in the game can result in blood and death fx."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 94,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "41,402 Verified Steam Reviews",
+    "steamReviewCount": "41,420 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 83,
     "userBacklogRating": 9.4
@@ -1218,6 +1321,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -1226,17 +1330,30 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172198714,
+   "fetchedAt": 1793622063247,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/dayz/",
     "openCritic": null,
     "steamAppID": "221100"
    },
+   "features": {
+    "controller": null,
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": [
+     "This game may contain content not appropriate for all ages, or may not be appropriate for viewing at work: Frequent Violence or Gore, General Mature Content\r\n\r\nDayZ is a multiplayer-focused sandbox game. Other players might behave unpredictably and impact the game experience significantly. Voice chat and text chat can be disabled from the in-game options menu."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 74,
     "steamStatus": "Mostly Positive",
-    "steamReviewCount": "179,340 Verified Steam Reviews",
+    "steamReviewCount": "179,465 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 7.4
@@ -1256,7 +1373,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 384 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 385 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($24.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -1265,7 +1382,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "179,340 players",
+     "author": "179,465 players",
      "quote": "Rated \"Mostly Positive\" with 74% positive reception.",
      "sentiment": "neutral",
      "url": null,
@@ -1285,8 +1402,8 @@
     "Simulation"
    ],
    "steamAppID": "227300",
-   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/227300/d3c44cfff95e8223687121b05c80e594d35c4c53/header_alt_assets_9.jpg?t=1792055307",
-   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/227300/d3c44cfff95e8223687121b05c80e594d35c4c53/header_alt_assets_9.jpg?t=1792055307",
+   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/227300/9a81dc3126c56637297b654f9dcac057cfd79b77/header.jpg?t=1793285269",
+   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/227300/9a81dc3126c56637297b654f9dcac057cfd79b77/header.jpg?t=1793285269",
    "platforms": [
     "PC (Steam)",
     "Mac",
@@ -1297,6 +1414,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -1315,17 +1433,29 @@
     }
    },
    "trend": null,
-   "fetchedAt": 1793172202572,
+   "fetchedAt": 1793622066491,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/euro-truck-simulator-2/",
     "openCritic": null,
     "steamAppID": "227300"
    },
+   "features": {
+    "controller": "partial",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "Remote Play Together"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 97,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "147,107 Verified Steam Reviews",
+    "steamReviewCount": "147,239 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 79,
     "userBacklogRating": 9.7
@@ -1345,7 +1475,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 502 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 505 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($19.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -1386,6 +1516,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -1394,17 +1525,30 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172219221,
+   "fetchedAt": 1793622080006,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": null,
     "openCritic": null,
     "steamAppID": "2694490"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "HORROR SCENES\r\nVIOLENCE\r\nNUDITY"
+    ]
+   },
    "scores": {
     "steamPositivePercent": 77,
     "steamStatus": "Mostly Positive",
-    "steamReviewCount": "98,065 Verified Steam Reviews",
+    "steamReviewCount": "98,131 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 7.7
@@ -1424,7 +1568,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 686 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 687 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($29.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -1433,7 +1577,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "98,065 players",
+     "author": "98,131 players",
      "quote": "Rated \"Mostly Positive\" with 77% positive reception.",
      "sentiment": "neutral",
      "url": null,
@@ -1461,28 +1605,31 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 49.99,
-   "salePrice": 9.99,
+   "salePrice": 10,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
-    "detail": "390k reviews"
+    "detail": "391k reviews"
    },
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172222999,
+   "fetchedAt": 1793622083202,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": null,
     "openCritic": null,
     "steamAppID": "1265945"
    },
+   "features": null,
+   "family": null,
    "scores": {
     "steamPositivePercent": 94,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "390,331 Verified Steam Reviews",
+    "steamReviewCount": "390,805 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 9.4
@@ -1504,14 +1651,14 @@
     "sampledN": 0,
     "steamDeckRating": "Playable (Unverified — no ProtonDB reports)",
     "deckEstimated": true,
-    "monetization": "💎 Standard Retail ($49.99 · Sale: $9.99)",
+    "monetization": "💎 Standard Retail ($49.99 · Sale: $10.00)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "390,331 players",
+     "author": "390,805 players",
      "quote": "Rated \"Very Positive\" with 94% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -1543,6 +1690,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -1551,17 +1699,31 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172226842,
+   "fetchedAt": 1793622086254,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/the-forest/",
     "openCritic": null,
     "steamAppID": "242760"
    },
+   "features": {
+    "controller": "partial",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "LAN Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "The Forest contains intense violence, blood and gore, as well as horror themes and occasional nudity."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 95,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "178,306 Verified Steam Reviews",
+    "steamReviewCount": "178,429 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 9.5
@@ -1581,7 +1743,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 456 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 457 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($3.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -1590,7 +1752,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "178,306 players",
+     "author": "178,429 players",
      "quote": "Rated \"Overwhelmingly Positive\" with 95% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -1624,6 +1786,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -1632,17 +1795,32 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172230570,
+   "fetchedAt": 1793622089272,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/7-days-to-die/",
     "openCritic": null,
     "steamAppID": "251570"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "LAN Co-op",
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "Explicit Violence\r\nShock and/or Horror Content\r\nDrug Use"
+    ]
+   },
    "scores": {
     "steamPositivePercent": 85,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "124,898 Verified Steam Reviews",
+    "steamReviewCount": "124,973 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 8.5
@@ -1671,7 +1849,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "124,898 players",
+     "author": "124,973 players",
      "quote": "Rated \"Very Positive\" with 85% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -1704,6 +1882,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -1722,17 +1901,31 @@
     }
    },
    "trend": null,
-   "fetchedAt": 1793172234371,
+   "fetchedAt": 1793622092419,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/rust/",
     "openCritic": null,
     "steamAppID": "252490"
    },
+   "features": {
+    "controller": null,
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "Contains violence and caveman themed nudity.\r\n\r\nIn-game nudity, blood, player-made signs, voice chat and text chat can be disabled from the in-game options menu."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 86,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "533,962 Verified Steam Reviews",
+    "steamReviewCount": "534,214 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 69,
     "userBacklogRating": 8.6
@@ -1790,9 +1983,10 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 29.99,
-   "salePrice": 26.99,
+   "salePrice": 8.69,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -1801,17 +1995,25 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172241720,
+   "fetchedAt": 1793622098704,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/cities-skylines/",
     "openCritic": null,
     "steamAppID": "255710"
    },
+   "features": {
+    "controller": null,
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 92,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "100,598 Verified Steam Reviews",
+    "steamReviewCount": "100,581 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 85,
     "userBacklogRating": 9.2
@@ -1831,9 +2033,9 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 375 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 376 reports)",
     "deckEstimated": false,
-    "monetization": "💎 No in-app purchases on Steam ($29.99 · Sale: $26.99)",
+    "monetization": "💎 No in-app purchases on Steam ($29.99 · Sale: $8.69)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -1872,6 +2074,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -1880,17 +2083,27 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172245778,
+   "fetchedAt": 1793622101994,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/mount-and-blade-ii-bannerlord/",
     "openCritic": null,
     "steamAppID": "261550"
    },
+   "features": {
+    "controller": "partial",
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "This game is set in a fictional medieval world where the player assumes the role of an adventurer. The player engages in fights and battles and may kill or dispatch enemies and possibly horses using swords, axes, bows and other melee and ranged weapons. The game shows blood effects and rag-doll integrated death animations. Player can purchase wine and ale, and consume these in taverns. Game text includes moderate crude language such as bastard, piss, etc."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 87,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "99,054 Verified Steam Reviews",
+    "steamReviewCount": "99,091 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 77,
     "userBacklogRating": 8.7
@@ -1910,7 +2123,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 467 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 469 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($49.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -1947,9 +2160,10 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 59.99,
-   "salePrice": 5.1,
+   "salePrice": 5.36,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -1958,17 +2172,30 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172254091,
+   "fetchedAt": 1793622111988,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/sid-meiers-civilization-vi/",
     "openCritic": null,
     "steamAppID": "289070"
    },
+   "features": {
+    "controller": null,
+    "coop": [
+     "Shared/Split Screen PvP",
+     "Shared/Split Screen",
+     "Cross-Platform Multiplayer",
+     "Remote Play Together"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 85,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "107,993 Verified Steam Reviews",
+    "steamReviewCount": "108,055 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 88,
     "userBacklogRating": 8.5
@@ -1988,9 +2215,9 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 575 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 576 reports)",
     "deckEstimated": false,
-    "monetization": "⚠️ In-App Purchases flagged on Steam ($59.99 · Sale: $5.10)",
+    "monetization": "⚠️ In-App Purchases flagged on Steam ($59.99 · Sale: $5.36)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -2026,6 +2253,7 @@
    "salePrice": 24.99,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -2034,17 +2262,27 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172266042,
+   "fetchedAt": 1793622122395,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/the-witcher-3-wild-hunt-remastered/",
     "openCritic": null,
     "steamAppID": "292030"
    },
+   "features": {
+    "controller": "partial",
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": [
+     "The Witcher 3: Wild Hunt contains strong language, intense violence, blood and gore, as well as nudity and sexual material.\r\n"
+    ]
+   },
    "scores": {
     "steamPositivePercent": 96,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "248,543 Verified Steam Reviews",
+    "steamReviewCount": "248,923 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 92,
     "userBacklogRating": 9.6
@@ -2053,7 +2291,7 @@
    "verdictBadge": "Essential Masterpiece",
    "badgeType": "emerald",
    "threeSentenceVerdict": {
-    "coreHook": "Celebrated by over 248,543 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
+    "coreHook": "Celebrated by over 248,923 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
     "flaw": "Demands high commitment and patience with complex systems or challenging difficulty curves.",
     "targetAudience": "Essential for anyone who values peak game design, deep storytelling, and polished mechanics."
    },
@@ -2064,7 +2302,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 1880 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 1886 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($49.99 · Sale: $24.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -2106,6 +2344,7 @@
    "salePrice": 33.35,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -2114,12 +2353,26 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172269659,
+   "fetchedAt": 1793622125465,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/shovel-knight-treasure-trove/",
     "openCritic": null,
     "steamAppID": "250760"
+   },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Shared/Split Screen PvP",
+     "Co-op",
+     "Shared/Split Screen Co-op",
+     "Shared/Split Screen",
+     "Remote Play Together"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
    },
    "scores": {
     "steamPositivePercent": 95,
@@ -2187,25 +2440,38 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
-    "detail": "82.4k reviews"
+    "detail": "82.5k reviews"
    },
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172277628,
+   "fetchedAt": 1793622131740,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/dont-starve-together/",
     "openCritic": null,
     "steamAppID": "322330"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "LAN Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 95,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "82,417 Verified Steam Reviews",
+    "steamReviewCount": "82,477 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 83,
     "userBacklogRating": 9.5
@@ -2256,8 +2522,8 @@
     "Massively Multiplayer"
    ],
    "steamAppID": "346110",
-   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/346110/header.jpg?t=1792799671",
-   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/346110/header.jpg?t=1792799671",
+   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/346110/header.jpg?t=1793226330",
+   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/346110/header.jpg?t=1793226330",
    "platforms": [
     "PC (Steam)",
     "Mac"
@@ -2267,6 +2533,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -2275,17 +2542,27 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172281418,
+   "fetchedAt": 1793622134772,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/ark-survival-evolved/",
     "openCritic": null,
     "steamAppID": "346110"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 80,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "256,793 Verified Steam Reviews",
+    "steamReviewCount": "256,837 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 70,
     "userBacklogRating": 8
@@ -2342,9 +2619,10 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 59.99,
-   "salePrice": null,
+   "salePrice": 32.39,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -2353,17 +2631,19 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172289473,
+   "fetchedAt": 1793622141264,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/fallout-4-anniversary-edition/",
     "openCritic": null,
     "steamAppID": "1431931"
    },
+   "features": null,
+   "family": null,
    "scores": {
     "steamPositivePercent": 80,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "310,669 Verified Steam Reviews",
+    "steamReviewCount": "310,837 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 8
@@ -2385,14 +2665,14 @@
     "sampledN": 0,
     "steamDeckRating": "Playable (Unverified — no ProtonDB reports)",
     "deckEstimated": true,
-    "monetization": "💎 Standard Retail ($59.99)",
+    "monetization": "💎 Standard Retail ($59.99 · Sale: $32.39)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "310,669 players",
+     "author": "310,837 players",
      "quote": "Rated \"Very Positive\" with 80% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -2411,8 +2691,8 @@
     "Action"
    ],
    "steamAppID": "381210",
-   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/381210/header.jpg?t=1793113581",
-   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/381210/header.jpg?t=1793113581",
+   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/381210/header.jpg?t=1793202236",
+   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/381210/header.jpg?t=1793202236",
    "platforms": [
     "PC (Steam)"
    ],
@@ -2421,25 +2701,38 @@
    "salePrice": 7.15,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
-    "detail": "270k reviews"
+    "detail": "271k reviews"
    },
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172293207,
+   "fetchedAt": 1793622144291,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/dead-by-daylight/",
     "openCritic": null,
     "steamAppID": "381210"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 79,
     "steamStatus": "Mostly Positive",
-    "steamReviewCount": "270,098 Verified Steam Reviews",
+    "steamReviewCount": "270,747 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 71,
     "userBacklogRating": 7.9
@@ -2459,7 +2752,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 1034 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 1038 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($7.99 · Sale: $7.15)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -2501,25 +2794,41 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
-    "detail": "396k reviews"
+    "detail": "397k reviews"
    },
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172304841,
+   "fetchedAt": 1793622150951,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/stardew-valley/",
     "openCritic": null,
     "steamAppID": "413150"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "LAN Co-op",
+     "Shared/Split Screen Co-op",
+     "Shared/Split Screen",
+     "Remote Play Together"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 98,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "396,417 Verified Steam Reviews",
+    "steamReviewCount": "396,640 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 89,
     "userBacklogRating": 9.8
@@ -2528,7 +2837,7 @@
    "verdictBadge": "Essential Masterpiece",
    "badgeType": "emerald",
    "threeSentenceVerdict": {
-    "coreHook": "Celebrated by over 396,417 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
+    "coreHook": "Celebrated by over 396,640 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
     "flaw": "Demands high commitment and patience with complex systems or challenging difficulty curves.",
     "targetAudience": "Essential for anyone who values peak game design, deep storytelling, and polished mechanics."
    },
@@ -2539,7 +2848,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 395 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 396 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($14.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -2576,10 +2885,11 @@
     "PC (Steam)"
    ],
    "subscriptionServices": [],
-   "basePriceUsd": 1.99,
+   "basePriceUsd": 0.81,
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Emerging",
@@ -2588,12 +2898,20 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172308883,
+   "fetchedAt": 1793622153966,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/street-warriors-online/",
     "openCritic": null,
     "steamAppID": "417910"
+   },
+   "features": {
+    "controller": "partial",
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
    },
    "scores": {
     "steamPositivePercent": 59,
@@ -2620,7 +2938,7 @@
     "sampledN": 0,
     "steamDeckRating": "Playable (Unverified — no ProtonDB reports)",
     "deckEstimated": true,
-    "monetization": "⚠️ In-App Purchases flagged on Steam ($1.99)",
+    "monetization": "⚠️ In-App Purchases flagged on Steam ($0.81)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -2659,6 +2977,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Emerging",
@@ -2667,12 +2986,22 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172320522,
+   "fetchedAt": 1793622160155,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": null,
     "openCritic": null,
     "steamAppID": "433850"
+   },
+   "features": {
+    "controller": null,
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "This game contains intense violence, including depictions of gunfights, explosions, and melee combat, but without graphic gore. The focus is on fast-paced survival gameplay in a competitive setting."
+    ]
    },
    "scores": {
     "steamPositivePercent": 90,
@@ -2697,7 +3026,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Playable via ProtonDB (silver, 37 reports)",
+    "steamDeckRating": "Playable via ProtonDB (silver, 39 reports)",
     "deckEstimated": false,
     "monetization": "⚠️ In-App Purchases flagged on Steam ($14.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -2735,6 +3064,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Emerging",
@@ -2743,12 +3073,20 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172330260,
+   "fetchedAt": 1793622166063,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": null,
     "openCritic": null,
     "steamAppID": "696360"
+   },
+   "features": {
+    "controller": null,
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
    },
    "scores": {
     "steamPositivePercent": 55,
@@ -2811,10 +3149,11 @@
     "Mac"
    ],
    "subscriptionServices": [],
-   "basePriceUsd": 19.99,
-   "salePrice": 4.75,
+   "basePriceUsd": 5.99,
+   "salePrice": 4.35,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -2833,17 +3172,30 @@
     }
    },
    "trend": null,
-   "fetchedAt": 1793172338194,
+   "fetchedAt": 1793622172010,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/human-fall-flat/",
     "openCritic": null,
     "steamAppID": "477160"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Shared/Split Screen Co-op",
+     "Shared/Split Screen",
+     "Remote Play Together"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 95,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "30,972 Verified Steam Reviews",
+    "steamReviewCount": "30,981 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 70,
     "userBacklogRating": 9.5
@@ -2865,7 +3217,7 @@
     "sampledN": 0,
     "steamDeckRating": "Verified via ProtonDB (gold, 177 reports)",
     "deckEstimated": false,
-    "monetization": "💎 No in-app purchases on Steam ($19.99 · Sale: $4.75)",
+    "monetization": "💎 No in-app purchases on Steam ($5.99 · Sale: $4.35)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -2901,9 +3253,10 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 39.99,
-   "salePrice": 25.19,
+   "salePrice": 33.59,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -2912,17 +3265,29 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172341851,
+   "fetchedAt": 1793622174933,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/satisfactory/",
     "openCritic": null,
     "steamAppID": "526870"
    },
+   "features": {
+    "controller": "partial",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 97,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "138,534 Verified Steam Reviews",
+    "steamReviewCount": "138,660 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 91,
     "userBacklogRating": 9.7
@@ -2931,7 +3296,7 @@
    "verdictBadge": "Essential Masterpiece",
    "badgeType": "emerald",
    "threeSentenceVerdict": {
-    "coreHook": "Celebrated by over 138,534 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
+    "coreHook": "Celebrated by over 138,660 verified Steam players with Overwhelmingly Positive acclaim and award-level execution.",
     "flaw": "Demands high commitment and patience with complex systems or challenging difficulty curves.",
     "targetAudience": "Essential for anyone who values peak game design, deep storytelling, and polished mechanics."
    },
@@ -2942,9 +3307,9 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 1327 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 1331 reports)",
     "deckEstimated": false,
-    "monetization": "💎 No in-app purchases on Steam ($39.99 · Sale: $25.19)",
+    "monetization": "💎 No in-app purchases on Steam ($39.99 · Sale: $33.59)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -2982,6 +3347,7 @@
    "salePrice": 2.4,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Low",
@@ -2990,12 +3356,20 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172345973,
+   "fetchedAt": 1793622178507,
    "liveSource": "Live: Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/pc/life-is-strange-2-episode-5",
     "openCritic": null,
     "steamAppID": "532210"
+   },
+   "features": {
+    "controller": "full",
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
    },
    "scores": {
     "steamPositivePercent": null,
@@ -3051,8 +3425,8 @@
     "Strategy"
    ],
    "steamAppID": "552990",
-   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/552990/9684685d206bf6a74fb21cdb49eb4748c61b1c79/header_alt_assets_16.jpg?t=1791478284",
-   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/552990/9684685d206bf6a74fb21cdb49eb4748c61b1c79/header_alt_assets_16.jpg?t=1791478284",
+   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/552990/ff8da69a5590d72671ff9444932ca1def1947dec/header_alt_assets_17.jpg?t=1793268266",
+   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/552990/ff8da69a5590d72671ff9444932ca1def1947dec/header_alt_assets_17.jpg?t=1793268266",
    "platforms": [
     "PC (Steam)"
    ],
@@ -3061,6 +3435,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Low",
@@ -3069,12 +3444,23 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172356227,
+   "fetchedAt": 1793622184968,
    "liveSource": "Live: Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/world-of-warships/",
     "openCritic": null,
     "steamAppID": "552990"
+   },
+   "features": {
+    "controller": null,
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
    },
    "scores": {
     "steamPositivePercent": null,
@@ -3127,8 +3513,8 @@
     "Action"
    ],
    "steamAppID": "553850",
-   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/553850/850e2f9e5bb15c5706bb9a1edc832f4f782e8be5/header.jpg?t=1792487611",
-   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/553850/850e2f9e5bb15c5706bb9a1edc832f4f782e8be5/header.jpg?t=1792487611",
+   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/553850/850e2f9e5bb15c5706bb9a1edc832f4f782e8be5/header.jpg?t=1793395133",
+   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/553850/850e2f9e5bb15c5706bb9a1edc832f4f782e8be5/header.jpg?t=1793395133",
    "platforms": [
     "PC (Steam)"
    ],
@@ -3137,25 +3523,39 @@
    "salePrice": 32.99,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
-    "detail": "641k reviews"
+    "detail": "642k reviews"
    },
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172360263,
+   "fetchedAt": 1793622187970,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/helldivers-2/",
     "openCritic": null,
     "steamAppID": "553850"
    },
+   "features": {
+    "controller": "partial",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": [
+     "HELLDIVERS™ 2 is a 3rd person squad-based shooter that sees the elite forces of the Helldivers battling to win an intergalactic struggle to rid the galaxy of the rising alien threats. From a 3rd person perspective, players use a variety of weapons (pistols, machine guns, flamethrowers) and stratagems (turrets, airstrikes, etc.) to shoot and kill the alien threats. Players can also aim down the sights for a more accurate 1st person camera view. Combat is accompanied by frequent sprays of blood and dismemberment as players exterminate the alien forces or players and squad mates are hit by environmental explosions or friendly fire. Enemy encampments and battlefield environments depict bloodstains and dismembered corpses."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 79,
     "steamStatus": "Mostly Positive",
-    "steamReviewCount": "641,236 Verified Steam Reviews",
+    "steamReviewCount": "642,261 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 83,
     "userBacklogRating": 7.9
@@ -3175,7 +3575,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 2159 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 2174 reports)",
     "deckEstimated": false,
     "monetization": "⚠️ In-App Purchases flagged on Steam ($39.99 · Sale: $32.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -3210,9 +3610,10 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 29.99,
-   "salePrice": 6.63,
+   "salePrice": 7.8,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -3221,17 +3622,27 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172368307,
+   "fetchedAt": 1793622193986,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/monster-hunter-world/",
     "openCritic": null,
     "steamAppID": "582010"
    },
+   "features": {
+    "controller": "partial",
+    "coop": [
+     "Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 92,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "116,609 Verified Steam Reviews",
+    "steamReviewCount": "116,671 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 88,
     "userBacklogRating": 9.2
@@ -3253,7 +3664,7 @@
     "sampledN": 0,
     "steamDeckRating": "Verified via ProtonDB (gold, 994 reports)",
     "deckEstimated": false,
-    "monetization": "💎 No in-app purchases on Steam ($29.99 · Sale: $6.63)",
+    "monetization": "💎 No in-app purchases on Steam ($29.99 · Sale: $7.80)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -3289,25 +3700,37 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
-    "detail": "95.2k reviews"
+    "detail": "95.3k reviews"
    },
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172372085,
+   "fetchedAt": 1793622196980,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/hunt-showdown-1896/",
     "openCritic": null,
     "steamAppID": "594650"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 77,
     "steamStatus": "Mostly Positive",
-    "steamReviewCount": "95,206 Verified Steam Reviews",
+    "steamReviewCount": "95,251 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 7.7
@@ -3327,7 +3750,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 716 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 717 reports)",
     "deckEstimated": false,
     "monetization": "⚠️ In-App Purchases flagged on Steam ($11.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -3336,7 +3759,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "95,206 players",
+     "author": "95,251 players",
      "quote": "Rated \"Mostly Positive\" with 77% positive reception.",
      "sentiment": "neutral",
      "url": null,
@@ -3363,9 +3786,10 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 24.99,
-   "salePrice": 7.99,
+   "salePrice": 7.08,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -3374,17 +3798,28 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172375957,
+   "fetchedAt": 1793622199982,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/risk-of-rain-2/",
     "openCritic": null,
     "steamAppID": "632360"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 95,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "165,149 Verified Steam Reviews",
+    "steamReviewCount": "165,284 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 85,
     "userBacklogRating": 9.5
@@ -3406,7 +3841,7 @@
     "sampledN": 0,
     "steamDeckRating": "Verified via ProtonDB (platinum, 1153 reports)",
     "deckEstimated": false,
-    "monetization": "💎 No in-app purchases on Steam ($24.99 · Sale: $7.99)",
+    "monetization": "💎 No in-app purchases on Steam ($24.99 · Sale: $7.08)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -3438,10 +3873,11 @@
     "PC (Steam)"
    ],
    "subscriptionServices": [],
-   "basePriceUsd": 14.39,
-   "salePrice": null,
+   "basePriceUsd": 23.99,
+   "salePrice": 11.99,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -3450,17 +3886,28 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172379657,
+   "fetchedAt": 1793622202949,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/the-planet-crafter/",
     "openCritic": null,
     "steamAppID": "1284190"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 95,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "38,117 Verified Steam Reviews",
+    "steamReviewCount": "38,144 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 81,
     "userBacklogRating": 9.5
@@ -3482,7 +3929,7 @@
     "sampledN": 0,
     "steamDeckRating": "Verified via ProtonDB (platinum, 169 reports)",
     "deckEstimated": false,
-    "monetization": "💎 No in-app purchases on Steam ($14.39)",
+    "monetization": "💎 No in-app purchases on Steam ($23.99 · Sale: $11.99)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -3510,8 +3957,8 @@
     "Early Access"
    ],
    "steamAppID": "739630",
-   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/739630/6283e4bf96c6e8160492ae12016f0c9a308a75d9/header_alt_assets_13.jpg?t=1791632508",
-   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/739630/6283e4bf96c6e8160492ae12016f0c9a308a75d9/header_alt_assets_13.jpg?t=1791632508",
+   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/739630/c227a2855aba60f3657bc0c3a46515b8c41fb2b6/header.jpg?t=1793615120",
+   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/739630/c227a2855aba60f3657bc0c3a46515b8c41fb2b6/header.jpg?t=1793615120",
    "platforms": [
     "PC (Steam)"
    ],
@@ -3520,6 +3967,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -3528,17 +3976,28 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172383367,
+   "fetchedAt": 1793622205890,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": null,
     "openCritic": null,
     "steamAppID": "739630"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 94,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "360,607 Verified Steam Reviews",
+    "steamReviewCount": "360,766 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 9.4
@@ -3558,7 +4017,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 708 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 709 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($13.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -3567,7 +4026,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "360,607 players",
+     "author": "360,766 players",
      "quote": "Rated \"Very Positive\" with 94% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -3597,25 +4056,34 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
-    "detail": "89.0k reviews"
+    "detail": "89.1k reviews"
    },
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172392387,
+   "fetchedAt": 1793622211909,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": null,
     "openCritic": null,
     "steamAppID": "814380"
    },
+   "features": {
+    "controller": "full",
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 93,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "88,982 Verified Steam Reviews",
+    "steamReviewCount": "89,062 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 9.3
@@ -3635,7 +4103,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 527 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 528 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($59.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -3644,7 +4112,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "88,982 players",
+     "author": "89,062 players",
      "quote": "Rated \"Very Positive\" with 93% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -3675,28 +4143,40 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 29.99,
-   "salePrice": 24.29,
+   "salePrice": 28.49,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
-    "detail": "267k reviews"
+    "detail": "268k reviews"
    },
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172396390,
+   "fetchedAt": 1793622214830,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/valheim/",
     "openCritic": null,
     "steamAppID": "892970"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 94,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "267,240 Verified Steam Reviews",
+    "steamReviewCount": "267,592 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 89,
     "userBacklogRating": 9.4
@@ -3716,9 +4196,9 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 354 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 355 reports)",
     "deckEstimated": false,
-    "monetization": "💎 No in-app purchases on Steam ($29.99 · Sale: $24.29)",
+    "monetization": "💎 No in-app purchases on Steam ($29.99 · Sale: $28.49)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -3757,6 +4237,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -3765,17 +4246,30 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172400447,
+   "fetchedAt": 1793622218741,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/last-epoch/",
     "openCritic": null,
     "steamAppID": "899770"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "This Game may contain content not appropriate for all ages, or may not be appropriate for viewing at work: Frequent Violence or Gore, General Mature Content "
+    ]
+   },
    "scores": {
     "steamPositivePercent": 80,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "59,860 Verified Steam Reviews",
+    "steamReviewCount": "59,866 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 80,
     "userBacklogRating": 8
@@ -3834,25 +4328,34 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
-    "detail": "75.3k reviews"
+    "detail": "75.4k reviews"
    },
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172404091,
+   "fetchedAt": 1793622221591,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/grand-theft-auto-iv-the-complete-edition/",
     "openCritic": null,
     "steamAppID": "12210"
    },
+   "features": {
+    "controller": "partial",
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 81,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "75,253 Verified Steam Reviews",
+    "steamReviewCount": "75,365 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 8.1
@@ -3881,7 +4384,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "75,253 players",
+     "author": "75,365 players",
      "quote": "Rated \"Very Positive\" with 81% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -3910,6 +4413,7 @@
    "salePrice": 2.99,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -3918,17 +4422,30 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172407729,
+   "fetchedAt": 1793622224483,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/among-us/",
     "openCritic": null,
     "steamAppID": "945360"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "LAN Co-op",
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 92,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "382,979 Verified Steam Reviews",
+    "steamReviewCount": "383,095 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 85,
     "userBacklogRating": 9.2
@@ -3985,9 +4502,10 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 59.99,
-   "salePrice": 5.99,
+   "salePrice": 5.69,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -3996,17 +4514,25 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172411394,
+   "fetchedAt": 1793622227349,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/hogwarts-legacy/",
     "openCritic": null,
     "steamAppID": "990080"
    },
+   "features": {
+    "controller": "full",
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 91,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "144,634 Verified Steam Reviews",
+    "steamReviewCount": "144,746 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 83,
     "userBacklogRating": 9.1
@@ -4026,9 +4552,9 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 811 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 813 reports)",
     "deckEstimated": false,
-    "monetization": "⚠️ In-App Purchases flagged on Steam ($59.99 · Sale: $5.99)",
+    "monetization": "⚠️ In-App Purchases flagged on Steam ($59.99 · Sale: $5.69)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -4063,9 +4589,10 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 19.99,
-   "salePrice": 17.99,
+   "salePrice": 17.49,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Low",
@@ -4074,12 +4601,23 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172419616,
+   "fetchedAt": 1793622233524,
    "liveSource": "Live: Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/destiny-2-the-final-shape/",
     "openCritic": null,
     "steamAppID": "1085660"
+   },
+   "features": {
+    "controller": "partial",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
    },
    "scores": {
     "steamPositivePercent": null,
@@ -4106,7 +4644,7 @@
     "sampledN": 0,
     "steamDeckRating": "Unsupported via ProtonDB (borked, 263 reports)",
     "deckEstimated": false,
-    "monetization": "⚠️ In-App Purchases flagged on Steam ($19.99 · Sale: $17.99)",
+    "monetization": "⚠️ In-App Purchases flagged on Steam ($19.99 · Sale: $17.49)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -4306,6 +4844,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Emerging",
@@ -4314,12 +4853,25 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172435652,
+   "fetchedAt": 1793622247374,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/cybercorp/",
     "openCritic": null,
     "steamAppID": "1116170"
+   },
+   "features": {
+    "controller": "partial",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "This Game may contain content not appropriate for all ages, or may not be appropriate for viewing at work: Frequent Violence or Gore."
+    ]
    },
    "scores": {
     "steamPositivePercent": 75,
@@ -4383,25 +4935,37 @@
    "salePrice": 13.46,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
-    "detail": "318k reviews"
+    "detail": "319k reviews"
    },
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172446158,
+   "fetchedAt": 1793622253473,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/red-dead-redemption-2/",
     "openCritic": null,
     "steamAppID": "1174180"
    },
+   "features": {
+    "controller": "partial",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 92,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "318,430 Verified Steam Reviews",
+    "steamReviewCount": "318,904 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 93,
     "userBacklogRating": 9.2
@@ -4421,7 +4985,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 1467 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 1469 reports)",
     "deckEstimated": false,
     "monetization": "⚠️ In-App Purchases flagged on Steam ($59.99 · Sale: $13.46)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -4452,8 +5016,8 @@
     "Free To Play"
    ],
    "steamAppID": "1222670",
-   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1222670/header.jpg?t=1790028362",
-   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1222670/header.jpg?t=1790028362",
+   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1222670/header.jpg?t=1793293287",
+   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1222670/header.jpg?t=1793293287",
    "platforms": [
     "PC (Steam)"
    ],
@@ -4462,6 +5026,7 @@
    "salePrice": 19.99,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Low",
@@ -4470,12 +5035,20 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172459580,
+   "fetchedAt": 1793622259704,
    "liveSource": "Live: Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/the-sims-4-island-living/",
     "openCritic": null,
     "steamAppID": "1222670"
+   },
+   "features": {
+    "controller": null,
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
    },
    "scores": {
     "steamPositivePercent": null,
@@ -4538,6 +5111,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -4546,17 +5120,25 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172463422,
+   "fetchedAt": 1793622262674,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/battlefield-v/",
     "openCritic": null,
     "steamAppID": "1238810"
    },
+   "features": {
+    "controller": "full",
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 71,
     "steamStatus": "Mostly Positive",
-    "steamReviewCount": "35,714 Verified Steam Reviews",
+    "steamReviewCount": "35,728 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 81,
     "userBacklogRating": 7.1
@@ -4698,6 +5280,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -4706,17 +5289,30 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172475579,
+   "fetchedAt": 1793622271781,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/sons-of-the-forest/",
     "openCritic": null,
     "steamAppID": "1326470"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "Sons Of The Forest contains intense violence, blood and gore, as well as horror themes and occasional nudity.\r\n"
+    ]
+   },
    "scores": {
     "steamPositivePercent": 88,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "119,136 Verified Steam Reviews",
+    "steamReviewCount": "119,301 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 86,
     "userBacklogRating": 8.8
@@ -4776,6 +5372,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -4794,17 +5391,28 @@
     }
    },
    "trend": null,
-   "fetchedAt": 1793172484669,
+   "fetchedAt": 1793622277941,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/battlefield-2042/",
     "openCritic": null,
     "steamAppID": "1517290"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 46,
     "steamStatus": "Mixed",
-    "steamReviewCount": "106,606 Verified Steam Reviews",
+    "steamReviewCount": "106,599 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 68,
     "userBacklogRating": 4.6
@@ -4863,25 +5471,34 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Emerging",
-    "detail": "344 reviews"
+    "detail": "348 reviews"
    },
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172488506,
+   "fetchedAt": 1793622281028,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/yomawari-lost-in-the-dark/",
     "openCritic": null,
     "steamAppID": "1998330"
    },
+   "features": {
+    "controller": "full",
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 86,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "344 Verified Steam Reviews",
+    "steamReviewCount": "348 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 75,
     "userBacklogRating": 8.6
@@ -4942,6 +5559,7 @@
    "salePrice": 26.99,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -4960,17 +5578,29 @@
     }
    },
    "trend": null,
-   "fetchedAt": 1793172492594,
+   "fetchedAt": 1793622283986,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/palworld/",
     "openCritic": null,
     "steamAppID": "1623730"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 95,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "184,784 Verified Steam Reviews",
+    "steamReviewCount": "184,977 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 79,
     "userBacklogRating": 9.5
@@ -5029,10 +5659,11 @@
    "salePrice": 45.49,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Emerging",
-    "detail": "3,098 reviews"
+    "detail": "3,148 reviews"
    },
    "coverage": "solid",
    "split": {
@@ -5047,17 +5678,32 @@
     }
    },
    "trend": null,
-   "fetchedAt": 1793172497673,
+   "fetchedAt": 1793622286972,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/ea-sports-college-football-27/",
     "openCritic": null,
     "steamAppID": "4032350"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Shared/Split Screen PvP",
+     "Co-op",
+     "Online Co-op",
+     "Shared/Split Screen Co-op",
+     "Shared/Split Screen",
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 41,
     "steamStatus": "Mixed",
-    "steamReviewCount": "3,098 Verified Steam Reviews",
+    "steamReviewCount": "3,148 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 73,
     "userBacklogRating": 4.1
@@ -5115,6 +5761,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -5123,17 +5770,29 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172505710,
+   "fetchedAt": 1793622294079,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/call-of-duty-modern-warfare-iii/",
     "openCritic": null,
     "steamAppID": "2519060"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 17,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 46,
     "steamStatus": "Mixed",
-    "steamReviewCount": "10,902 Verified Steam Reviews",
+    "steamReviewCount": "10,935 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 58,
     "userBacklogRating": 4.6
@@ -5194,6 +5853,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -5202,17 +5862,30 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172509670,
+   "fetchedAt": 1793622297330,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": null,
     "openCritic": null,
     "steamAppID": "1966720"
    },
+   "features": {
+    "controller": "partial",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "The game has a realistic atmosphere. Player characters can die through various means, some involving dismemberment or decapitation. Player characters can use fictional medical drugs recklessly."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 97,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "276,788 Verified Steam Reviews",
+    "steamReviewCount": "276,840 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 9.7
@@ -5232,7 +5905,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 406 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 408 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($9.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -5241,7 +5914,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "276,788 players",
+     "author": "276,840 players",
      "quote": "Rated \"Overwhelmingly Positive\" with 97% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -5271,28 +5944,43 @@
    ],
    "subscriptionServices": [],
    "basePriceUsd": 49.99,
-   "salePrice": 10.49,
+   "salePrice": 15,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
-    "detail": "19.7k reviews"
+    "detail": "19.8k reviews"
    },
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172513453,
+   "fetchedAt": 1793622300472,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/warhammer-40000-rogue-trader/",
     "openCritic": null,
     "steamAppID": "2186680"
    },
+   "features": {
+    "controller": "partial",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "This game contains scenes and texts some people may find disturbing. They are not graphically detailed and presented from an isometric point of view, and most of them occur episodically. However, we consider it our duty to inform our players about them. You may see depictions of blood, gore, dismemberment, torture, slavery, and kidnapping in this game. It also contains textual descriptions and mentions of abuse, child abuse, sexual abuse, sexual assault, self-harm, suicide, cannibalism, and miscarriage. Player discretion is advised."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 86,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "19,726 Verified Steam Reviews",
+    "steamReviewCount": "19,760 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 78,
     "userBacklogRating": 8.6
@@ -5314,7 +6002,7 @@
     "sampledN": 0,
     "steamDeckRating": "Verified via ProtonDB (platinum, 110 reports)",
     "deckEstimated": false,
-    "monetization": "💎 No in-app purchases on Steam ($49.99 · Sale: $10.49)",
+    "monetization": "💎 No in-app purchases on Steam ($49.99 · Sale: $15.00)",
     "pacing": "Dynamic Player-Driven Flow",
     "difficultyCurve": "Moderate Progression"
    },
@@ -5352,44 +6040,57 @@
    "salePrice": 25.49,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
-    "detail": "86.3k reviews"
+    "detail": "86.4k reviews"
    },
    "coverage": "solid",
    "split": {
-    "gap": 18,
+    "gap": 17,
     "high": {
      "label": "Metacritic",
      "value": 88
     },
     "low": {
      "label": "Steam",
-     "value": 70
+     "value": 71
     }
    },
    "trend": null,
-   "fetchedAt": 1793172517141,
+   "fetchedAt": 1793622304693,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/monster-hunter-wilds/",
     "openCritic": null,
     "steamAppID": "2246340"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op",
+     "Cross-Platform Multiplayer"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
-    "steamPositivePercent": 70,
+    "steamPositivePercent": 71,
     "steamStatus": "Mostly Positive",
-    "steamReviewCount": "86,322 Verified Steam Reviews",
+    "steamReviewCount": "86,404 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 88,
-    "userBacklogRating": 7
+    "userBacklogRating": 7.1
    },
    "unifiedConsensusPercent": 77,
    "verdictBadge": "Divisive — Players vs Critics",
    "badgeType": "rose",
    "threeSentenceVerdict": {
-    "coreHook": "Steam sits at 70 while Metacritic scores 88 — a 18-point gap. Read both sides before buying.",
+    "coreHook": "Steam sits at 71 while Metacritic scores 88 — a 17-point gap. Read both sides before buying.",
     "flaw": "The two audiences disagree sharply: check whether you side with players or critics on this one.",
     "targetAudience": "Only for players who match the happier side of the split; everyone else should wait for a deep sale."
    },
@@ -5400,7 +6101,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (gold, 1331 reports)",
+    "steamDeckRating": "Verified via ProtonDB (gold, 1337 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($29.99 · Sale: $25.49)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -5440,6 +6141,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -5448,17 +6150,25 @@
    "coverage": "solid",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172521217,
+   "fetchedAt": 1793622308435,
    "liveSource": "Live: Steam · Metacritic · CheapShark",
    "liveLinks": {
     "metacritic": "https://www.metacritic.com/game/black-myth-wukong/",
     "openCritic": null,
     "steamAppID": "2358720"
    },
+   "features": {
+    "controller": "full",
+    "coop": []
+   },
+   "family": {
+    "requiredAge": 13,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 93,
     "steamStatus": "Very Positive",
-    "steamReviewCount": "71,578 Verified Steam Reviews",
+    "steamReviewCount": "71,628 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": 81,
     "userBacklogRating": 9.3
@@ -5519,6 +6229,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "Medium",
@@ -5527,17 +6238,30 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172527966,
+   "fetchedAt": 1793622311389,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": null,
     "openCritic": null,
     "steamAppID": "2694490"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "HORROR SCENES\r\nVIOLENCE\r\nNUDITY"
+    ]
+   },
    "scores": {
     "steamPositivePercent": 77,
     "steamStatus": "Mostly Positive",
-    "steamReviewCount": "98,065 Verified Steam Reviews",
+    "steamReviewCount": "98,131 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 7.7
@@ -5557,7 +6281,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 686 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 687 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($29.99)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -5566,7 +6290,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "98,065 players",
+     "author": "98,131 players",
      "quote": "Rated \"Mostly Positive\" with 77% positive reception.",
      "sentiment": "neutral",
      "url": null,
@@ -5598,6 +6322,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -5606,17 +6331,30 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172532171,
+   "fetchedAt": 1793622316111,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": null,
     "openCritic": null,
     "steamAppID": "3164500"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": [
+     "This game depicts the simplified production, distribution and sale of illegal drugs. It also contains non-realistic violence in the form of melee and firearm combat."
+    ]
+   },
    "scores": {
     "steamPositivePercent": 97,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "204,196 Verified Steam Reviews",
+    "steamReviewCount": "204,452 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 9.7
@@ -5645,7 +6383,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "204,196 players",
+     "author": "204,452 players",
      "quote": "Rated \"Overwhelmingly Positive\" with 97% positive reception.",
      "sentiment": "positive",
      "url": null,
@@ -5665,8 +6403,8 @@
     "Early Access"
    ],
    "steamAppID": "3241660",
-   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3241660/1ea445e044a2d5b09cfa8291350b63ebed6e5741/header.jpg?t=1791817973",
-   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3241660/1ea445e044a2d5b09cfa8291350b63ebed6e5741/header.jpg?t=1791817973",
+   "headerImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3241660/62177765c05399116f0453fe1177b00ceed698c4/header_alt_assets_3.jpg?t=1793278962",
+   "backdropImg": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3241660/62177765c05399116f0453fe1177b00ceed698c4/header_alt_assets_3.jpg?t=1793278962",
    "platforms": [
     "PC (Steam)"
    ],
@@ -5675,6 +6413,7 @@
    "salePrice": null,
    "isLive": true,
    "isEstimate": false,
+   "stale": false,
    "unknownScores": false,
    "confidence": {
     "level": "High",
@@ -5683,17 +6422,28 @@
    "coverage": "thin",
    "split": null,
    "trend": null,
-   "fetchedAt": 1793172536013,
+   "fetchedAt": 1793622319086,
    "liveSource": "Live: Steam · CheapShark",
    "liveLinks": {
     "metacritic": null,
     "openCritic": null,
     "steamAppID": "3241660"
    },
+   "features": {
+    "controller": "full",
+    "coop": [
+     "Co-op",
+     "Online Co-op"
+    ]
+   },
+   "family": {
+    "requiredAge": 0,
+    "descriptors": []
+   },
    "scores": {
     "steamPositivePercent": 96,
     "steamStatus": "Overwhelmingly Positive",
-    "steamReviewCount": "140,586 Verified Steam Reviews",
+    "steamReviewCount": "141,066 Verified Steam Reviews",
     "openCritic": null,
     "metaCritic": null,
     "userBacklogRating": 9.6
@@ -5713,7 +6463,7 @@
     "hoursEstimated": true,
     "sampledMedianHrs": null,
     "sampledN": 0,
-    "steamDeckRating": "Verified via ProtonDB (platinum, 385 reports)",
+    "steamDeckRating": "Verified via ProtonDB (platinum, 389 reports)",
     "deckEstimated": false,
     "monetization": "💎 No in-app purchases on Steam ($6.49)",
     "pacing": "Dynamic Player-Driven Flow",
@@ -5722,7 +6472,7 @@
    "topQuotes": [
     {
      "source": "Steam + CheapShark",
-     "author": "140,586 players",
+     "author": "141,066 players",
      "quote": "Rated \"Overwhelmingly Positive\" with 96% positive reception.",
      "sentiment": "positive",
      "url": null,
